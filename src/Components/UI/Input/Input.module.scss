@@ -1,0 +1,47 @@
+Input {
+  margin-top: 8px;
+  padding: 8px 15px;
+  width: 220px;
+  font-family: 'Cuprum', 'Arial', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  color: #a9a9a9;
+  border: 2px solid #d7dcde;
+}
+.Input__label {
+  font-family: 'Cuprum', 'Arial', sans-serif;
+  font-size: 18px;
+  line-height: 18px;
+  color: black;
+  background-color: white;
+}
+.Input__paragraph {
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 25px;
+  margin-right: 40px;
+}
+.Input:hover {
+  border-color: #b5b5b5;
+}
+.Input:focus {
+  border-color: rgb(95, 19, 24);
+  border-radius: 5px;
+  outline: none;
+}
+.Input--password {
+  position: relative;
+}
+.Input--passwordSvg {
+  opacity: 0.4;
+  display: block;
+  position: absolute;
+  top: 32px;
+  right: 9px;
+  width: 25px;
+  height: 25px;
+  background: url('../../../../src/img/svg/show-pass.svg') no-repeat;
+}
+.Input--passwordSvg:hover {
+  opacity: 0.7;
+}
