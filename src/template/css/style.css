@@ -229,56 +229,11 @@ footer ul,
   display: flex;
   justify-content: space-between;
 }
-.signIn__lable {
-  font-family: 'Cuprum', 'Arial', sans-serif;
-  font-size: 18px;
-  line-height: 18px;
-  color: black;
-  background-color: white;
-}
-.signIn__input {
-  margin-top: 8px;
-  padding: 8px 15px;
-  width: 220px;
-  font-family: 'Cuprum', 'Arial', sans-serif;
-  font-size: 13px;
-  line-height: 18px;
-  color: #a9a9a9;
-  border: 2px solid #d7dcde;
-}
-.signIn__paragraph {
-  position: relative;
-  margin-top: 5px;
-  margin-bottom: 25px;
-  margin-right: 40px;
-}
+
 .signIn__input--textarea {
   width: 100%;
 }
-.signIn__input:hover {
-  border-color: #b5b5b5;
-}
-.signIn__input:focus {
-  border-color: rgb(95, 19, 24);
-  border-radius: 5px;
-  outline: none;
-}
-.signIn__input--password {
-  position: relative;
-}
-.signIn__input--passwordSvg {
-  opacity: 0.4;
-  display: block;
-  position: absolute;
-  top: 32px;
-  right: 9px;
-  width: 25px;
-  height: 25px;
-  background: url('../img/svg/show-pass.svg') no-repeat;
-}
-.signIn__input--passwordSvg:hover {
-  opacity: 0.7;
-}
+
 .popup--show {
   display: inline-block;
   z-index: 3;
