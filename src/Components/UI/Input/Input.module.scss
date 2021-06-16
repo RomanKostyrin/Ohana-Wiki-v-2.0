@@ -5,17 +5,17 @@ Input {
   font-family: 'Cuprum', 'Arial', sans-serif;
   font-size: 13px;
   line-height: 18px;
-  color: #a9a9a9;
+  color: #1b1b1b;
   border: 2px solid #d7dcde;
 }
-.Input__label {
+.Input__Label {
   font-family: 'Cuprum', 'Arial', sans-serif;
   font-size: 18px;
   line-height: 18px;
   color: black;
   background-color: white;
 }
-.Input__paragraph {
+.Input__Paragraph {
   position: relative;
   margin-top: 5px;
   margin-bottom: 25px;
@@ -29,11 +29,12 @@ Input {
   border-radius: 5px;
   outline: none;
 }
-.Input--password {
+.InputPassword {
   position: relative;
 }
-.Input--passwordSvg {
+.InputPasswordSvg {
   opacity: 0.4;
+  z-index: 2;
   display: block;
   position: absolute;
   top: 32px;
@@ -42,6 +43,6 @@ Input {
   height: 25px;
   background: url('../../../../src/img/svg/show-pass.svg') no-repeat;
 }
-.Input--passwordSvg:hover {
+.InputPasswordSvg:hover {
   opacity: 0.7;
 }
