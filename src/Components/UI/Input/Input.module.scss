@@ -1,36 +1,40 @@
+$blue: rgb(113, 135, 246);
+$darkBlue: rgb(93, 111, 201);
+$purple: rgb(117, 23, 117);
+$darkPurple: rgb(71, 14, 71);
+
 Input {
   margin-top: 8px;
   padding: 8px 15px;
-  width: 220px;
+  width: 270px;
   font-family: 'Cuprum', 'Arial', sans-serif;
   font-size: 13px;
   line-height: 18px;
   color: #1b1b1b;
   border: 2px solid #d7dcde;
+  border-radius: 3px;
 }
-.Input__Label {
+.InputLabel {
+  position: relative;
   font-family: 'Cuprum', 'Arial', sans-serif;
   font-size: 18px;
   line-height: 18px;
   color: black;
   background-color: white;
 }
-.Input__Paragraph {
+.InputParagraph {
   position: relative;
   margin-top: 5px;
   margin-bottom: 25px;
   margin-right: 40px;
 }
 .Input:hover {
-  border-color: #b5b5b5;
+  border-color: $blue;
 }
 .Input:focus {
-  border-color: rgb(95, 19, 24);
+  border-color: $purple;
   border-radius: 5px;
   outline: none;
-}
-.InputPassword {
-  position: relative;
 }
 .InputPasswordSvg {
   opacity: 0.4;
@@ -41,8 +45,56 @@ Input {
   right: 9px;
   width: 25px;
   height: 25px;
-  background: url('../../../../src/img/svg/show-pass.svg') no-repeat;
+  background: url('../../../img/svg/show-pass.svg') no-repeat;
 }
 .InputPasswordSvg:hover {
   opacity: 0.7;
+}
+
+.Search {
+  margin-right: auto;
+  border: 1px solid #63a63e;
+  border-radius: 3px;
+}
+.LabelSearch {
+  position: relative;
+}
+.InputSearch {
+  width: 265px;
+  padding: 13px 12px 12px 48px;
+  border: none;
+  font-family: 'Cuprum', 'Arial', sans-serif;
+  font-size: 17px;
+  line-height: 18px;
+  background-color: #293449;
+}
+.InputSearch + label::before {
+  position: absolute;
+  content: '';
+  z-index: 2;
+  left: -248px;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  background: url('../../../img/svg//icon-search.svg') no-repeat;
+  opacity: 0.6;
+}
+.InputSearch::placeholder {
+  color: white;
+  opacity: 1;
+}
+.InputSearch:hover {
+  background-color: #212a3a;
+}
+.InputSearch:hover + label::before {
+  opacity: 1;
+}
+.InputSearch:focus {
+  border: 1px solid #212a3a;
+  color: black;
+  background-color: white;
+  outline: none;
+}
+.InputSearch:focus + label::before {
+  background: url('../../../img/svg/icon-search-active.svg') no-repeat;
 }

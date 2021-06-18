@@ -8,11 +8,13 @@ class App extends React.Component {
     return (
       <div className={classes.container}>
         <Input
-          label={'Введите название'}
-          labelType={'InputPassword'}
-          type={'password'}
+          label={'Логин'}
+          labelTypeClass={'LabelSearch'}
+          name={'Введите название'}
+          type={'search'}
+          inputTypeClass={'InputSearch'}
         />
-        <Button type={'Button--important'}>Hello</Button>
+        <Button type={'Button--important'}>Hello Ohana Fitness!!!</Button>
       </div>
     )
   }
