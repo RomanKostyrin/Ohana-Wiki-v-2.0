@@ -2,7 +2,11 @@ import classes from './Button.module.scss'
 import React from 'react'
 
 const Button = (props) => {
-  const cls = [classes.Button, classes[props.type]]
+  const cls = [
+    classes.Button,
+    classes[props.classType],
+    classes[props.classType2],
+  ]
   return (
     <button
       onClick={props.onClick}

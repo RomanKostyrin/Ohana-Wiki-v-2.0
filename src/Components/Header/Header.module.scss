@@ -1,0 +1,45 @@
+$blue: rgb(113, 135, 246);
+$darkBlue: rgb(93, 111, 201);
+$purple: rgb(117, 23, 117);
+$darkPurple: rgb(71, 14, 71);
+
+.Header {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: linear-gradient(90deg, $blue -20%, $purple 100%);
+  min-height: 80px;
+}
+.Logo {
+  padding: 2px 54px 2px 21px;
+  display: block;
+  width: 142px;
+  height: 34px;
+  background: url('../../img/svg/ohana.svg') no-repeat;
+}
+.LoggedAs {
+  position: relative;
+  display: inline-block;
+  padding: 8px 15px 8px 35px;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 18px;
+  font-family: 'Cuprum', 'Arial', sans-serif;
+  background-color: white;
+  color: black;
+  border: 2px solid $darkBlue;
+  border-radius: 30px;
+}
+.LoggedAs::before {
+  content: '';
+  width: 27px;
+  height: 23px;
+  position: absolute;
+  left: 7px;
+  top: 8px;
+  background: url('../../img/svg/icon-user-hover.svg') no-repeat;
+}
+.userName {
+  color: $darkBlue;
+}

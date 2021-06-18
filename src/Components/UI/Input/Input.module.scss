@@ -4,7 +4,6 @@ $purple: rgb(117, 23, 117);
 $darkPurple: rgb(71, 14, 71);
 
 Input {
-  margin-top: 8px;
   padding: 8px 15px;
   width: 270px;
   font-family: 'Cuprum', 'Arial', sans-serif;
@@ -12,7 +11,7 @@ Input {
   line-height: 18px;
   color: #1b1b1b;
   border: 2px solid #d7dcde;
-  border-radius: 3px;
+  border-radius: 30px;
 }
 .InputLabel {
   position: relative;
@@ -33,7 +32,7 @@ Input {
 }
 .Input:focus {
   border-color: $purple;
-  border-radius: 5px;
+  border-radius: 30px;
   outline: none;
 }
 .InputPasswordSvg {
@@ -53,20 +52,19 @@ Input {
 
 .Search {
   margin-right: auto;
-  border: 1px solid #63a63e;
-  border-radius: 3px;
+  border-radius: 30px;
 }
 .LabelSearch {
   position: relative;
 }
 .InputSearch {
   width: 265px;
-  padding: 13px 12px 12px 48px;
+  padding: 10px 12px 10px 48px;
   border: none;
   font-family: 'Cuprum', 'Arial', sans-serif;
   font-size: 17px;
   line-height: 18px;
-  background-color: #293449;
+  background-color: $blue;
 }
 .InputSearch + label::before {
   position: absolute;
@@ -84,7 +82,7 @@ Input {
   opacity: 1;
 }
 .InputSearch:hover {
-  background-color: #212a3a;
+  background-color: $darkBlue;
 }
 .InputSearch:hover + label::before {
   opacity: 1;
