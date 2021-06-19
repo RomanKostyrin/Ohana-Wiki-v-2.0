@@ -1,0 +1,119 @@
+$blue: rgb(113, 135, 246);
+$darkBlue: rgb(93, 111, 201);
+$purple: rgb(117, 23, 117);
+$darkPurple: rgb(71, 14, 71);
+$red: #ba2732;
+$darkRed: #8a1d25;
+
+.VisuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+.ContainerColumn {
+  display: flex;
+  margin-left: 50px;
+  margin-top: 10px;
+  max-width: 1040px;
+  margin-right: auto;
+  flex-direction: column;
+}
+.MainSection {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 50px 50px 0;
+  font-family: 'Cuprum', 'Arial', sans-serif;
+}
+.MainSectionHeader {
+  display: flex;
+  height: 38px;
+  align-items: center;
+  padding-left: 26px;
+  padding-right: 25px;
+  background-color: $red;
+  justify-content: space-between;
+  border-radius: 30px;
+  box-shadow: 0px 10px 25px 0px rgba(41, 52, 73, 0.5);
+}
+.MainSectionHeaderTitle {
+  font-family: 'Cuprum', 'Arial', sans-serif;
+  color: white;
+  font-size: 24px;
+  line-height: 26px;
+  font-weight: 400;
+}
+
+.BreadCrumbs {
+  list-style: none;
+  margin-bottom: 10px;
+  margin-top: 7px;
+  padding-top: 3px;
+  padding-left: 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.BreadCrumbsLink {
+  position: relative;
+  padding-right: 42px;
+  font-family: 'PT Sans', 'Arial', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  color: black;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.BreadCrumbsLink:hover {
+  color: #ee3643;
+}
+.BreadCrumbsLinkActive:hover {
+  color: black;
+}
+.BreadCrumbsLink:active {
+  color: #32425c;
+  opacity: 0.3;
+}
+.BreadCrumbsLinkActive:active {
+  color: black;
+  opacity: 1;
+}
+.BreadCrumbsLink:after {
+  content: '';
+  width: 27px;
+  height: 23px;
+  position: absolute;
+  right: -4px;
+  top: 2px;
+  background: url('../../img/svg/icon-right-small.svg') no-repeat;
+}
+.BreadCrumbsLinkActive:after {
+  display: none;
+}
+.BreadCrumbsLinkIndex {
+  position: relative;
+  padding-right: 42px;
+  padding-left: 10px;
+  width: 45px;
+  height: 22px;
+  background: url('../../img/svg/icon-home.svg') no-repeat;
+}
+.BreadCrumbsLinkIndex:hover {
+  background: url('../../img/svg/icon-home-hover.svg') no-repeat;
+}
+
+.PostList {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 0 20px 0;
+  margin: 0;
+  align-items: stretch;
+  flex-direction: row;
+  justify-content: flex-start;
+  margin-top: 20px;
+}

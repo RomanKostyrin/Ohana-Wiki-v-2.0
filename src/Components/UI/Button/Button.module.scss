@@ -2,6 +2,8 @@ $blue: rgb(113, 135, 246);
 $darkBlue: rgb(93, 111, 201);
 $purple: rgb(117, 23, 117);
 $darkPurple: rgb(71, 14, 71);
+$red: #ba2732;
+$darkRed: #8a1d25;
 
 .Button {
   position: relative;
@@ -56,11 +58,11 @@ $darkPurple: rgb(71, 14, 71);
   background: url('../../../img/svg/icon-login.svg') no-repeat;
 }
 .ButtonSignOut {
-  background-color: #ba2732;
+  background-color: $red;
   margin-right: 10px;
 }
 .ButtonSignOut:hover {
-  background-color: #8a1d25;
+  background-color: $darkRed;
 }
 .ButtonSignOut::before {
   background: url('../../../img/svg/icon-logout.svg') no-repeat;
@@ -91,10 +93,11 @@ $darkPurple: rgb(71, 14, 71);
 }
 .ButtonNavigation:active,
 .ButtonNavigationActive {
-  background-color: #ba2732;
+  margin-bottom: 15px;
+  background-color: $red;
 }
 .ButtonNavigationActive:hover {
-  background-color: #ba2732;
+  background-color: $red;
 }
 .ButtonNavigationActive:after {
   content: '';

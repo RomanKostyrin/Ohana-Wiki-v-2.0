@@ -328,31 +328,7 @@ footer ul,
 .navigation__link--mainSection:hover:after {
   display: none;
 }
-.mainSection {
-  display: flex;
-  flex-direction: column;
-  margin: 20px 50px 50px 0;
-  font-family: 'Cuprum', 'Arial', sans-serif;
-}
-.mainSection__header {
-  display: flex;
-  height: 38px;
-  align-items: center;
-  padding-left: 26px;
-  padding-right: 25px;
-  background-color: #265010;
-  justify-content: space-between;
-  border-radius: 5px;
-  box-shadow: 0px 10px 25px 0px rgba(41, 52, 73, 0.5);
-}
-.mainSection__header--title {
-  font-family: 'Cuprum', 'Arial', sans-serif;
-  color: white;
-  font-size: 28px;
-  line-height: 30px;
-  font-weight: 400;
-  text-transform: uppercase;
-}
+
 .mainSection__header--User,
 .mainSection__header--Post {
   color: #ba2732;
@@ -382,70 +358,13 @@ footer ul,
 .container--item__svg {
   position: relative;
 }
-.container--columnMain {
-  flex-direction: column;
-}
+
 .container__Post {
   min-width: 300px;
   flex-wrap: wrap;
   margin-right: unset;
 }
 
-.container__breadcrumbs {
-  margin-bottom: 10px;
-  margin-top: 7px;
-}
-.breadcrumbs {
-  padding-top: 3px;
-  padding-left: 0px;
-  display: flex;
-  flex-wrap: wrap;
-}
-.breadcrumbs__link {
-  position: relative;
-  padding-right: 42px;
-  font-family: 'PT Sans', 'Arial', sans-serif;
-  font-size: 13px;
-  line-height: 18px;
-  color: black;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-.breadcrumbs__link:hover {
-  color: #ee3643;
-}
-.breadcrumbs__link--active:hover {
-  color: black;
-}
-.breadcrumbs__link:active {
-  color: #32425c;
-  opacity: 0.3;
-}
-.breadcrumbs__link--active:active {
-  color: black;
-  opacity: 1;
-}
-.breadcrumbs__link:after {
-  content: '';
-  width: 27px;
-  height: 23px;
-  position: absolute;
-  right: -4px;
-  top: 2px;
-  background: url('../img/svg/icon-right-small.svg') no-repeat;
-}
-.breadcrumbs__link--active:after {
-  display: none;
-}
-.breadcrumbs__link--index {
-  padding-left: 10px;
-  width: 45px;
-  height: 22px;
-  background: url('../img/svg/icon-home.svg') no-repeat;
-}
-.breadcrumbs__link--index:hover {
-  background: url('../img/svg/icon-home-hover.svg') no-repeat;
-}
 .mainSection__form {
   margin-top: 20px;
   margin-left: 40px;
