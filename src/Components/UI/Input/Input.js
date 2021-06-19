@@ -8,9 +8,8 @@ const Input = (props) => {
       ? (event.target.previousElementSibling.type = 'password')
       : (event.target.previousElementSibling.type = 'text')
   }
-  console.log(props.labelTypeClass)
   return props.type === 'search' ? (
-    <form className="classes.search">
+    <form className={classes.Search}>
       <input
         type={props.type}
         placeholder={props.placeholder || 'Поиск:'}

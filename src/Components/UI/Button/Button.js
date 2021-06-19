@@ -6,9 +6,11 @@ const Button = (props) => {
     classes.Button,
     classes[props.classType],
     classes[props.classType2],
+    classes[props.classTypeActive],
   ]
   return (
     <button
+      id={props.id}
       onClick={props.onClick}
       className={cls.join(' ')}
       disabled={props.disabled}

@@ -1,0 +1,40 @@
+$blue: rgb(113, 135, 246);
+$darkBlue: rgb(93, 111, 201);
+$purple: rgb(117, 23, 117);
+$darkPurple: rgb(71, 14, 71);
+
+.Footer {
+  border-top-style: solid;
+  border-top-width: 5px;
+  border-image: linear-gradient(90deg, $darkPurple, $darkBlue, $darkPurple) 1;
+  background-color: $blue;
+  display: flex;
+  justify-content: space-around;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+.Copy,
+.MailTo {
+  font-family: 'Cuprum', 'Arial', sans-serif;
+  font-size: 16px;
+  line-height: 18px;
+  color: white;
+}
+.Copy {
+  max-width: 240px;
+}
+.MailTo {
+  padding-right: 15px;
+  padding-left: 35px;
+}
+.MailToLink {
+  color: $darkPurple;
+  text-decoration: none;
+}
+.MailToLink:hover {
+  text-decoration: underline;
+}
+.MailToLink:active {
+  text-decoration: none;
+  color: #ee3643;
+}

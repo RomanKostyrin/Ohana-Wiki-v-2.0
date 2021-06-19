@@ -10,8 +10,10 @@ $darkPurple: rgb(71, 14, 71);
   align-items: center;
   background: linear-gradient(90deg, $blue -20%, $purple 100%);
   min-height: 80px;
+  margin-bottom: 80px;
 }
 .Logo {
+  margin-left: 20px;
   padding: 2px 54px 2px 21px;
   display: block;
   width: 142px;
@@ -30,6 +32,7 @@ $darkPurple: rgb(71, 14, 71);
   color: black;
   border: 2px solid $darkBlue;
   border-radius: 30px;
+  margin: 0px 20px;
 }
 .LoggedAs::before {
   content: '';
