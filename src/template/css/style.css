@@ -388,7 +388,6 @@ footer ul,
 .container__Post {
   min-width: 300px;
   flex-wrap: wrap;
-
   margin-right: unset;
 }
 

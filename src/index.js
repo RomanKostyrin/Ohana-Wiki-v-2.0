@@ -1,12 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import Header from './Components/Header/Header'
+import Footer from './Components/Footer/Footer'
+import Navigation from './Components/Navigation/Navigation'
+import classes from './index.module.scss'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <>
+      <Header />
+      <div className={classes.container}>
+        <Navigation />
+        <App />
+      </div>
+      <Footer />
+    </>
   </React.StrictMode>,
   document.getElementById('root')
 )
