@@ -2,20 +2,12 @@ import React from 'react'
 import Main from './Components/Main/Main'
 import classes from './App.module.scss'
 import Navigation from './Components/Navigation/Navigation'
+import axios from 'axios'
 
 class App extends React.Component {
   state = {
-    posts: [
-      'Номенклатура',
-      'Пользователи',
-      'Контракты',
-      'Рецепция',
-      'Номенклатура',
-      'Пользователи',
-      'Контракты',
-      'Рецепция',
-    ],
-    activePost: 0,
+    posts: ['Номенклатура', 'Пользователи', 'Контракты', 'Рецепция'],
+    activePost: 10,
     activeSubPost: 0,
     0: [
       {
@@ -105,6 +97,8 @@ class App extends React.Component {
             3: 'text',
             4: 'text',
             5: 'img',
+            6: 'img',
+            7: 'text',
           },
           value: {
             1: 'Loremred1',
@@ -112,6 +106,8 @@ class App extends React.Component {
             3: 'Loremred2',
             4: 'Loremred3',
             5: '2.png',
+            6: '1.png',
+            7: 'hello jenya',
           },
         },
       },
@@ -330,7 +326,15 @@ class App extends React.Component {
       },
     ],
   }
+
   onClickSubPost = (event) => {
+    axios
+      .get(
+        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+      )
+      .then(function (response) {
+        console.log(response.data)
+      })
     const subId = this.getIndexFromSome(event.target.id)
     this.setState({
       activeSubPost: +subId,

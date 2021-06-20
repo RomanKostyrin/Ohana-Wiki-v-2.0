@@ -8,6 +8,7 @@ const Button = (props) => {
     classes[props.classType2],
     classes[props.classTypeActive],
   ]
+  console.log('cls == ' + cls.join(' '))
   return (
     <button
       id={props.id}

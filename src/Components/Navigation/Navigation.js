@@ -26,6 +26,15 @@ class Navigation extends React.Component {
               </li>
             )
           })}
+          <li key={'edit'}>
+            <Button
+              id={`NavButton-edit`}
+              classType={'ButtonImportant'}
+              classType2={'ButtonNavigation'}
+            >
+              {'Edit'}
+            </Button>
+          </li>
         </ul>
       </nav>
     )
