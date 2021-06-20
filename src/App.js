@@ -20,56 +20,76 @@ class App extends React.Component {
     0: [
       {
         name: 'Удаление Ном',
-        text: {
-          p: {
-            1: 'Lorem',
-            3: 'Lorem',
-            4: 'Lorem',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
           },
-          img: {
+          value: {
+            1: 'Lorem441',
             2: '1.png',
+            3: 'Lorem443',
+            4: 'Lorem4',
             5: '2.png',
           },
         },
       },
       {
         name: 'Редактирование',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
       },
       {
         name: 'Создание',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
       },
       {
         name: 'Корректировка',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
@@ -77,57 +97,77 @@ class App extends React.Component {
     ],
     1: [
       {
-        name: 'Удаление Пользователи',
-        text: {
-          p: {
-            1: 'Lorem',
-            3: 'Lorem',
-            4: 'Lorem',
+        name: 'Удаление ред',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
           },
-          img: {
+          value: {
+            1: 'Loremred1',
             2: '1.png',
+            3: 'Loremred2',
+            4: 'Loremred3',
             5: '2.png',
           },
         },
       },
       {
         name: 'Редактирование',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
       },
       {
         name: 'Создание',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
       },
       {
         name: 'Корректировка',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
@@ -135,73 +175,178 @@ class App extends React.Component {
     ],
     2: [
       {
-        name: 'Удаление Контракты',
-        text: {
-          p: {
+        name: 'Удаление контр',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
       },
       {
         name: 'Редактирование',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
       },
       {
         name: 'Создание',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
-          },
-          img: {
-            2: '1.png',
             5: '2.png',
           },
         },
       },
       {
         name: 'Корректировка',
-        text: {
-          p: {
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
             1: 'Lorem',
+            2: '1.png',
             3: 'Lorem',
             4: 'Lorem',
+            5: '2.png',
           },
-          img: {
+        },
+      },
+    ],
+    3: [
+      {
+        name: 'Удаление контр',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
+            1: 'Lorem',
+            2: '2.png',
+            3: 'Lorem',
+            4: 'Lorem',
+            5: '1.png',
+          },
+        },
+      },
+      {
+        name: 'Редактирование',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
+            1: 'Lorem',
+            2: '2.png',
+            3: 'Lorem',
+            4: 'Lorem',
+            5: '2.png',
+          },
+        },
+      },
+      {
+        name: 'Создание',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
+            1: 'Lorem',
             2: '1.png',
+            3: 'Lorem',
+            4: 'Lorem',
+            5: '2.png',
+          },
+        },
+      },
+      {
+        name: 'Корректировка',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
+            1: 'Lorem',
+            2: '1.png',
+            3: 'Lorem',
+            4: 'Lorem',
             5: '2.png',
           },
         },
       },
     ],
   }
-
+  onClickSubPost = (event) => {
+    const subId = this.getIndexFromSome(event.target.id)
+    this.setState({
+      activeSubPost: +subId,
+    })
+  }
+  getIndexFromSome = (string) => {
+    const indexOfDash = string.indexOf('-')
+    const newIndex = string.slice(indexOfDash + 1, string.length)
+    return newIndex
+  }
   //получаем из id цифру для передачи в activePost
   onClickButton = (event) => {
-    const indexOfDash = event.target.id.indexOf('-')
-    const newActiveIndex = event.target.id.slice(
-      indexOfDash + 1,
-      event.target.id.length
-    )
+    const newActiveIndex = this.getIndexFromSome(event.target.id)
     this.setState({
       activePost: +newActiveIndex,
+      activeSubPost: 0,
     })
   }
   render() {
@@ -218,6 +363,7 @@ class App extends React.Component {
           activeSubPost={this.state.activeSubPost}
           posts={this.state.posts}
           subPosts={this.state[this.state.activePost]}
+          onClick={this.onClickSubPost}
         />
       </>
     )

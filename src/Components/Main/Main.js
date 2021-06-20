@@ -11,6 +11,7 @@ class Main extends React.Component {
         activePost={this.props.activePost}
         activeSubPost={this.props.activeSubPost}
         subPosts={this.props.subPosts}
+        onClick={this.props.onClick}
       />
     )
   }

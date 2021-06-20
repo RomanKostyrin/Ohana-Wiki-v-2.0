@@ -337,12 +337,7 @@ footer ul,
   display: inline-block;
   width: 100%;
 }
-.mainSection__text {
-  max-width: 1024px;
-}
-.mainSection__post {
-  margin: 0 20px 20px 20px;
-}
+
 .containerImg {
   position: relative;
   margin-right: 40px;
