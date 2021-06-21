@@ -327,6 +327,10 @@ class App extends React.Component {
     ],
   }
 
+  ChangePostHandle = (data) => {
+    console.log(this.state[data])
+  }
+
   onClickSubPost = (event) => {
     axios
       .get(
@@ -365,6 +369,7 @@ class App extends React.Component {
           className={classes.Main}
           activePost={this.state.activePost}
           activeSubPost={this.state.activeSubPost}
+          ChangePostHandle={(data) => this.ChangePostHandle(data)}
           posts={this.state.posts}
           subPosts={this.state[this.state.activePost]}
           onClick={this.onClickSubPost}

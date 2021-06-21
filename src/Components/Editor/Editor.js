@@ -5,7 +5,10 @@ import Button from '../UI/Button/Button'
 import classes from './Editor.module.scss'
 
 class Editor extends React.Component {
-  state = {}
+  state = {
+    posts: this.props.posts,
+    subPosts: this.props.subPosts,
+  }
   render() {
     return (
       <>
@@ -58,6 +61,9 @@ class Editor extends React.Component {
                       id={'selectUsers'}
                       name={'users'}
                       className={classes.SignInSelect}
+                      onChange={(event) =>
+                        this.props.ChangePostHandle(event.target.value)
+                      }
                     >
                       {this.props.posts.map((post, index) => {
                         return <option value={index}>{post}</option>
@@ -65,47 +71,37 @@ class Editor extends React.Component {
                     </select>
                   </label>
                 </p>
-                <p className="container--item container--item__svg">
+                <p className={classes.ContainerItem}>
                   <Input
                     type={'text'}
                     inputTypeClass={'Input'}
                     labelTypeClass={'InputLabel'}
-                    label={'Название поста'}
+                    label={'Новое название'}
                     name={'users'}
                     placeholder="Введите название"
                   />
-
-                  <label className="signIn__lable">
-                    Новое название:
-                    <br />
-                    <input
-                      type="text"
-                      className="signIn__input"
-                      name="login"
-                      value="12345"
-                    />
-                  </label>
                 </p>
               </div>
-              <h2 className="mainSection__header--title mainSection__header--Post">
+              <h2 className={classes.MainSectionHeaderTitle}>
                 Редактирование Сабпоста
               </h2>
-              <div className="container container__Post">
-                <p className="container--item">
-                  <label className="signIn__lable">
+              <div className={classes.ContainerPost}>
+                <p className={classes.ContainerItem}>
+                  <label className={classes.InputLabel}>
                     Старое название:
                     <br />
                     <select
-                      id="selectUsers"
-                      name="users"
-                      className="signIn__input"
+                      id={'selectUsers'}
+                      name={'users'}
+                      className={classes.SignInSelect}
                     >
-                      <option value="admin">Удаление</option>
-                      <option value="trener">Редактирование</option>
+                      {this.props.posts.map((post, index) => {
+                        return <option value={index}>{post}</option>
+                      })}
                     </select>
                   </label>
                 </p>
-                <p className="container--item container--item__svg">
+                <p className={classes.ContainerItem}>
                   <label className="signIn__lable">
                     Новое название:
                     <br />

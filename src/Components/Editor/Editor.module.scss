@@ -18,12 +18,15 @@ $darkRed: #8a1d25;
 }
 .ContainerPost {
   min-width: 300px;
+  display: flex;
   flex-wrap: wrap;
   margin-right: unset;
 }
 .ContainerItem {
+  position: relative;
   margin-right: 20px;
 }
+
 .MainSection {
   display: flex;
   flex-direction: column;

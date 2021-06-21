@@ -9,7 +9,11 @@ class Main extends React.Component {
     {
       if (this.props.activePost === 10) {
         return (
-          <Editor posts={this.props.posts} subPosts={this.props.subPosts} />
+          <Editor
+            posts={this.props.posts}
+            subPosts={this.props.subPosts}
+            ChangePostHandle={(data) => this.props.ChangePostHandle(data)}
+          />
         )
       } else
         return (
