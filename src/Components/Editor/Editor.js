@@ -1,14 +1,31 @@
 import React from 'react'
-import axios from 'axios'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import classes from './Editor.module.scss'
+import Textarea from '../UI/Textarea/Textarea'
 
 class Editor extends React.Component {
   state = {
     posts: this.props.posts,
-    subPosts: this.props.subPosts,
+    subPost: this.props.ChangePostHandle(0),
   }
+  onChangeForm = (event) => {
+    event.preventDefault()
+    console.log(this.state.subPost[1])
+    Object.keys(this.state.subPost[0].data.value[1]).map((val, ind) => {})
+  }
+
+  changeSubPosts = (ind) => {
+    this.setState({
+      subPost: this.props.ChangePostHandle(ind),
+    })
+  }
+  ChangeSubPostHandle = (data) => {
+    this.setState({
+      subPost: this.props.ChangePostHandle(2),
+    })
+  }
+  formChange = () => {}
   render() {
     return (
       <>
@@ -19,7 +36,10 @@ class Editor extends React.Component {
                 Создание нового поста
               </h2>
             </header>
-            <form className={classes.MainSectionForm}>
+            <form
+              className={classes.MainSectionForm}
+              onChange={this.onChangeForm}
+            >
               <h2 className={classes.MainSectionHeaderTitle}>
                 Создание основного поста
               </h2>
@@ -40,14 +60,15 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onChange={this.props.onChangeForm}
+                onChange={this.onChangeForm}
               >
                 Создать
               </Button>
             </form>
+            <button onClick={this.onChangeForm}>11</button>
             <form
               className={classes.MainSectionForm}
-              onChange={this.props.onChangeForm}
+              onChange={this.onChangeForm}
             >
               <h2 className={classes.MainSectionHeaderTitle}>
                 Редактирование поста
@@ -61,12 +82,17 @@ class Editor extends React.Component {
                       id={'selectUsers'}
                       name={'users'}
                       className={classes.SignInSelect}
-                      onChange={(event) =>
+                      onChange={(event) => {
                         this.props.ChangePostHandle(event.target.value)
-                      }
+                        this.changeSubPosts(event.target.value)
+                      }}
                     >
-                      {this.props.posts.map((post, index) => {
-                        return <option value={index}>{post}</option>
+                      {this.state.posts.map((post, index) => {
+                        return (
+                          <option value={index} key={`optpost-${index}`}>
+                            {post}
+                          </option>
+                        )
                       })}
                     </select>
                   </label>
@@ -77,7 +103,7 @@ class Editor extends React.Component {
                     inputTypeClass={'Input'}
                     labelTypeClass={'InputLabel'}
                     label={'Новое название'}
-                    name={'users'}
+                    name={'post'}
                     placeholder="Введите название"
                   />
                 </p>
@@ -91,104 +117,71 @@ class Editor extends React.Component {
                     Старое название:
                     <br />
                     <select
-                      id={'selectUsers'}
+                      id={'selectSubPost'}
                       name={'users'}
                       className={classes.SignInSelect}
+                      onChange={(event) => {
+                        this.ChangeSubPostHandle(event.target.value)
+                      }}
                     >
-                      {this.props.posts.map((post, index) => {
-                        return <option value={index}>{post}</option>
+                      {Object.keys(this.state.subPost).map((post, index) => {
+                        return (
+                          <option value={index} key={`opt-${index}`}>
+                            {this.state.subPost[post].name}
+                          </option>
+                        )
                       })}
                     </select>
                   </label>
                 </p>
                 <p className={classes.ContainerItem}>
-                  <label className="signIn__lable">
-                    Новое название:
-                    <br />
-                    <input
-                      type="text"
-                      className="signIn__input"
-                      name="login"
-                      value="12345"
-                    />
-                  </label>
-                </p>
-                <p className="signIn__paragraph">
-                  <label className="signIn__lable">
-                    Текст:
-                    <br />
-                    <textarea
-                      className="signIn__input signIn__input--textarea"
-                      name="comment"
-                      rows="5"
-                      cols="120"
-                      placeholder="Текст"
-                    >
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Tempora delectus iste, nemo officiis nesciunt ducimus
-                      consectetur perspiciatis explicabo sint! Debitis magni
-                      ratione doloribus odio facere sapiente sunt suscipit sequi
-                      sed.
-                    </textarea>
-                  </label>
-                  <button
-                    className="btnClose btnClose--delete"
-                    type="button"
-                    title="close"
-                  ></button>
-                </p>
-                <div className="containerImg">
-                  <img
-                    src="img/1.png"
-                    alt=""
-                    className="mainSection__img"
-                    width="273px"
-                    height="167px"
+                  <Input
+                    type={'text'}
+                    inputTypeClass={'Input'}
+                    labelTypeClass={'InputLabel'}
+                    label={'Новое название'}
+                    name={'subPost'}
+                    placeholder={'Введите название'}
                   />
-                  <button
-                    className="btnClose btnClose--delete"
-                    type="button"
-                    title="close"
-                  ></button>
-                </div>
-                <p className="signIn__paragraph">
-                  <label className="signIn__lable">
-                    Текст:
-                    <br />
-                    <textarea
-                      className="signIn__input signIn__input--textarea"
-                      name="comment"
-                      rows="5"
-                      cols="120"
-                      placeholder="Текст"
-                    >
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Tempora delectus iste, nemo officiis nesciunt ducimus
-                      consectetur perspiciatis explicabo sint! Debitis magni
-                      ratione doloribus odio facere sapiente sunt suscipit sequi
-                      sed.
-                    </textarea>
-                  </label>
-                  <button
-                    className="btnClose btnClose--delete"
-                    type="button"
-                    title="close"
-                  ></button>
                 </p>
-                <div className="containerImg">
-                  <img
-                    src="img/1.png"
-                    alt=""
-                    className="mainSection__img"
-                    width="273px"
-                    height="167px"
-                  />
-                  <button
-                    className="btnClose btnClose--delete"
-                    type="button"
-                    title="close"
-                  ></button>
-                </div>
+                {Object.keys(this.state.subPost[0].data.type).map((key) => {
+                  if (this.state.subPost[0].data.type[key] === 'text') {
+                    return (
+                      <p className={classes.ContainerItem}>
+                        <Textarea
+                          LabelClass={'TextareaLabel'}
+                          labelName={'Введите текст'}
+                          rows={10}
+                          cols={120}
+                          placeholder={'Введите текст'}
+                          defaultValue={this.state.subPost[0].data.value[key]}
+                        ></Textarea>
+                        <button
+                          className={classes.BtnClose}
+                          type="button"
+                          title="close"
+                        ></button>
+                      </p>
+                    )
+                  } else if (this.state.subPost[0].data.type[key] === 'img') {
+                    return (
+                      <div className={classes.ContainerImg}>
+                        <img
+                          src={this.state.subPost[0].data.value[key]}
+                          alt=""
+                          className="mainSection__img"
+                          width="273px"
+                          height="167px"
+                        />
+                        <button
+                          className={classes.BtnClose}
+                          type="button"
+                          title="close"
+                        ></button>
+                      </div>
+                    )
+                  }
+                })}
               </div>
 
               <button
@@ -201,9 +194,9 @@ class Editor extends React.Component {
             </form>
             <form
               className={classes.MainSectionForm}
-              onChange={this.props.onChangeForm}
+              onChange={this.formChange}
             >
-              <h2 className="mainSection__header--title mainSection__header--Post">
+              <h2 className={classes.MainSectionHeaderTitle}>
                 Создание Сабпоста
               </h2>
               <div className="container container__Post">
@@ -224,7 +217,7 @@ class Editor extends React.Component {
                   </label>
                 </p>
               </div>
-              <h2 className="mainSection__header--title mainSection__header--Post">
+              <h2 className={classes.MainSectionHeaderTitle}>
                 Введите текст Сабпоста
               </h2>
               <div className="container container__Post">
@@ -250,10 +243,11 @@ class Editor extends React.Component {
                       rows="5"
                       cols="120"
                       placeholder="Текст"
+                      defaultValue={'3'}
                     ></textarea>
                   </label>
                   <button
-                    className="btnClose btnClose--delete"
+                    className={classes.BtnClose}
                     type="button"
                     title="close"
                   ></button>

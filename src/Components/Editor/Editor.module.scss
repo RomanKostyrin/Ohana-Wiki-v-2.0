@@ -93,3 +93,46 @@ $darkRed: #8a1d25;
   border-radius: 30px;
   outline: none;
 }
+
+.BtnClose {
+  position: absolute;
+  content: '';
+  width: 25px;
+  height: 25px;
+  top: 45%;
+  right: -40px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+}
+.BtnClose::before,
+.BtnClose::after {
+  top: 10px;
+  left: 0px;
+  content: '';
+  position: absolute;
+  width: 25px;
+  height: 5px;
+  background: #ee3643;
+  border-radius: 2px;
+}
+.BtnClose::before {
+  transform: rotate(45deg);
+}
+.BtnClose::after {
+  transform: rotate(-45deg);
+}
+.BtnClose:hover::after {
+  transform: rotate(135deg);
+  transition: transform 0.5s ease-in-out;
+}
+.BtnClose:hover::before {
+  transform: rotate(225deg);
+  transition: transform 0.5s ease-in-out;
+}
+
+.ContainerImg {
+  position: relative;
+  margin-right: 40px;
+}

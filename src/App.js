@@ -11,7 +11,7 @@ class App extends React.Component {
     activeSubPost: 0,
     0: [
       {
-        name: 'Удаление Ном',
+        name: 'Удал номен',
         data: {
           type: {
             1: 'text',
@@ -21,16 +21,35 @@ class App extends React.Component {
             5: 'img',
           },
           value: {
-            1: 'Lorem441',
+            1: 'текстареа 1 ном удал',
             2: '1.png',
-            3: 'Lorem443',
-            4: 'Lorem4',
+            3: 'текстар ном удал 2',
+            4: 'текстареа 3 ном удал',
             5: '2.png',
           },
         },
       },
       {
-        name: 'Редактирование',
+        name: 'Редакт номен',
+        data: {
+          type: {
+            1: 'text',
+            2: 'img',
+            3: 'text',
+            4: 'text',
+            5: 'img',
+          },
+          value: {
+            1: 'текстареа 1 редакт удал',
+            2: '1.png',
+            3: 'текстареа 2 редакт удал',
+            4: 'текстареа 3 редакт удал',
+            5: '2.png',
+          },
+        },
+      },
+      {
+        name: 'Созд номен',
         data: {
           type: {
             1: 'text',
@@ -49,26 +68,7 @@ class App extends React.Component {
         },
       },
       {
-        name: 'Создание',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Корректировка',
+        name: 'Корр номен',
         data: {
           type: {
             1: 'text',
@@ -327,8 +327,12 @@ class App extends React.Component {
     ],
   }
 
-  ChangePostHandle = (data) => {
-    console.log(this.state[data])
+  ChangePostHandle = (data = 1) => {
+    return this.state[data]
+  }
+
+  ChangeSubPostHandle = (num = 1) => {
+    return this.state[this.state.activePost[num]]
   }
 
   onClickSubPost = (event) => {
@@ -371,7 +375,7 @@ class App extends React.Component {
           activeSubPost={this.state.activeSubPost}
           ChangePostHandle={(data) => this.ChangePostHandle(data)}
           posts={this.state.posts}
-          subPosts={this.state[this.state.activePost]}
+          subPost={(num) => this.ChangeSubPostHandle(num)}
           onClick={this.onClickSubPost}
         />
       </>
