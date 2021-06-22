@@ -6,14 +6,7 @@ import Editor from '../Editor/Editor'
 class Main extends React.Component {
   render() {
     if (this.props.activePost === 10) {
-      return (
-        <Editor
-          posts={this.props.posts}
-          subPost={this.props.subPost}
-          ChangePostHandle={(data) => this.props.ChangePostHandle(data)}
-          activePost={(num) => this.props.activePost(num)}
-        />
-      )
+      return <Editor />
     } else
       return (
         <Post
