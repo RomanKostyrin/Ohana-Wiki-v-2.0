@@ -31,6 +31,8 @@ const Input = (props) => {
         className={classes[props.inputTypeClass]}
         name={props.name || 'Логин'}
         placeholder={props.placeholder || 'Введите название'}
+        onChange={props.onChange}
+        value={props.value}
       />
       {props.type === 'password' ? (
         <span

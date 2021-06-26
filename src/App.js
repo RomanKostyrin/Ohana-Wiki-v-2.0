@@ -373,7 +373,6 @@ class App extends React.Component {
           className={classes.Main}
           activePost={this.state.activePost}
           activeSubPost={this.state.activeSubPost}
-          ChangePostHandle={(data) => this.ChangePostHandle(data)}
           posts={this.state.posts}
           subPost={(num) => this.ChangeSubPostHandle(num)}
           onClick={this.onClickSubPost}

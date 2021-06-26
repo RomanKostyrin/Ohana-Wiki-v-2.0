@@ -7,8 +7,10 @@ import axios from 'axios'
 
 class Editor extends React.Component {
   state = {
-    posts: ['post1', 'post2'],
-    subPost: [
+    posts: ['', ''],
+    keys: [],
+    activePost: 0,
+    subPosts: [
       {
         name: 'subpost1',
         data: {
@@ -36,22 +38,110 @@ class Editor extends React.Component {
         },
       },
     ],
+    newPost: { postName: '', subPosts: [{}] },
+    newSubPost: {
+      name: '',
+      data: {
+        type: ['text'],
+        value: [''],
+      },
+    },
+  }
+  putActivePost = (event) => {
+    event.preventDefault()
+    this.setState({
+      activePost: event.target.value,
+    })
   }
 
-  async componentDidMount() {
+  onSubmitPost = async (event) => {
+    event.preventDefault()
     try {
-      const response = await axios.get(
-        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+      const response = await axios.post(
+        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
+        this.state.newPost
       )
+      let arr = this.state.posts
+      arr.push(this.state.newPost.postName)
 
-      Object.keys(response.data).forEach((key, value) => {
-        console.log(response.data[key].post)
+      this.setState({
+        posts: arr,
+        newPost: { postName: '', subPosts: [{}] },
       })
     } catch (e) {
       console.log(e)
     }
   }
-
+  renderPosts = (res) => {
+    let arrPosts = []
+    let arrSubPosts = []
+    let keys = []
+    Object.keys(res.data).forEach((key) => {
+      keys.push(key)
+      arrPosts.push(res.data[key].postName)
+      arrSubPosts = res.data[key].subPosts
+      this.setState({
+        keys: keys,
+        subPosts: arrSubPosts,
+        posts: arrPosts,
+      })
+    })
+  }
+  createNewSubPost = async (event) => {
+    event.preventDefault()
+    let keyDB = this.state.keys[this.state.activePost]
+    let newSubPosts = this.state.subPosts
+    newSubPosts.push(this.state.newSubPost)
+    this.setState({
+      subPosts: newSubPosts,
+    })
+    try {
+      const response = await axios.put(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
+        this.state.subPosts
+      )
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  onChangePostName = (event) => {
+    this.setState({
+      newPost: {
+        postName: event.target.value,
+        subPosts: [
+          {
+            name: '',
+            data: {
+              type: ['text'],
+              value: [''],
+            },
+          },
+        ],
+      },
+    })
+  }
+  async componentDidMount() {
+    try {
+      const response = await axios.get(
+        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+      )
+      this.renderPosts(response)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  changePostHandle = (event) => {}
+  changeSubPostsHandle = (event) => {
+    this.setState({
+      newSubPost: {
+        name: event.target.value,
+        data: {
+          type: ['text'],
+          value: [''],
+        },
+      },
+    })
+  }
   render() {
     return (
       <>
@@ -64,7 +154,7 @@ class Editor extends React.Component {
             </header>
             <form
               className={classes.MainSectionForm}
-              onChange={this.onChangeForm}
+              onSubmit={this.onSubmitPost}
             >
               <h2 className={classes.MainSectionHeaderTitle}>
                 Создание основного поста
@@ -78,6 +168,8 @@ class Editor extends React.Component {
                     label={'Название поста'}
                     name={'login'}
                     placeholder="Введите название"
+                    onChange={this.onChangePostName}
+                    value={this.state.newPost.postName}
                   />
                 </p>
               </div>
@@ -91,6 +183,60 @@ class Editor extends React.Component {
                 Создать
               </Button>
             </form>
+            <form className={classes.MainSectionForm}>
+              <h2 className={classes.MainSectionHeaderTitle}>
+                Создание Сабпоста
+              </h2>
+              <div className={classes.ContainerPost}>
+                <p className={classes.ContainerItem}>
+                  <label className={classes.InputLabel}>
+                    Выберите пост:
+                    <br />
+                    <select
+                      id={'selectUsers'}
+                      name={'users'}
+                      className={classes.SignInSelect}
+                      onChange={this.putActivePost}
+                    >
+                      {this.state.posts.map((post, index) => {
+                        return (
+                          <option
+                            value={index}
+                            key={`optSubpost-${index}`}
+                            id={`optSubpost-${index}`}
+                          >
+                            {post}
+                          </option>
+                        )
+                      })}
+                    </select>
+                  </label>
+                </p>
+
+                <p className={classes.ContainerItem}>
+                  <Input
+                    type={'text'}
+                    inputTypeClass={'Input'}
+                    labelTypeClass={'InputLabel'}
+                    label={'Название Сабпоста'}
+                    name={'login'}
+                    placeholder="Введите название"
+                    onChange={this.changeSubPostsHandle}
+                    value={this.state.newSubPost.name}
+                  />
+                </p>
+              </div>
+              <Button
+                type={'submit'}
+                id={'NewPostButton'}
+                classType2={'ButtonSubmit'}
+                classType={'ButtonPrimary'}
+                onClick={this.createNewSubPost}
+              >
+                Создать
+              </Button>
+            </form>
+
             <form
               className={classes.MainSectionForm}
               onChange={this.onChangeForm}
@@ -107,14 +253,15 @@ class Editor extends React.Component {
                       id={'selectUsers'}
                       name={'users'}
                       className={classes.SignInSelect}
-                      onChange={(event) => {
-                        this.props.ChangePostHandle(event.target.value)
-                        this.changeSubPosts(event.target.value)
-                      }}
+                      onChange={this.changePostHandle}
                     >
                       {this.state.posts.map((post, index) => {
                         return (
-                          <option value={index} key={`optpost-${index}`}>
+                          <option
+                            value={index}
+                            key={`optpost-${index}`}
+                            id={`optpost-${index}`}
+                          >
                             {post}
                           </option>
                         )
@@ -146,10 +293,10 @@ class Editor extends React.Component {
                       name={'users'}
                       className={classes.SignInSelect}
                       onChange={(event) => {
-                        this.ChangeSubPostHandle(event.target.value)
+                        this.ChangeSubPostsHandle(event.target.value)
                       }}
                     >
-                      {this.state.subPost.map((post, index) => {
+                      {this.state.subPosts.map((post, index) => {
                         return (
                           <option value={post.name} key={`opt-${index}`}>
                             {post.name}
@@ -169,8 +316,8 @@ class Editor extends React.Component {
                     placeholder={'Введите название'}
                   />
                 </p>
-                {this.state.subPost[0].data.type.map((key, index) => {
-                  if (this.state.subPost[0].data.type[index] === 'text') {
+                {this.state.subPosts[0].data.type.map((key, index) => {
+                  if (this.state.subPosts[0].data.type[index] === 'text') {
                     return (
                       <p
                         className={classes.ContainerItem}
@@ -182,7 +329,9 @@ class Editor extends React.Component {
                           rows={10}
                           cols={120}
                           placeholder={'Введите текст'}
-                          defaultValue={this.state.subPost[0].data.value[index]}
+                          defaultValue={
+                            this.state.subPosts[0].data.value[index]
+                          }
                         ></Textarea>
                         <button
                           className={classes.BtnClose}
@@ -191,14 +340,16 @@ class Editor extends React.Component {
                         ></button>
                       </p>
                     )
-                  } else if (this.state.subPost[0].data.type[index] === 'img') {
+                  } else if (
+                    this.state.subPosts[0].data.type[index] === 'img'
+                  ) {
                     return (
                       <div
                         className={classes.ContainerImg}
                         key={`img-${index}`}
                       >
                         <img
-                          src={this.state.subPost[0].data.value[index]}
+                          src={this.state.subPosts[0].data.value[index]}
                           alt=""
                           className="mainSection__img"
                           width="273px"
