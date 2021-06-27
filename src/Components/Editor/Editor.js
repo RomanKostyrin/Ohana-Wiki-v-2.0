@@ -10,40 +10,50 @@ class Editor extends React.Component {
     posts: ['', ''],
     keys: [],
     activePost: 0,
+    activeSubPost: 0,
     subPosts: [
       {
         name: 'subpost1',
         data: {
-          type: ['text', 'img', 'text', 'text', 'img'],
-          value: [
-            'текстареа 1 ном удал',
-            '1.png',
-            'текстар ном удал 2',
-            'текстареа 3 ном удал',
-            '2.png',
-          ],
+          type: ['text'],
+          value: ['1'],
         },
       },
     ],
+    newPostName: '',
     newPost: { postName: '', subPosts: [{}] },
     newSubPost: {
       name: '',
       data: {
         type: ['text'],
-        value: [''],
+        value: [' '],
       },
     },
   }
+  newPostNameHandle = (event) => {
+    this.setState({
+      newPostName: event.target.value,
+    })
+  }
+  ChangeSubPostName = async (event) => {
+    let keyDB = this.state.keys[this.state.activePost]
+    try {
+      const response = await axios.put(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
+        this.state.subPosts
+      )
+      console.log(response)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   putActivePost = async (event) => {
     event.preventDefault()
-    console.log('value ' + event.target.value)
-    console.log('1 ' + this.state.activePost)
     await this.setState({
       activePost: event.target.value,
     })
-    console.log('2 ' + this.state.activePost)
     this.getSubPosts()
-    console.log('3 ' + this.state.activePost)
   }
 
   onSubmitPost = async (event) => {
@@ -76,7 +86,7 @@ class Editor extends React.Component {
       this.setState({
         subPosts: response.data.subPosts,
       })
-      console.log('getsP ' + response.data.postName)
+      console.log(response.data)
     } catch (e) {
       console.log(e)
     }
@@ -89,34 +99,39 @@ class Editor extends React.Component {
     Object.keys(res.data).forEach((key) => {
       keys.push(key)
       arrPosts.push(res.data[key].postName)
-      arrSubPosts = res.data[key].subPosts
-      this.setState({
-        keys: keys,
-        subPosts: arrSubPosts,
-        posts: arrPosts,
-      })
+    })
+    arrSubPosts = res.data[keys[this.state.activeSubPost]].subPosts
+    this.setState({
+      keys: keys,
+      subPosts: arrSubPosts,
+      posts: arrPosts,
     })
   }
   createNewSubPost = async (event) => {
     event.preventDefault()
     let keyDB = this.state.keys[this.state.activePost]
     let newSubPosts = this.state.subPosts
+    console.log('newSubPosts')
+    console.log(newSubPosts)
     if (newSubPosts[0].name === '') {
+      console.log('newsubpost-0')
       newSubPosts = []
     }
     newSubPosts.push(this.state.newSubPost)
     console.log(newSubPosts)
-    this.setState({
+    await this.setState({
       subPosts: newSubPosts,
       newSubPost: {
         name: '',
         data: {
           type: ['text'],
-          value: [''],
+          value: [' '],
         },
       },
     })
     try {
+      console.log('try')
+      console.log(this.state.subPosts)
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
         this.state.subPosts
@@ -159,7 +174,7 @@ class Editor extends React.Component {
         name: event.target.value,
         data: {
           type: ['text'],
-          value: [''],
+          value: [' '],
         },
       },
     })
@@ -246,6 +261,8 @@ class Editor extends React.Component {
                     label={'Новое название'}
                     name={'post'}
                     placeholder="Введите название"
+                    value={this.state.newPostName}
+                    onChange={this.newPostNameHandle}
                   />
                 </p>
               </div>
@@ -287,9 +304,7 @@ class Editor extends React.Component {
                       id={'selectSubPost'}
                       name={'users'}
                       className={classes.SignInSelect}
-                      onChange={(event) => {
-                        this.ChangeSubPostsHandle(event.target.value)
-                      }}
+                      onChange={this.ChangeSubPostName}
                     >
                       {this.state.subPosts.map((post, index) => {
                         return (
@@ -311,8 +326,12 @@ class Editor extends React.Component {
                     placeholder={'Введите название'}
                   />
                 </p>
-                {this.state.subPosts[0].data.type.forEach((key, index) => {
-                  if (this.state.subPosts[0].data.type[index] === 'text') {
+                {this.state.subPosts[
+                  this.state.activeSubPost
+                ].data.type.forEach((type, index) => {
+                  let elem = this.state.subPosts[this.state.activeSubPost]
+
+                  if (elem.data.type[index] === 'text') {
                     return (
                       <p
                         className={classes.ContainerItem}
@@ -324,9 +343,7 @@ class Editor extends React.Component {
                           rows={10}
                           cols={120}
                           placeholder={'Введите текст'}
-                          defaultValue={
-                            this.state.subPosts[0].data.value[index]
-                          }
+                          defaultValue={elem.data.value[index]}
                         ></Textarea>
                         <button
                           className={classes.BtnClose}
@@ -335,16 +352,14 @@ class Editor extends React.Component {
                         ></button>
                       </p>
                     )
-                  } else if (
-                    this.state.subPosts[0].data.type[index] === 'img'
-                  ) {
+                  } else if (elem.data.type[index] === 'img') {
                     return (
                       <div
                         className={classes.ContainerImg}
                         key={`img-${index}`}
                       >
                         <img
-                          src={this.state.subPosts[0].data.value[index]}
+                          src={elem.data.value[index]}
                           alt=""
                           className="mainSection__img"
                           width="273px"
@@ -360,16 +375,16 @@ class Editor extends React.Component {
                   }
                 })}
               </div>
-
-              <button
-                className="btn btn--submit btn--bottom"
+              <Button
                 type={'submit'}
-                onChange={this.props.onChangeForm}
+                id={'NewPostButton'}
+                classType2={'ButtonSubmit'}
+                classType={'ButtonPrimary'}
+                onClick={this.props.onChangeForm}
               >
                 Сохранить
-              </button>
+              </Button>
             </form>
-            <button onClick={this.getSubPosts}>11</button>
           </section>
         </div>
       </>
