@@ -17,7 +17,9 @@ const Post = (props) => {
               href="/"
               className={BCClassIndex.join(' ')}
               aria-label="Ссылка на главную страницу"
-            ></a>
+            >
+              {' '}
+            </a>
           </li>
           <li>
             <a href="/nomen" className={classes.BreadCrumbsLink}>
@@ -25,7 +27,7 @@ const Post = (props) => {
             </a>
           </li>
           <li>
-            <a className={BCClassActive.join(' ')}>
+            <a href="/nomen" className={BCClassActive.join(' ')}>
               {props.subPosts[props.activeSubPost].name}
             </a>
           </li>

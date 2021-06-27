@@ -1,9 +1,9 @@
 import React from 'react'
+import axios from 'axios'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import classes from './Editor.module.scss'
 import Textarea from '../UI/Textarea/Textarea'
-import axios from 'axios'
 
 class Editor extends React.Component {
   state = {
@@ -13,19 +13,6 @@ class Editor extends React.Component {
     subPosts: [
       {
         name: 'subpost1',
-        data: {
-          type: ['text', 'img', 'text', 'text', 'img'],
-          value: [
-            'текстареа 1 ном удал',
-            '1.png',
-            'текстар ном удал 2',
-            'текстареа 3 ном удал',
-            '2.png',
-          ],
-        },
-      },
-      {
-        name: 'subpost2',
         data: {
           type: ['text', 'img', 'text', 'text', 'img'],
           value: [
@@ -47,11 +34,16 @@ class Editor extends React.Component {
       },
     },
   }
-  putActivePost = (event) => {
+  putActivePost = async (event) => {
     event.preventDefault()
-    this.setState({
+    console.log('value ' + event.target.value)
+    console.log('1 ' + this.state.activePost)
+    await this.setState({
       activePost: event.target.value,
     })
+    console.log('2 ' + this.state.activePost)
+    this.getSubPosts()
+    console.log('3 ' + this.state.activePost)
   }
 
   onSubmitPost = async (event) => {
@@ -61,6 +53,7 @@ class Editor extends React.Component {
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
         this.state.newPost
       )
+      console.log(response)
       let arr = this.state.posts
       arr.push(this.state.newPost.postName)
 
@@ -72,6 +65,23 @@ class Editor extends React.Component {
       console.log(e)
     }
   }
+
+  getSubPosts = async () => {
+    let keyDB = this.state.keys[this.state.activePost]
+    try {
+      const response = await axios.get(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
+      )
+
+      this.setState({
+        subPosts: response.data.subPosts,
+      })
+      console.log('getsP ' + response.data.postName)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   renderPosts = (res) => {
     let arrPosts = []
     let arrSubPosts = []
@@ -91,15 +101,27 @@ class Editor extends React.Component {
     event.preventDefault()
     let keyDB = this.state.keys[this.state.activePost]
     let newSubPosts = this.state.subPosts
+    if (newSubPosts[0].name === '') {
+      newSubPosts = []
+    }
     newSubPosts.push(this.state.newSubPost)
+    console.log(newSubPosts)
     this.setState({
       subPosts: newSubPosts,
+      newSubPost: {
+        name: '',
+        data: {
+          type: ['text'],
+          value: [''],
+        },
+      },
     })
     try {
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
         this.state.subPosts
       )
+      console.log(response)
     } catch (e) {
       console.log(e)
     }
@@ -183,59 +205,6 @@ class Editor extends React.Component {
                 Создать
               </Button>
             </form>
-            <form className={classes.MainSectionForm}>
-              <h2 className={classes.MainSectionHeaderTitle}>
-                Создание Сабпоста
-              </h2>
-              <div className={classes.ContainerPost}>
-                <p className={classes.ContainerItem}>
-                  <label className={classes.InputLabel}>
-                    Выберите пост:
-                    <br />
-                    <select
-                      id={'selectUsers'}
-                      name={'users'}
-                      className={classes.SignInSelect}
-                      onChange={this.putActivePost}
-                    >
-                      {this.state.posts.map((post, index) => {
-                        return (
-                          <option
-                            value={index}
-                            key={`optSubpost-${index}`}
-                            id={`optSubpost-${index}`}
-                          >
-                            {post}
-                          </option>
-                        )
-                      })}
-                    </select>
-                  </label>
-                </p>
-
-                <p className={classes.ContainerItem}>
-                  <Input
-                    type={'text'}
-                    inputTypeClass={'Input'}
-                    labelTypeClass={'InputLabel'}
-                    label={'Название Сабпоста'}
-                    name={'login'}
-                    placeholder="Введите название"
-                    onChange={this.changeSubPostsHandle}
-                    value={this.state.newSubPost.name}
-                  />
-                </p>
-              </div>
-              <Button
-                type={'submit'}
-                id={'NewPostButton'}
-                classType2={'ButtonSubmit'}
-                classType={'ButtonPrimary'}
-                onClick={this.createNewSubPost}
-              >
-                Создать
-              </Button>
-            </form>
 
             <form
               className={classes.MainSectionForm}
@@ -253,7 +222,7 @@ class Editor extends React.Component {
                       id={'selectUsers'}
                       name={'users'}
                       className={classes.SignInSelect}
-                      onChange={this.changePostHandle}
+                      onChange={this.putActivePost}
                     >
                       {this.state.posts.map((post, index) => {
                         return (
@@ -280,6 +249,32 @@ class Editor extends React.Component {
                   />
                 </p>
               </div>
+              <h2 className={classes.MainSectionHeaderTitle}>
+                Создание Сабпоста
+              </h2>
+              <div className={classes.ContainerPost}>
+                <p className={classes.ContainerItem}>
+                  <Input
+                    type={'text'}
+                    inputTypeClass={'Input'}
+                    labelTypeClass={'InputLabel'}
+                    label={'Название Сабпоста'}
+                    name={'login'}
+                    placeholder="Введите название"
+                    onChange={this.changeSubPostsHandle}
+                    value={this.state.newSubPost.name}
+                  />
+                </p>
+              </div>
+              <Button
+                type={'submit'}
+                id={'NewPostButton'}
+                classType2={'ButtonSubmit'}
+                classType={'ButtonPrimary'}
+                onClick={this.createNewSubPost}
+              >
+                Создать
+              </Button>
               <h2 className={classes.MainSectionHeaderTitle}>
                 Редактирование Сабпоста
               </h2>
@@ -316,7 +311,7 @@ class Editor extends React.Component {
                     placeholder={'Введите название'}
                   />
                 </p>
-                {this.state.subPosts[0].data.type.map((key, index) => {
+                {this.state.subPosts[0].data.type.forEach((key, index) => {
                   if (this.state.subPosts[0].data.type[index] === 'text') {
                     return (
                       <p
@@ -374,7 +369,7 @@ class Editor extends React.Component {
                 Сохранить
               </button>
             </form>
-            <button onClick={this.onChangeForm}>11</button>
+            <button onClick={this.getSubPosts}>11</button>
           </section>
         </div>
       </>
