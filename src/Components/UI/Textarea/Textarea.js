@@ -13,6 +13,8 @@ const Textarea = (props) => {
         cols={props.cols}
         placeholder={props.placeholder}
         defaultValue={props.defaultValue}
+        onChange={props.onChange}
+        id={props.id}
       ></textarea>
     </label>
   )

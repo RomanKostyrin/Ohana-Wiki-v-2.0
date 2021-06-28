@@ -35,14 +35,39 @@ class Editor extends React.Component {
       newPostName: event.target.value,
     })
   }
-  ChangeSubPostName = async (event) => {
+  changeActiveSubPost = (event) => {
+    this.setState({
+      activeSubPost: event.target.value,
+    })
+  }
+
+  onChangeTextArea = (event) => {
+    const indexOfTextArea = this.getIndexFromSome(event.target.id)
+    const tempSub = this.state.subPosts
+    tempSub[this.state.activeSubPost].data.value[indexOfTextArea] =
+      event.target.value
+    this.setState({
+      subPosts: tempSub,
+    })
+    console.log(this.state.subPosts)
+  }
+  getIndexFromSome = (string) => {
+    const indexOfDash = string.indexOf('-')
+    const newIndex = string.slice(indexOfDash + 1, string.length)
+    return newIndex
+  }
+  ChangeSubPost = async (event) => {
+    event.preventDefault()
     let keyDB = this.state.keys[this.state.activePost]
     try {
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
         this.state.subPosts
       )
-      console.log(response)
+      console.log(response.data)
+      this.setState({
+        subPosts: response.data,
+      })
     } catch (e) {
       console.log(e)
     }
@@ -75,7 +100,11 @@ class Editor extends React.Component {
       console.log(e)
     }
   }
-
+  getIndexFromSome = (string) => {
+    const indexOfDash = string.indexOf('-')
+    const newIndex = string.slice(indexOfDash + 1, string.length)
+    return newIndex
+  }
   getSubPosts = async () => {
     let keyDB = this.state.keys[this.state.activePost]
     try {
@@ -130,8 +159,6 @@ class Editor extends React.Component {
       },
     })
     try {
-      console.log('try')
-      console.log(this.state.subPosts)
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
         this.state.subPosts
@@ -304,11 +331,15 @@ class Editor extends React.Component {
                       id={'selectSubPost'}
                       name={'users'}
                       className={classes.SignInSelect}
-                      onChange={this.ChangeSubPostName}
+                      onChange={this.changeActiveSubPost}
                     >
                       {this.state.subPosts.map((post, index) => {
                         return (
-                          <option value={post.name} key={`opt-${index}`}>
+                          <option
+                            value={index}
+                            key={`opt-${index}`}
+                            id={`opt-${index}`}
+                          >
                             {post.name}
                           </option>
                         )
@@ -326,61 +357,63 @@ class Editor extends React.Component {
                     placeholder={'Введите название'}
                   />
                 </p>
-                {this.state.subPosts[
-                  this.state.activeSubPost
-                ].data.type.forEach((type, index) => {
-                  let elem = this.state.subPosts[this.state.activeSubPost]
-
-                  if (elem.data.type[index] === 'text') {
-                    return (
-                      <p
-                        className={classes.ContainerItem}
-                        key={`text-${index}`}
-                      >
-                        <Textarea
-                          LabelClass={'TextareaLabel'}
-                          labelName={'Введите текст'}
-                          rows={10}
-                          cols={120}
-                          placeholder={'Введите текст'}
-                          defaultValue={elem.data.value[index]}
-                        ></Textarea>
-                        <button
-                          className={classes.BtnClose}
-                          type="button"
-                          title="close"
-                        ></button>
-                      </p>
-                    )
-                  } else if (elem.data.type[index] === 'img') {
-                    return (
-                      <div
-                        className={classes.ContainerImg}
-                        key={`img-${index}`}
-                      >
-                        <img
-                          src={elem.data.value[index]}
-                          alt=""
-                          className="mainSection__img"
-                          width="273px"
-                          height="167px"
-                        />
-                        <button
-                          className={classes.BtnClose}
-                          type="button"
-                          title="close"
-                        ></button>
-                      </div>
-                    )
+                {this.state.subPosts[this.state.activeSubPost].data.type.map(
+                  (type, index) => {
+                    let elem = this.state.subPosts[this.state.activeSubPost]
+                    if (type === 'text') {
+                      return (
+                        <p
+                          className={classes.ContainerItem}
+                          key={`text-${index}`}
+                        >
+                          <Textarea
+                            LabelClass={'TextareaLabel'}
+                            labelName={'Введите текст'}
+                            rows={10}
+                            cols={120}
+                            placeholder={'Введите текст'}
+                            defaultValue={elem.data.value}
+                            id={`textarea-${index}`}
+                            onChange={this.onChangeTextArea}
+                          ></Textarea>
+                          <button
+                            className={classes.BtnClose}
+                            type="button"
+                            title="close"
+                          ></button>
+                        </p>
+                      )
+                    } else if (elem.data.type[index] === 'img') {
+                      return (
+                        <div
+                          className={classes.ContainerImg}
+                          key={`img-${index}`}
+                        >
+                          <img
+                            src={elem.data.value[index]}
+                            alt=""
+                            className="mainSection__img"
+                            width="273px"
+                            height="167px"
+                            id={`img-${index}`}
+                          />
+                          <button
+                            className={classes.BtnClose}
+                            type="button"
+                            title="close"
+                          ></button>
+                        </div>
+                      )
+                    }
                   }
-                })}
+                )}
               </div>
               <Button
                 type={'submit'}
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={this.props.onChangeForm}
+                onClick={this.ChangeSubPost}
               >
                 Сохранить
               </Button>
