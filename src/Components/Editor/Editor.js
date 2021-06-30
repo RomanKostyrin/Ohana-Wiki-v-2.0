@@ -16,7 +16,7 @@ class Editor extends React.Component {
         name: 'subpost1',
         data: {
           type: ['text'],
-          value: ['1'],
+          value: [''],
         },
       },
     ],
@@ -29,6 +29,38 @@ class Editor extends React.Component {
         value: [' '],
       },
     },
+  }
+
+  addTextHandle = (event) => {
+    event.preventDefault()
+    let tempSubs = this.state.subPosts
+    tempSubs[this.state.activeSubPost].data.type.push('text')
+    tempSubs[this.state.activeSubPost].data.value.push('')
+    console.log(tempSubs[this.state.activeSubPost].data)
+    this.setState({
+      subPosts: tempSubs,
+    })
+  }
+
+  deleteSubElement = (event) => {
+    event.preventDefault()
+    let btnId = this.getIndexFromSome(event.target.id)
+    let tempSubs = this.state.subPosts
+    console.log(tempSubs[this.state.activeSubPost].data.value[btnId])
+    tempSubs[this.state.activeSubPost].data.type.splice(btnId, 1)
+    tempSubs[this.state.activeSubPost].data.value.splice(btnId, 1)
+    this.setState({
+      subPosts: tempSubs,
+    })
+  }
+
+  addImgHandle = (event) => {
+    event.preventDefault()
+    let tempSubs = this.state.subPosts
+    console.log(tempSubs)
+    this.setState({
+      subPosts: tempSubs,
+    })
   }
   newPostNameHandle = (event) => {
     this.setState({
@@ -49,7 +81,6 @@ class Editor extends React.Component {
     this.setState({
       subPosts: tempSub,
     })
-    console.log(this.state.subPosts)
   }
   getIndexFromSome = (string) => {
     const indexOfDash = string.indexOf('-')
@@ -59,9 +90,13 @@ class Editor extends React.Component {
   ChangeSubPost = async (event) => {
     event.preventDefault()
     let keyDB = this.state.keys[this.state.activePost]
+    await this.putSubPosts(keyDB)
+  }
+
+  putSubPosts = async (key) => {
     try {
       const response = await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
         this.state.subPosts
       )
       console.log(response.data)
@@ -76,6 +111,7 @@ class Editor extends React.Component {
   putActivePost = async (event) => {
     event.preventDefault()
     await this.setState({
+      activeSubPost: 0,
       activePost: event.target.value,
     })
     this.getSubPosts()
@@ -158,15 +194,7 @@ class Editor extends React.Component {
         },
       },
     })
-    try {
-      const response = await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}/subPosts.json`,
-        this.state.subPosts
-      )
-      console.log(response)
-    } catch (e) {
-      console.log(e)
-    }
+    this.putSubPosts(keyDB)
   }
   onChangePostName = (event) => {
     this.setState({
@@ -372,14 +400,16 @@ class Editor extends React.Component {
                             rows={10}
                             cols={120}
                             placeholder={'Введите текст'}
-                            defaultValue={elem.data.value}
+                            defaultValue={elem.data.value[index]}
                             id={`textarea-${index}`}
                             onChange={this.onChangeTextArea}
                           ></Textarea>
                           <button
                             className={classes.BtnClose}
+                            id={`closeBtn-${index}`}
                             type="button"
                             title="close"
+                            onClick={this.deleteSubElement}
                           ></button>
                         </p>
                       )
@@ -399,8 +429,10 @@ class Editor extends React.Component {
                           />
                           <button
                             className={classes.BtnClose}
+                            id={`closeBtn-${index}`}
                             type="button"
                             title="close"
+                            onClick={this.deleteSubElement}
                           ></button>
                         </div>
                       )
@@ -408,6 +440,24 @@ class Editor extends React.Component {
                   }
                 )}
               </div>
+              <Button
+                type={'submit'}
+                id={'NewPostButton'}
+                classType2={'ButtonSubmit'}
+                classType={'ButtonPrimary'}
+                onClick={this.addTextHandle}
+              >
+                Добавить текст
+              </Button>
+              <Button
+                type={'submit'}
+                id={'NewPostButton'}
+                classType2={'ButtonSubmit'}
+                classType={'ButtonPrimary'}
+                onClick={this.addImgHandle}
+              >
+                Добавить картинку
+              </Button>
               <Button
                 type={'submit'}
                 id={'NewPostButton'}
