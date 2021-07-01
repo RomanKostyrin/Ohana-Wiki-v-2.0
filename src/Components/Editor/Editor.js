@@ -3,6 +3,7 @@ import axios from 'axios'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import classes from './Editor.module.scss'
+import Loader from '../UI/Loader/Loader'
 import Textarea from '../UI/Textarea/Textarea'
 
 class Editor extends React.Component {
@@ -29,6 +30,7 @@ class Editor extends React.Component {
         value: [' '],
       },
     },
+    isDisabledButtons: true,
   }
 
   addTextHandle = (event) => {
@@ -45,7 +47,11 @@ class Editor extends React.Component {
   deleteSubElement = (event) => {
     event.preventDefault()
     let btnId = this.getIndexFromSome(event.target.id)
+
     let tempSubs = this.state.subPosts
+    if (tempSubs[this.state.activeSubPost].data.value.length === 1) {
+      return alert('Нельзя удалять единственный')
+    }
     console.log(tempSubs[this.state.activeSubPost].data.value[btnId])
     tempSubs[this.state.activeSubPost].data.type.splice(btnId, 1)
     tempSubs[this.state.activeSubPost].data.value.splice(btnId, 1)
@@ -94,6 +100,7 @@ class Editor extends React.Component {
   }
 
   putSubPosts = async (key) => {
+    this.disableButtons(true)
     try {
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
@@ -102,6 +109,7 @@ class Editor extends React.Component {
       console.log(response.data)
       this.setState({
         subPosts: response.data,
+        isDisabledButtons: false,
       })
     } catch (e) {
       console.log(e)
@@ -116,9 +124,14 @@ class Editor extends React.Component {
     })
     this.getSubPosts()
   }
-
+  disableButtons = (bool) => {
+    this.setState({
+      isDisabledButtons: bool,
+    })
+  }
   onSubmitPost = async (event) => {
     event.preventDefault()
+    this.disableButtons(true)
     try {
       const response = await axios.post(
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
@@ -131,6 +144,7 @@ class Editor extends React.Component {
       this.setState({
         posts: arr,
         newPost: { postName: '', subPosts: [{}] },
+        isDisabledButtons: false,
       })
     } catch (e) {
       console.log(e)
@@ -143,6 +157,7 @@ class Editor extends React.Component {
   }
   getSubPosts = async () => {
     let keyDB = this.state.keys[this.state.activePost]
+    this.disableButtons(true)
     try {
       const response = await axios.get(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
@@ -150,6 +165,7 @@ class Editor extends React.Component {
 
       this.setState({
         subPosts: response.data.subPosts,
+        isDisabledButtons: false,
       })
       console.log(response.data)
     } catch (e) {
@@ -170,6 +186,7 @@ class Editor extends React.Component {
       keys: keys,
       subPosts: arrSubPosts,
       posts: arrPosts,
+      isDisabledButtons: false,
     })
   }
   createNewSubPost = async (event) => {
@@ -222,7 +239,6 @@ class Editor extends React.Component {
       console.log(e)
     }
   }
-  changePostHandle = (event) => {}
   changeSubPostsHandle = (event) => {
     this.setState({
       newSubPost: {
@@ -237,7 +253,8 @@ class Editor extends React.Component {
   render() {
     return (
       <>
-        <div className={classes.containerColumn}>
+        <div className={classes.СontainerColumn}>
+          {this.state.isDisabledButtons ? <Loader /> : null}
           <section className={classes.MainSection}>
             <header className={classes.MainSectionHeader}>
               <h2 className={classes.MainSectionHeaderTitle}>
@@ -271,11 +288,11 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onChange={this.onChangeForm}
+                disabled={this.state.isDisabledButtons}
               >
                 Создать
               </Button>
             </form>
-
             <form
               className={classes.MainSectionForm}
               onChange={this.onChangeForm}
@@ -283,12 +300,14 @@ class Editor extends React.Component {
               <h2 className={classes.MainSectionHeaderTitle}>
                 Редактирование поста
               </h2>
+
               <div className={classes.ContainerPost}>
                 <p className={classes.ContainerItem}>
                   <label className={classes.InputLabel}>
                     Старое название:
                     <br />
                     <select
+                      disabled={this.state.isDisabledButtons}
                       id={'selectUsers'}
                       name={'users'}
                       className={classes.SignInSelect}
@@ -344,6 +363,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.createNewSubPost}
+                disabled={this.state.isDisabledButtons}
               >
                 Создать
               </Button>
@@ -360,6 +380,7 @@ class Editor extends React.Component {
                       name={'users'}
                       className={classes.SignInSelect}
                       onChange={this.changeActiveSubPost}
+                      disabled={this.state.isDisabledButtons}
                     >
                       {this.state.subPosts.map((post, index) => {
                         return (
@@ -385,6 +406,7 @@ class Editor extends React.Component {
                     placeholder={'Введите название'}
                   />
                 </p>
+
                 {this.state.subPosts[this.state.activeSubPost].data.type.map(
                   (type, index) => {
                     let elem = this.state.subPosts[this.state.activeSubPost]
@@ -410,6 +432,7 @@ class Editor extends React.Component {
                             type="button"
                             title="close"
                             onClick={this.deleteSubElement}
+                            disabled={this.state.isDisabledButtons}
                           ></button>
                         </p>
                       )
@@ -433,6 +456,7 @@ class Editor extends React.Component {
                             type="button"
                             title="close"
                             onClick={this.deleteSubElement}
+                            disabled={this.state.isDisabledButtons}
                           ></button>
                         </div>
                       )
@@ -446,6 +470,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.addTextHandle}
+                disabled={this.state.isDisabledButtons}
               >
                 Добавить текст
               </Button>
@@ -455,6 +480,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.addImgHandle}
+                disabled={this.state.isDisabledButtons}
               >
                 Добавить картинку
               </Button>
@@ -464,6 +490,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.ChangeSubPost}
+                disabled={this.state.isDisabledButtons}
               >
                 Сохранить
               </Button>

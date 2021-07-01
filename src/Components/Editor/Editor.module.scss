@@ -8,9 +8,10 @@ $darkRed: #8a1d25;
 .Editor {
   display: flex;
 }
-.ContainerColumn {
+.СontainerColumn {
+  position: relative;
   display: flex;
-  margin-left: 50px;
+  margin-left: 0;
   margin-top: 10px;
   max-width: 1040px;
   margin-right: auto;
@@ -39,7 +40,7 @@ $darkRed: #8a1d25;
   align-items: center;
   padding-left: 26px;
   padding-right: 25px;
-  background-color: $red;
+  background-color: $blue;
   justify-content: space-between;
   border-radius: 5px;
   box-shadow: 0px 10px 25px 0px rgba(41, 52, 73, 0.5);

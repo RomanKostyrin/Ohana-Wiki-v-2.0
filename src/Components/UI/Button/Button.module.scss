@@ -107,3 +107,11 @@ $darkRed: #8a1d25;
   top: 7px;
   background: url('../../../img/svg/folder.svg') no-repeat;
 }
+
+.Button:disabled {
+  cursor: default;
+  box-shadow: inset 1px 1px 4px 0px rgb(148, 142, 142);
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
