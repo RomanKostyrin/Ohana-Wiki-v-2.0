@@ -10,9 +10,10 @@ class Main extends React.Component {
     } else
       return (
         <Post
+          subPosts={this.props.subPosts}
           className={classes.Post}
           posts={this.props.posts}
-          activePost={(num) => this.props.activePost(num)}
+          activePost={this.props.activePost}
           activeSubPost={this.props.activeSubPost}
           subPost={this.props.subPost}
           onClick={this.props.onClick}

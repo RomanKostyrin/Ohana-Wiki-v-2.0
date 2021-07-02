@@ -6,333 +6,35 @@ import axios from 'axios'
 
 class App extends React.Component {
   state = {
-    posts: ['Номенклатура', 'Пользователи', 'Контракты', 'Рецепция'],
-    activePost: 10,
+    keys: [],
+    posts: ['', ''],
+    activePost: 0,
     activeSubPost: 0,
-    0: [
+    subPosts: [
       {
-        name: 'Удал номен',
+        name: 'subpost1',
         data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'текстареа 1 ном удал',
-            2: '1.png',
-            3: 'текстар ном удал 2',
-            4: 'текстареа 3 ном удал',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Редакт номен',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'текстареа 1 редакт удал',
-            2: '1.png',
-            3: 'текстареа 2 редакт удал',
-            4: 'текстареа 3 редакт удал',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Созд номен',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Корр номен',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-    ],
-    1: [
-      {
-        name: 'Удаление ред',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-            6: 'img',
-            7: 'text',
-          },
-          value: {
-            1: 'Loremred1',
-            2: '1.png',
-            3: 'Loremred2',
-            4: 'Loremred3',
-            5: '2.png',
-            6: '1.png',
-            7: 'hello jenya',
-          },
-        },
-      },
-      {
-        name: 'Редактирование',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Создание',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Корректировка',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-    ],
-    2: [
-      {
-        name: 'Удаление контр',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Редактирование',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Создание',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Корректировка',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-    ],
-    3: [
-      {
-        name: 'Удаление контр',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '2.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '1.png',
-          },
-        },
-      },
-      {
-        name: 'Редактирование',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '2.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Создание',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
-        },
-      },
-      {
-        name: 'Корректировка',
-        data: {
-          type: {
-            1: 'text',
-            2: 'img',
-            3: 'text',
-            4: 'text',
-            5: 'img',
-          },
-          value: {
-            1: 'Lorem',
-            2: '1.png',
-            3: 'Lorem',
-            4: 'Lorem',
-            5: '2.png',
-          },
+          type: ['text'],
+          value: [''],
         },
       },
     ],
   }
 
-  ChangePostHandle = (data = 1) => {
-    return this.state[data]
-  }
-
-  ChangeSubPostHandle = (num = 1) => {
-    return this.state[this.state.activePost[num]]
+  renderPosts = (res) => {
+    let arrPosts = []
+    let arrSubPosts = []
+    let keys = []
+    Object.keys(res.data).forEach((key) => {
+      keys.push(key)
+      arrPosts.push(res.data[key].postName)
+    })
+    arrSubPosts = res.data[keys[this.state.activeSubPost]].subPosts
+    this.setState({
+      keys: keys,
+      subPosts: arrSubPosts,
+      posts: arrPosts,
+    })
   }
 
   onClickSubPost = (event) => {
@@ -348,33 +50,58 @@ class App extends React.Component {
       activeSubPost: +subId,
     })
   }
+
+  getSubPosts = async (event) => {
+    const newActiveIndex = this.getIndexFromSome(event.target.id)
+    let keyDB = this.state.keys[newActiveIndex]
+    try {
+      const response = await axios.get(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
+      )
+
+      this.setState({
+        activePost: +newActiveIndex,
+        activeSubPost: 0,
+        subPosts: response.data.subPosts,
+      })
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   getIndexFromSome = (string) => {
     const indexOfDash = string.indexOf('-')
     const newIndex = string.slice(indexOfDash + 1, string.length)
     return newIndex
   }
-  //получаем из id цифру для передачи в activePost
-  onClickButton = (event) => {
-    const newActiveIndex = this.getIndexFromSome(event.target.id)
-    this.setState({
-      activePost: +newActiveIndex,
-      activeSubPost: 0,
-    })
+
+  async componentDidMount() {
+    try {
+      const response = await axios.get(
+        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+      )
+      this.renderPosts(response)
+    } catch (e) {
+      console.log(e)
+    }
   }
+
   render() {
     return (
       <>
         <Navigation
           posts={this.state.posts}
           activePost={this.state.activePost}
-          onClick={this.onClickButton}
+          onClick={this.getSubPosts}
         />
         <Main
+          subPosts={this.state.subPosts}
           className={classes.Main}
           activePost={this.state.activePost}
           activeSubPost={this.state.activeSubPost}
           posts={this.state.posts}
-          subPost={(num) => this.ChangeSubPostHandle(num)}
+          subPost={this.state.subPosts[this.state.activeSubPost]}
           onClick={this.onClickSubPost}
         />
       </>

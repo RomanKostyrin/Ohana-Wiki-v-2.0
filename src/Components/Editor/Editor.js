@@ -98,11 +98,6 @@ class Editor extends React.Component {
       subPosts: tempSub,
     })
   }
-  getIndexFromSome = (string) => {
-    const indexOfDash = string.indexOf('-')
-    const newIndex = string.slice(indexOfDash + 1, string.length)
-    return newIndex
-  }
   ChangeSubPost = async (event) => {
     event.preventDefault()
     let keyDB = this.state.keys[this.state.activePost]
