@@ -27,6 +27,7 @@ const Input = (props) => {
       {props.label}
       <br />
       <input
+        id={props.id}
         type={props.type}
         className={classes[props.inputTypeClass]}
         name={props.name || 'Логин'}

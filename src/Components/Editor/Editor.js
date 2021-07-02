@@ -38,7 +38,6 @@ class Editor extends React.Component {
     let tempSubs = this.state.subPosts
     tempSubs[this.state.activeSubPost].data.type.push('text')
     tempSubs[this.state.activeSubPost].data.value.push('')
-    console.log(tempSubs[this.state.activeSubPost].data)
     this.setState({
       subPosts: tempSubs,
     })
@@ -63,7 +62,18 @@ class Editor extends React.Component {
   addImgHandle = (event) => {
     event.preventDefault()
     let tempSubs = this.state.subPosts
-    console.log(tempSubs)
+    tempSubs[this.state.activeSubPost].data.type.push('img')
+    tempSubs[this.state.activeSubPost].data.value.push('')
+    this.setState({
+      subPosts: tempSubs,
+    })
+  }
+  pathImgHandle = (event) => {
+    event.preventDefault()
+    let tempSubs = this.state.subPosts
+
+    let pathId = this.getIndexFromSome(event.target.id)
+    tempSubs[this.state.activeSubPost].data.value[pathId] = event.target.value
     this.setState({
       subPosts: tempSubs,
     })
@@ -450,6 +460,19 @@ class Editor extends React.Component {
                             height="167px"
                             id={`img-${index}`}
                           />
+                          <p className={classes.ContainerItem}>
+                            <Input
+                              type={'text'}
+                              inputTypeClass={'Input'}
+                              labelTypeClass={'InputLabel'}
+                              label={''}
+                              name={'post'}
+                              placeholder="Введите название"
+                              value={elem.data.value[index]}
+                              id={`path-${index}`}
+                              onChange={this.pathImgHandle}
+                            />
+                          </p>
                           <button
                             className={classes.BtnClose}
                             id={`closeBtn-${index}`}
