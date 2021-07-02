@@ -33,6 +33,15 @@ class Editor extends React.Component {
     isDisabledButtons: true,
   }
 
+  ChangeSubPostName = (event) => {
+    event.preventDefault()
+    let tempSubs = this.state.subPosts
+    tempSubs[this.state.activeSubPost].name = event.target.value
+    this.setState({
+      subPosts: tempSubs,
+    })
+  }
+
   addTextHandle = (event) => {
     event.preventDefault()
     let tempSubs = this.state.subPosts
@@ -409,6 +418,7 @@ class Editor extends React.Component {
                     label={'Новое название'}
                     name={'subPost'}
                     placeholder={'Введите название'}
+                    onChange={this.ChangeSubPostName}
                   />
                 </p>
 

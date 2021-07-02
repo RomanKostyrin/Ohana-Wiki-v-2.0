@@ -21,6 +21,11 @@ class App extends React.Component {
     ],
   }
 
+  onEdit = () => {
+    this.setState({
+      activePost: 10,
+    })
+  }
   renderPosts = (res) => {
     let arrPosts = []
     let arrSubPosts = []
@@ -94,6 +99,7 @@ class App extends React.Component {
           posts={this.state.posts}
           activePost={this.state.activePost}
           onClick={this.getSubPosts}
+          onEdit={this.onEdit}
         />
         <Main
           subPosts={this.state.subPosts}
