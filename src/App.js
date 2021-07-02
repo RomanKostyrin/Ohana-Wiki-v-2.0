@@ -19,6 +19,9 @@ class App extends React.Component {
         },
       },
     ],
+    imgClass: '',
+    ImgButtonClass: '',
+    imgId: '',
   }
 
   onEdit = () => {
@@ -26,6 +29,17 @@ class App extends React.Component {
       activePost: 10,
     })
   }
+  onImgClick = (event) => {
+    event.preventDefault()
+    console.log(event.target.id)
+    let imgClass = 'modalImg'
+    let ImgButtonClass = 'modalWrapper'
+    this.setState({
+      imgClass: imgClass,
+      ImgButtonClass: ImgButtonClass,
+    })
+  }
+
   renderPosts = (res) => {
     let arrPosts = []
     let arrSubPosts = []
@@ -102,8 +116,12 @@ class App extends React.Component {
           onEdit={this.onEdit}
         />
         <Main
+          imgId={this.getIndexFromSome(this.state.imgId)}
+          ImgButtonClass={this.state.ImgButtonClass}
+          onImgClick={this.onImgClick}
           subPosts={this.state.subPosts}
           className={classes.Main}
+          imgClass={this.state.imgClass}
           activePost={this.state.activePost}
           activeSubPost={this.state.activeSubPost}
           posts={this.state.posts}

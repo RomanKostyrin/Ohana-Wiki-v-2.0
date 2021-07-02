@@ -3,6 +3,8 @@ import React from 'react'
 import Button from '../UI/Button/Button'
 
 const Post = (props) => {
+  let ImgButton = [classes.ImgButton, classes[props.ImgButtonClass]]
+  let imgClass = [classes.Img, classes[props.imgClass]]
   const BCClassIndex = [classes.BreadCrumbsLink, classes.BreadCrumbsLinkIndex]
   const BCClassActive = [classes.BreadCrumbsLink, classes.BreadCrumbsLinkActive]
   return (
@@ -73,13 +75,22 @@ const Post = (props) => {
                   {valueData}
                 </p>
               ) : (
-                <img
-                  id={`${typeData}-${index}`}
-                  key={`${typeData}-${index}`}
-                  src={valueData}
-                  alt=""
-                  className={classes.MainSectionImg}
-                />
+                props.imgId === index ?  (
+                  <button
+                    className={ImgButton.join(' ')}
+                    onClick={props.onImgClick}
+                    key={`ImgButton-${index}`}
+                  >
+                    <img
+                      id={`${typeData}-${index}`}
+                      key={`${typeData}-${index}`}
+                      src={valueData}
+                      alt=""
+                      width="273"
+                      height="167"
+                      className={imgClass.join(' ')}
+                    />
+                  </button>)
               )
             }
           )}

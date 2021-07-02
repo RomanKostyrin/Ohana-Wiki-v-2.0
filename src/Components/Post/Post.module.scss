@@ -127,3 +127,43 @@ $darkRed: #8a1d25;
   justify-content: flex-start;
   margin-top: 20px;
 }
+
+.ImgButton {
+  margin-right: 10px;
+  padding: 0;
+  outline: none;
+  background-color: unset;
+  border: none;
+  cursor: pointer;
+}
+
+.modalWrapper {
+  position: fixed;
+  z-index: 3;
+  padding-top: 100px;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+.Img {
+  border-radius: 15px;
+}
+.modalImg {
+  z-index: 4;
+  margin: auto;
+  display: block;
+  width: fit-content;
+  height: fit-content;
+}
+
+@keyframes zoom {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
