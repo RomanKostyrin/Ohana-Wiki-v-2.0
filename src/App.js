@@ -29,6 +29,11 @@ class App extends React.Component {
       activePost: 10,
     })
   }
+  onUsers = () => {
+    this.setState({
+      activePost: 20,
+    })
+  }
   onImgClick = (event) => {
     event.preventDefault()
     let ImgId = ''
@@ -45,6 +50,23 @@ class App extends React.Component {
       ImgButtonClass: ImgButtonClass,
       ImgId: ImgId,
     })
+  }
+
+  loginHandler = async (event) => {
+    const authData = {
+      email: this.state.newEmail,
+      password: this.state.password,
+      returnSecureToken: true,
+    }
+    try {
+      const response = await axios.post(
+        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCZ5AHawQ9Rr2m_pMRkOGSf_9pDqGcr8aU',
+        authData
+      )
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   renderPosts = (res) => {
@@ -121,6 +143,7 @@ class App extends React.Component {
           activePost={this.state.activePost}
           onClick={this.getSubPosts}
           onEdit={this.onEdit}
+          onUsers={this.onUsers}
         />
         <Main
           ImgId={+this.getIndexFromSome(this.state.ImgId)}

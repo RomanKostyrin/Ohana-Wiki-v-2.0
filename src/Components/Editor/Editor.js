@@ -301,7 +301,7 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onChange={this.onChangeForm}
+                onClick={this.onChangeForm}
                 disabled={this.state.isDisabledButtons}
               >
                 Создать
@@ -322,7 +322,7 @@ class Editor extends React.Component {
                     <br />
                     <select
                       disabled={this.state.isDisabledButtons}
-                      id={'selectUsers'}
+                      id={'selectPosts'}
                       name={'users'}
                       className={classes.SignInSelect}
                       onChange={this.putActivePost}
@@ -390,7 +390,7 @@ class Editor extends React.Component {
                     Старое название:
                     <br />
                     <select
-                      id={'selectSubPost'}
+                      id={'selectSubPosts'}
                       name={'users'}
                       className={classes.SignInSelect}
                       onChange={this.changeActiveSubPost}

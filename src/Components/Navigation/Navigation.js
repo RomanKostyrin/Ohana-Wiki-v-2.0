@@ -39,6 +39,19 @@ class Navigation extends React.Component {
               {'Edit'}
             </Button>
           </li>
+          <li key={'users'}>
+            <Button
+              id={`NavButton-20`}
+              classType={'ButtonImportant'}
+              classType2={'ButtonNavigation'}
+              classTypeActive={
+                this.props.activePost === 20 ? 'ButtonNavigationActive' : null
+              }
+              onClick={this.props.onUsers}
+            >
+              {'Users'}
+            </Button>
+          </li>
         </ul>
       </nav>
     )
