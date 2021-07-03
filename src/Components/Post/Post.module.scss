@@ -127,9 +127,13 @@ $darkRed: #8a1d25;
   justify-content: flex-start;
   margin-top: 20px;
 }
-
-.ImgButton {
+.ImgWrapper {
+  width: 273px;
+  height: 167px;
+  display: inline-block;
   margin-right: 10px;
+}
+.ImgButton {
   padding: 0;
   outline: none;
   background-color: unset;
@@ -149,21 +153,26 @@ $darkRed: #8a1d25;
   background-color: rgba(0, 0, 0, 0.3);
 }
 .Img {
+  width: 273px;
+  height: 167px;
   border-radius: 15px;
 }
 .modalImg {
   z-index: 4;
   margin: auto;
   display: block;
-  width: fit-content;
-  height: fit-content;
+  width: 1024px;
+  height: 768px;
+  animation: zoom 0.3s;
 }
 
 @keyframes zoom {
   from {
-    transform: scale(0);
+    width: 273px;
+    height: 167px;
   }
   to {
-    transform: scale(1);
+    width: 1024px;
+    height: 768px;
   }
 }

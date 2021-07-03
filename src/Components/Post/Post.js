@@ -75,27 +75,28 @@ const Post = (props) => {
                   {valueData}
                 </p>
               ) : (
-                <button
-                  className={
-                    props.ImgId === index
-                      ? ImgButton.join(' ')
-                      : classes.ImgButton
-                  }
-                  onClick={props.onImgClick}
-                  key={`ImgButton-${index}`}
-                >
-                  <img
-                    id={`${typeData}-${index}`}
-                    key={`${typeData}-${index}`}
-                    src={valueData}
-                    alt=""
-                    width="273"
-                    height="167"
+                <div className={classes.ImgWrapper} key={`ImgWrapper-${index}`}>
+                  <button
                     className={
-                      props.ImgId === index ? ImgClass.join(' ') : classes.Img
+                      props.ImgId === index
+                        ? ImgButton.join(' ')
+                        : classes.ImgButton
                     }
-                  />
-                </button>
+                    onClick={props.onImgClick}
+                  >
+                    <img
+                      id={`${typeData}-${index}`}
+                      key={`${typeData}-${index}`}
+                      src={valueData}
+                      alt=""
+                      width="273"
+                      height="167"
+                      className={
+                        props.ImgId === index ? ImgClass.join(' ') : classes.Img
+                      }
+                    />
+                  </button>
+                </div>
               )
             }
           )}
