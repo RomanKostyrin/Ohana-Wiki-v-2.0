@@ -10,9 +10,9 @@ class Main extends React.Component {
     } else
       return (
         <Post
-          imgId={this.props.imgId}
+          ImgId={this.props.ImgId}
           ImgButtonClass={this.props.ImgButtonClass}
-          imgClass={this.props.imgClass}
+          ImgClass={this.props.ImgClass}
           onImgClick={this.props.onImgClick}
           subPosts={this.props.subPosts}
           className={classes.Post}

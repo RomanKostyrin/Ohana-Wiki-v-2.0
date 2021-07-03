@@ -19,9 +19,9 @@ class App extends React.Component {
         },
       },
     ],
-    imgClass: '',
+    ImgClass: '',
     ImgButtonClass: '',
-    imgId: '',
+    ImgId: '',
   }
 
   onEdit = () => {
@@ -31,12 +31,19 @@ class App extends React.Component {
   }
   onImgClick = (event) => {
     event.preventDefault()
-    console.log(event.target.id)
-    let imgClass = 'modalImg'
-    let ImgButtonClass = 'modalWrapper'
+    let ImgId = ''
+    let ImgClass = ''
+    let ImgButtonClass = ''
+    if (this.state.ImgClass === '') {
+      ImgId = event.target.id
+      ImgClass = 'modalImg'
+      ImgButtonClass = 'modalWrapper'
+    }
+
     this.setState({
-      imgClass: imgClass,
+      ImgClass: ImgClass,
       ImgButtonClass: ImgButtonClass,
+      ImgId: ImgId,
     })
   }
 
@@ -116,12 +123,12 @@ class App extends React.Component {
           onEdit={this.onEdit}
         />
         <Main
-          imgId={this.getIndexFromSome(this.state.imgId)}
+          ImgId={+this.getIndexFromSome(this.state.ImgId)}
           ImgButtonClass={this.state.ImgButtonClass}
           onImgClick={this.onImgClick}
           subPosts={this.state.subPosts}
           className={classes.Main}
-          imgClass={this.state.imgClass}
+          ImgClass={this.state.ImgClass}
           activePost={this.state.activePost}
           activeSubPost={this.state.activeSubPost}
           posts={this.state.posts}
