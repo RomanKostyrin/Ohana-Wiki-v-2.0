@@ -2,12 +2,12 @@ import {
   FETCH_POSTS_ERROR,
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_START,
+  FETCH_SUBPOSTS,
 } from '../actions/actionTypes'
 
 const initialState = {
   posts: ['1', '2'],
   keys: [],
-  activePost: 0,
   activeSubPost: 0,
   subPosts: [
     {
@@ -51,6 +51,12 @@ export default function editReducer(state = initialState, action) {
         ...state,
         isDisabledButtons: false,
         error: action.error,
+      }
+    case FETCH_SUBPOSTS:
+      return {
+        ...state,
+        subPosts: action.subPosts,
+        isDisabledButtons: false,
       }
     default:
       return state

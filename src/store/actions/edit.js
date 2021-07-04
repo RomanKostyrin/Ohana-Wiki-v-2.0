@@ -3,6 +3,7 @@ import {
   FETCH_POSTS_ERROR,
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_START,
+  FETCH_SUBPOSTS,
 } from './actionTypes'
 
 export function ChangeSubPostName(event) {
@@ -13,6 +14,28 @@ export function ChangeSubPostName(event) {
     this.setState({
       subPosts: tempSubs,
     })
+  }
+}
+
+export function fetchSubPosts(props, id) {
+  console.log(props)
+  return async (dispatch) => {
+    let keyDB = props.keys[id]
+    dispatch(fetchPostsStart)
+    try {
+      const response = await axios.get(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
+      )
+
+      dispatch(fetchSubPostsSuccess(response.data.subPosts))
+      this.setState({
+        subPosts: response.data.subPosts,
+        isDisabledButtons: false,
+      })
+      console.log(response.data)
+    } catch (e) {
+      dispatch(fetchPostsError(e))
+    }
   }
 }
 
@@ -31,12 +54,17 @@ export function fetchPosts() {
         arrPosts.push(res.data[key].postName)
       })
       arrSubPosts = res.data[keys[0]].subPosts
-      console.log('bef')
       dispatch(fetchPostsSuccess(arrPosts, arrSubPosts, keys))
-      console.log('after')
     } catch (e) {
       dispatch(fetchPostsError(e))
     }
+  }
+}
+
+export function fetchSubPostsSuccess(subPosts) {
+  return {
+    type: FETCH_SUBPOSTS,
+    subPosts,
   }
 }
 

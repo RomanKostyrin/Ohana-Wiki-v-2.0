@@ -6,7 +6,7 @@ import classes from './Editor.module.scss'
 import Loader from '../UI/Loader/Loader'
 import Textarea from '../UI/Textarea/Textarea'
 import { connect } from 'react-redux'
-import { fetchPosts } from '../../store/actions/edit'
+import { fetchPosts, fetchSubPosts } from '../../store/actions/edit'
 
 class Editor extends React.Component {
   ChangeSubPostName = (event) => {
@@ -101,13 +101,9 @@ class Editor extends React.Component {
       console.log(e)
     }
   }
-  putActivePost = async (event) => {
+  putActivePost = (event) => {
     event.preventDefault()
-    await this.setState({
-      activeSubPost: 0,
-      activePost: event.target.value,
-    })
-    this.getSubPosts()
+    this.props.fetchSubPosts(this.props, event.target.value)
   }
   disableButtons = (bool) => {
     this.setState({
@@ -139,23 +135,6 @@ class Editor extends React.Component {
     const indexOfDash = string.indexOf('-')
     const newIndex = string.slice(indexOfDash + 1, string.length)
     return newIndex
-  }
-  getSubPosts = async () => {
-    let keyDB = this.props.keys[this.props.activePost]
-    this.disableButtons(true)
-    try {
-      const response = await axios.get(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
-      )
-
-      this.setState({
-        subPosts: response.data.subPosts,
-        isDisabledButtons: false,
-      })
-      console.log(response.data)
-    } catch (e) {
-      console.log(e)
-    }
   }
   createNewSubPost = async (event) => {
     event.preventDefault()
@@ -210,11 +189,9 @@ class Editor extends React.Component {
   }
   componentDidMount() {
     this.props.fetchPosts()
-    console.log('didm')
   }
 
   render() {
-    console.log('render')
     return (
       <>
         <div className={classes.СontainerColumn}>
@@ -497,6 +474,7 @@ function mapStatePoProps(state) {
 function mapDispatchPoProps(dispatch) {
   return {
     fetchPosts: () => dispatch(fetchPosts()),
+    fetchSubPosts: (props, id) => dispatch(fetchSubPosts(props, id)),
   }
 }
 
