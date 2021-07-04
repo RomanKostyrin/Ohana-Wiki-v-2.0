@@ -1,6 +1,7 @@
 import classes from './Post.module.scss'
 import React from 'react'
 import Button from '../UI/Button/Button'
+import { connect } from 'react-redux'
 
 const Post = (props) => {
   let ImgButton = [classes.ImgButton, classes[props.ImgButtonClass]]
@@ -106,4 +107,12 @@ const Post = (props) => {
   )
 }
 
-export default Post
+function mapStatePoProps(state) {
+  return {}
+}
+
+function mapDispatchPoProps(dispatch) {
+  return {}
+}
+
+export default connect(mapStatePoProps, mapDispatchPoProps)(Post)

@@ -3,6 +3,7 @@ import Main from './Components/Main/Main'
 import classes from './App.module.scss'
 import Navigation from './Components/Navigation/Navigation'
 import axios from 'axios'
+import { Route, Switch } from 'react-router-dom'
 
 class App extends React.Component {
   state = {
@@ -145,6 +146,10 @@ class App extends React.Component {
           onEdit={this.onEdit}
           onUsers={this.onUsers}
         />
+        <Switch>
+          <Route path="m" />
+        </Switch>
+
         <Main
           ImgId={+this.getIndexFromSome(this.state.ImgId)}
           ImgButtonClass={this.state.ImgButtonClass}

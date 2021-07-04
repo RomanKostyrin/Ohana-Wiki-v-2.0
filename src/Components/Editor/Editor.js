@@ -5,84 +5,58 @@ import Button from '../UI/Button/Button'
 import classes from './Editor.module.scss'
 import Loader from '../UI/Loader/Loader'
 import Textarea from '../UI/Textarea/Textarea'
+import { connect } from 'react-redux'
+import { fetchPosts } from '../../store/actions/edit'
 
 class Editor extends React.Component {
-  state = {
-    posts: ['', ''],
-    keys: [],
-    activePost: 0,
-    activeSubPost: 0,
-    subPosts: [
-      {
-        name: 'subpost1',
-        data: {
-          type: ['text'],
-          value: [''],
-        },
-      },
-    ],
-    newPostName: '',
-    newPost: { postName: '', subPosts: [{}] },
-    newSubPost: {
-      name: '',
-      data: {
-        type: ['text'],
-        value: [' '],
-      },
-    },
-    isDisabledButtons: true,
-  }
-
   ChangeSubPostName = (event) => {
+    this.props.ChangeSubPostName(event)
     event.preventDefault()
-    let tempSubs = this.state.subPosts
-    tempSubs[this.state.activeSubPost].name = event.target.value
+    let tempSubs = this.props.subPosts
+    tempSubs[this.props.activeSubPost].name = event.target.value
     this.setState({
       subPosts: tempSubs,
     })
   }
-
   addTextHandle = (event) => {
     event.preventDefault()
-    let tempSubs = this.state.subPosts
-    tempSubs[this.state.activeSubPost].data.type.push('text')
-    tempSubs[this.state.activeSubPost].data.value.push('')
+    let tempSubs = this.props.subPosts
+    tempSubs[this.props.activeSubPost].data.type.push('text')
+    tempSubs[this.props.activeSubPost].data.value.push('')
     this.setState({
       subPosts: tempSubs,
     })
   }
-
   deleteSubElement = (event) => {
     event.preventDefault()
     let btnId = this.getIndexFromSome(event.target.id)
 
-    let tempSubs = this.state.subPosts
-    if (tempSubs[this.state.activeSubPost].data.value.length === 1) {
+    let tempSubs = this.props.subPosts
+    if (tempSubs[this.props.activeSubPost].data.value.length === 1) {
       return alert('Нельзя удалять единственный')
     }
-    console.log(tempSubs[this.state.activeSubPost].data.value[btnId])
-    tempSubs[this.state.activeSubPost].data.type.splice(btnId, 1)
-    tempSubs[this.state.activeSubPost].data.value.splice(btnId, 1)
+    console.log(tempSubs[this.props.activeSubPost].data.value[btnId])
+    tempSubs[this.props.activeSubPost].data.type.splice(btnId, 1)
+    tempSubs[this.props.activeSubPost].data.value.splice(btnId, 1)
     this.setState({
       subPosts: tempSubs,
     })
   }
-
   addImgHandle = (event) => {
     event.preventDefault()
-    let tempSubs = this.state.subPosts
-    tempSubs[this.state.activeSubPost].data.type.push('img')
-    tempSubs[this.state.activeSubPost].data.value.push('')
+    let tempSubs = this.props.subPosts
+    tempSubs[this.props.activeSubPost].data.type.push('img')
+    tempSubs[this.props.activeSubPost].data.value.push('')
     this.setState({
       subPosts: tempSubs,
     })
   }
   pathImgHandle = (event) => {
     event.preventDefault()
-    let tempSubs = this.state.subPosts
+    let tempSubs = this.props.subPosts
 
     let pathId = this.getIndexFromSome(event.target.id)
-    tempSubs[this.state.activeSubPost].data.value[pathId] = event.target.value
+    tempSubs[this.props.activeSubPost].data.value[pathId] = event.target.value
     this.setState({
       subPosts: tempSubs,
     })
@@ -97,11 +71,10 @@ class Editor extends React.Component {
       activeSubPost: event.target.value,
     })
   }
-
   onChangeTextArea = (event) => {
     const indexOfTextArea = this.getIndexFromSome(event.target.id)
-    const tempSub = this.state.subPosts
-    tempSub[this.state.activeSubPost].data.value[indexOfTextArea] =
+    const tempSub = this.props.subPosts
+    tempSub[this.props.activeSubPost].data.value[indexOfTextArea] =
       event.target.value
     this.setState({
       subPosts: tempSub,
@@ -109,16 +82,15 @@ class Editor extends React.Component {
   }
   ChangeSubPost = async (event) => {
     event.preventDefault()
-    let keyDB = this.state.keys[this.state.activePost]
+    let keyDB = this.props.keys[this.props.activePost]
     await this.putSubPosts(keyDB)
   }
-
   putSubPosts = async (key) => {
     this.disableButtons(true)
     try {
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
-        this.state.subPosts
+        this.props.subPosts
       )
       console.log(response.data)
       this.setState({
@@ -129,7 +101,6 @@ class Editor extends React.Component {
       console.log(e)
     }
   }
-
   putActivePost = async (event) => {
     event.preventDefault()
     await this.setState({
@@ -149,11 +120,11 @@ class Editor extends React.Component {
     try {
       const response = await axios.post(
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-        this.state.newPost
+        this.props.newPost
       )
       console.log(response)
-      let arr = this.state.posts
-      arr.push(this.state.newPost.postName)
+      let arr = this.props.posts
+      arr.push(this.props.newPost.postName)
 
       this.setState({
         posts: arr,
@@ -170,7 +141,7 @@ class Editor extends React.Component {
     return newIndex
   }
   getSubPosts = async () => {
-    let keyDB = this.state.keys[this.state.activePost]
+    let keyDB = this.props.keys[this.props.activePost]
     this.disableButtons(true)
     try {
       const response = await axios.get(
@@ -186,34 +157,17 @@ class Editor extends React.Component {
       console.log(e)
     }
   }
-
-  renderPosts = (res) => {
-    let arrPosts = []
-    let arrSubPosts = []
-    let keys = []
-    Object.keys(res.data).forEach((key) => {
-      keys.push(key)
-      arrPosts.push(res.data[key].postName)
-    })
-    arrSubPosts = res.data[keys[this.state.activeSubPost]].subPosts
-    this.setState({
-      keys: keys,
-      subPosts: arrSubPosts,
-      posts: arrPosts,
-      isDisabledButtons: false,
-    })
-  }
   createNewSubPost = async (event) => {
     event.preventDefault()
-    let keyDB = this.state.keys[this.state.activePost]
-    let newSubPosts = this.state.subPosts
+    let keyDB = this.props.keys[this.props.activePost]
+    let newSubPosts = this.props.subPosts
     console.log('newSubPosts')
     console.log(newSubPosts)
     if (newSubPosts[0].name === '') {
       console.log('newsubpost-0')
       newSubPosts = []
     }
-    newSubPosts.push(this.state.newSubPost)
+    newSubPosts.push(this.props.newSubPost)
     console.log(newSubPosts)
     await this.setState({
       subPosts: newSubPosts,
@@ -243,16 +197,6 @@ class Editor extends React.Component {
       },
     })
   }
-  async componentDidMount() {
-    try {
-      const response = await axios.get(
-        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
-      )
-      this.renderPosts(response)
-    } catch (e) {
-      console.log(e)
-    }
-  }
   changeSubPostsHandle = (event) => {
     this.setState({
       newSubPost: {
@@ -264,11 +208,17 @@ class Editor extends React.Component {
       },
     })
   }
+  componentDidMount() {
+    this.props.fetchPosts()
+    console.log('didm')
+  }
+
   render() {
+    console.log('render')
     return (
       <>
         <div className={classes.СontainerColumn}>
-          {this.state.isDisabledButtons ? <Loader /> : null}
+          {this.props.isDisabledButtons ? <Loader /> : null}
           <section className={classes.mainSection}>
             <header className={classes.mainSectionHeader}>
               <h2 className={classes.mainSectionHeaderTitle}>
@@ -292,7 +242,7 @@ class Editor extends React.Component {
                     name={'login'}
                     placeholder="Введите название"
                     onChange={this.onChangePostName}
-                    value={this.state.newPost.postName}
+                    value={this.props.newPost.postName}
                   />
                 </p>
               </div>
@@ -302,7 +252,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.onChangeForm}
-                disabled={this.state.isDisabledButtons}
+                disabled={this.props.isDisabledButtons}
               >
                 Создать
               </Button>
@@ -321,13 +271,13 @@ class Editor extends React.Component {
                     Старое название:
                     <br />
                     <select
-                      disabled={this.state.isDisabledButtons}
+                      disabled={this.props.isDisabledButtons}
                       id={'selectPosts'}
                       name={'users'}
                       className={classes.signInSelect}
                       onChange={this.putActivePost}
                     >
-                      {this.state.posts.map((post, index) => {
+                      {this.props.posts.map((post, index) => {
                         return (
                           <option
                             value={index}
@@ -349,7 +299,7 @@ class Editor extends React.Component {
                     label={'Новое название'}
                     name={'post'}
                     placeholder="Введите название"
-                    value={this.state.newPostName}
+                    value={this.props.newPostName}
                     onChange={this.newPostNameHandle}
                   />
                 </p>
@@ -367,7 +317,7 @@ class Editor extends React.Component {
                     name={'login'}
                     placeholder="Введите название"
                     onChange={this.changeSubPostsHandle}
-                    value={this.state.newSubPost.name}
+                    value={this.props.newSubPost.name}
                   />
                 </p>
               </div>
@@ -377,7 +327,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.createNewSubPost}
-                disabled={this.state.isDisabledButtons}
+                disabled={this.props.isDisabledButtons}
               >
                 Создать
               </Button>
@@ -394,9 +344,9 @@ class Editor extends React.Component {
                       name={'users'}
                       className={classes.signInSelect}
                       onChange={this.changeActiveSubPost}
-                      disabled={this.state.isDisabledButtons}
+                      disabled={this.props.isDisabledButtons}
                     >
-                      {this.state.subPosts.map((post, index) => {
+                      {this.props.subPosts.map((post, index) => {
                         return (
                           <option
                             value={index}
@@ -422,9 +372,9 @@ class Editor extends React.Component {
                   />
                 </p>
 
-                {this.state.subPosts[this.state.activeSubPost].data.type.map(
+                {this.props.subPosts[this.props.activeSubPost].data.type.map(
                   (type, index) => {
-                    let elem = this.state.subPosts[this.state.activeSubPost]
+                    let elem = this.props.subPosts[this.props.activeSubPost]
                     if (type === 'text') {
                       return (
                         <p
@@ -447,7 +397,7 @@ class Editor extends React.Component {
                             type="button"
                             title="close"
                             onClick={this.deleteSubElement}
-                            disabled={this.state.isDisabledButtons}
+                            disabled={this.props.isDisabledButtons}
                           ></button>
                         </p>
                       )
@@ -484,7 +434,7 @@ class Editor extends React.Component {
                             type="button"
                             title="close"
                             onClick={this.deleteSubElement}
-                            disabled={this.state.isDisabledButtons}
+                            disabled={this.props.isDisabledButtons}
                           ></button>
                         </div>
                       )
@@ -498,7 +448,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.addTextHandle}
-                disabled={this.state.isDisabledButtons}
+                disabled={this.props.isDisabledButtons}
               >
                 Добавить текст
               </Button>
@@ -508,7 +458,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.addImgHandle}
-                disabled={this.state.isDisabledButtons}
+                disabled={this.props.isDisabledButtons}
               >
                 Добавить картинку
               </Button>
@@ -518,7 +468,7 @@ class Editor extends React.Component {
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={this.ChangeSubPost}
-                disabled={this.state.isDisabledButtons}
+                disabled={this.props.isDisabledButtons}
               >
                 Сохранить
               </Button>
@@ -530,4 +480,24 @@ class Editor extends React.Component {
   }
 }
 
-export default Editor
+function mapStatePoProps(state) {
+  return {
+    posts: state.edit.posts,
+    keys: state.edit.keys,
+    activePost: state.edit.activePost,
+    activeSubPost: state.edit.activeSubPost,
+    subPosts: state.edit.subPosts,
+    newPostName: state.edit.newPostName,
+    newPost: state.edit.newPost,
+    newSubPost: state.edit.newSubPost,
+    isDisabledButtons: state.edit.isDisabledButtons,
+  }
+}
+
+function mapDispatchPoProps(dispatch) {
+  return {
+    fetchPosts: () => dispatch(fetchPosts()),
+  }
+}
+
+export default connect(mapStatePoProps, mapDispatchPoProps)(Editor)
