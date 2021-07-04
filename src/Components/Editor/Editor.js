@@ -269,21 +269,21 @@ class Editor extends React.Component {
       <>
         <div className={classes.СontainerColumn}>
           {this.state.isDisabledButtons ? <Loader /> : null}
-          <section className={classes.MainSection}>
-            <header className={classes.MainSectionHeader}>
-              <h2 className={classes.MainSectionHeaderTitle}>
+          <section className={classes.mainSection}>
+            <header className={classes.mainSectionHeader}>
+              <h2 className={classes.mainSectionHeaderTitle}>
                 Создание нового поста
               </h2>
             </header>
             <form
-              className={classes.MainSectionForm}
+              className={classes.mainSectionForm}
               onSubmit={this.onSubmitPost}
             >
-              <h2 className={classes.MainSectionHeaderTitle}>
+              <h2 className={classes.mainSectionHeaderTitle}>
                 Создание основного поста
               </h2>
-              <div className={classes.ContainerPost}>
-                <p className={classes.ContainerItem}>
+              <div className={classes.containerPost}>
+                <p className={classes.containerItem}>
                   <Input
                     type={'text'}
                     inputTypeClass={'Input'}
@@ -308,23 +308,23 @@ class Editor extends React.Component {
               </Button>
             </form>
             <form
-              className={classes.MainSectionForm}
+              className={classes.mainSectionForm}
               onChange={this.onChangeForm}
             >
-              <h2 className={classes.MainSectionHeaderTitle}>
+              <h2 className={classes.mainSectionHeaderTitle}>
                 Редактирование поста
               </h2>
 
-              <div className={classes.ContainerPost}>
-                <p className={classes.ContainerItem}>
-                  <label className={classes.InputLabel}>
+              <div className={classes.containerPost}>
+                <p className={classes.containerItem}>
+                  <label className={classes.inputLabel}>
                     Старое название:
                     <br />
                     <select
                       disabled={this.state.isDisabledButtons}
                       id={'selectPosts'}
                       name={'users'}
-                      className={classes.SignInSelect}
+                      className={classes.signInSelect}
                       onChange={this.putActivePost}
                     >
                       {this.state.posts.map((post, index) => {
@@ -341,7 +341,7 @@ class Editor extends React.Component {
                     </select>
                   </label>
                 </p>
-                <p className={classes.ContainerItem}>
+                <p className={classes.containerItem}>
                   <Input
                     type={'text'}
                     inputTypeClass={'Input'}
@@ -354,11 +354,11 @@ class Editor extends React.Component {
                   />
                 </p>
               </div>
-              <h2 className={classes.MainSectionHeaderTitle}>
+              <h2 className={classes.mainSectionHeaderTitle}>
                 Создание Сабпоста
               </h2>
-              <div className={classes.ContainerPost}>
-                <p className={classes.ContainerItem}>
+              <div className={classes.containerPost}>
+                <p className={classes.containerItem}>
                   <Input
                     type={'text'}
                     inputTypeClass={'Input'}
@@ -381,18 +381,18 @@ class Editor extends React.Component {
               >
                 Создать
               </Button>
-              <h2 className={classes.MainSectionHeaderTitle}>
+              <h2 className={classes.mainSectionHeaderTitle}>
                 Редактирование Сабпоста
               </h2>
-              <div className={classes.ContainerPost}>
-                <p className={classes.ContainerItem}>
-                  <label className={classes.InputLabel}>
+              <div className={classes.containerPost}>
+                <p className={classes.containerItem}>
+                  <label className={classes.inputLabel}>
                     Старое название:
                     <br />
                     <select
                       id={'selectSubPosts'}
                       name={'users'}
-                      className={classes.SignInSelect}
+                      className={classes.signInSelect}
                       onChange={this.changeActiveSubPost}
                       disabled={this.state.isDisabledButtons}
                     >
@@ -410,7 +410,7 @@ class Editor extends React.Component {
                     </select>
                   </label>
                 </p>
-                <p className={classes.ContainerItem}>
+                <p className={classes.containerItem}>
                   <Input
                     type={'text'}
                     inputTypeClass={'Input'}
@@ -428,7 +428,7 @@ class Editor extends React.Component {
                     if (type === 'text') {
                       return (
                         <p
-                          className={classes.ContainerItem}
+                          className={classes.containerItem}
                           key={`text-${index}`}
                         >
                           <Textarea
@@ -442,7 +442,7 @@ class Editor extends React.Component {
                             onChange={this.onChangeTextArea}
                           ></Textarea>
                           <button
-                            className={classes.BtnClose}
+                            className={classes.btnClose}
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
@@ -454,7 +454,7 @@ class Editor extends React.Component {
                     } else if (elem.data.type[index] === 'img') {
                       return (
                         <div
-                          className={classes.ContainerImg}
+                          className={classes.containerImg}
                           key={`img-${index}`}
                         >
                           <img
@@ -465,7 +465,7 @@ class Editor extends React.Component {
                             height="167px"
                             id={`img-${index}`}
                           />
-                          <p className={classes.ContainerItem}>
+                          <p className={classes.containerItem}>
                             <Input
                               type={'text'}
                               inputTypeClass={'Input'}
@@ -479,7 +479,7 @@ class Editor extends React.Component {
                             />
                           </p>
                           <button
-                            className={classes.BtnClose}
+                            className={classes.btnClose}
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
