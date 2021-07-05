@@ -5,6 +5,12 @@ import {
   FETCH_SUBPOSTS,
   CHANGE_SUBPOSTS,
   CHANGE_ACTIVE_SUBPOST,
+  CHANGE_NEW_POST,
+  CHANGE_SUBPOST_NAME,
+  NEW_POSTNAME_HANDLE,
+  PUT_SUBPOSTS,
+  NEW_POST_ADD,
+  CREATE_NEW_SUBPOST,
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -36,6 +42,29 @@ const initialState = {
 
 export default function editReducer(state = initialState, action) {
   switch (action.type) {
+    case CHANGE_SUBPOST_NAME:
+      return {
+        ...state,
+        newSubPost: action.newSubPost,
+      }
+    case CREATE_NEW_SUBPOST:
+      return {
+        ...state,
+        subPosts: action.subPosts,
+        newSubPost: action.newSubPost,
+      }
+    case CHANGE_NEW_POST:
+      return {
+        ...state,
+        newPost: action.newPost,
+      }
+    case NEW_POST_ADD:
+      return {
+        ...state,
+        posts: action.posts,
+        newPost: action.newPost,
+        keys: action.keys,
+      }
     case CHANGE_ACTIVE_SUBPOST:
       return {
         ...state,
@@ -46,7 +75,11 @@ export default function editReducer(state = initialState, action) {
         ...state,
         isDisabledButtons: action.bool,
       }
-
+    case PUT_SUBPOSTS:
+      return {
+        ...state,
+        subPosts: action.subPosts,
+      }
     case FETCH_POSTS_SUCCESS:
       return {
         ...state,
@@ -67,12 +100,15 @@ export default function editReducer(state = initialState, action) {
         activePost: action.activePost,
         subPosts: action.subPosts,
       }
+    case NEW_POSTNAME_HANDLE:
+      return {
+        ...state,
+        newPostName: action.newPostName,
+      }
     case CHANGE_SUBPOSTS:
-      console.log(action.subPosts)
       return {
         ...state,
         subPosts: action.subPosts,
-        isDisabledButtons: true,
       }
     default:
       return state

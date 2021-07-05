@@ -3,7 +3,7 @@ import React from 'react'
 
 const Textarea = (props) => {
   return (
-    <label className={classes[props.LabelClass]}>
+    <label className={classes[props.LabelClass]} id={props.labelId}>
       {props.labelName}
       <br />
       <textarea

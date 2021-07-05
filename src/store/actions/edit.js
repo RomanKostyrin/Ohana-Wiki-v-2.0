@@ -6,6 +6,12 @@ import {
   FETCH_SUBPOSTS,
   CHANGE_SUBPOSTS,
   CHANGE_ACTIVE_SUBPOST,
+  CHANGE_NEW_POST,
+  CHANGE_SUBPOST_NAME,
+  NEW_POSTNAME_HANDLE,
+  NEW_POST_ADD,
+  PUT_SUBPOSTS,
+  CREATE_NEW_SUBPOST,
 } from './actionTypes'
 
 let getIndexFromSome = (string) => {
@@ -14,12 +20,139 @@ let getIndexFromSome = (string) => {
   return newIndex
 }
 
+export function changePostName(value) {
+  return (dispatch) => {
+    dispatch(fetchPostsStart(false))
+    let newpost = {
+      postName: value,
+      subPosts: [
+        {
+          name: '',
+          data: {
+            type: ['text'],
+            value: [''],
+          },
+        },
+      ],
+    }
+    dispatch(changeNP(newpost))
+    dispatch(fetchPostsStart(false))
+  }
+}
+
+export function onSubmitP(props) {
+  return async (dispatch) => {
+    dispatch(fetchPostsStart(true))
+    try {
+      const response = await axios.post(
+        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
+        props.newPost
+      )
+      console.log(response)
+      let keys = props.keys
+      keys.push(response.data.name)
+      let arr = props.posts
+      let newPost = { postName: '', subPosts: [{}] }
+      arr.push(props.newPost.postName)
+      dispatch(newPostAdd(arr, newPost, keys))
+      dispatch(fetchPostsStart(false))
+    } catch (e) {
+      dispatch(fetchPostsError(e))
+    }
+  }
+}
+
+export function onChangeText(props, event) {
+  return (dispatch) => {
+    const indexOfTextArea = getIndexFromSome(event.target.id)
+    const tempSubs = props.subPosts
+    tempSubs[props.activeSubPost].data.value[indexOfTextArea] =
+      event.target.value
+    dispatch(changeSubPosts(tempSubs))
+  }
+}
+
+export function newPostNameFunction(value) {
+  console.log(value)
+  return (dispatch) => {
+    dispatch(newPostNameHandle(value))
+  }
+}
+export function pathImg(props, event) {
+  return (dispatch) => {
+    dispatch(fetchPostsStart(true))
+    let tempSubs = props.subPosts
+    let pathId = getIndexFromSome(event.target.id)
+    tempSubs[props.activeSubPost].data.value[pathId] = event.target.value
+    dispatch(changeSubPosts(tempSubs))
+    dispatch(fetchPostsStart(false))
+  }
+}
+
+export function changeSPHandle(value) {
+  return (dispatch) => {
+    const newSubPost = {
+      name: value,
+      data: {
+        type: ['text'],
+        value: [' '],
+      },
+    }
+    dispatch(changeNewSubPostName(newSubPost))
+  }
+}
+
+export function putSP(props) {
+  let key = props.keys[props.activePost]
+  console.log(props)
+  return async (dispatch) => {
+    console.log('005')
+    dispatch(fetchPostsStart(true))
+    console.log('1')
+    try {
+      const response = await axios.put(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
+        props.subPosts
+      )
+      console.log('2')
+      dispatch(putSubPosts(response.data))
+      console.log('3')
+      dispatch(fetchPostsStart(false))
+      console.log(response.data)
+    } catch (e) {
+      dispatch(fetchPostsError(e))
+    }
+  }
+}
+export function createNewSub(props) {
+  return (dispatch) => {
+    dispatch(fetchPostsStart(true))
+    let newSubPosts = props.subPosts
+    let newSubPost = {
+      name: '',
+      data: {
+        type: ['text'],
+        value: [' '],
+      },
+    }
+    if (newSubPosts[0].name === '') {
+      newSubPosts = []
+    }
+    newSubPosts.push(props.newSubPost)
+    console.log('01')
+    dispatch(createNS(newSubPosts, newSubPost))
+
+    putSP(props)
+  }
+}
+
 export function deleteSubEl(props, id) {
   return (dispatch) => {
     dispatch(fetchPostsStart(true))
     let btnId = getIndexFromSome(id)
     let tmpSubs = props.subPosts
     if (tmpSubs[props.activeSubPost].data.value.length === 1) {
+      dispatch(fetchPostsStart(false))
       return alert('Нельзя удалять единственный')
     }
     tmpSubs[props.activeSubPost].data.type.splice(btnId, 1)
@@ -35,18 +168,22 @@ export function isDisabledButtonsFunction(bool) {
   }
 }
 
-export function addText(props) {
+export function addHandle(props, type) {
   return (dispatch) => {
+    dispatch(fetchPostsStart(true))
     let tempSubs = props.subPosts
-    tempSubs[props.activeSubPost].data.type.push('text')
+    tempSubs[props.activeSubPost].data.type.push(type)
     tempSubs[props.activeSubPost].data.value.push('')
     dispatch(changeSubPosts(tempSubs))
+    dispatch(fetchPostsStart(false))
   }
 }
 
 export function changeActiveSub(value) {
   return (dispatch) => {
+    dispatch(fetchPostsStart(true))
     dispatch(changeActiveSubPost(value))
+    dispatch(fetchPostsStart(false))
   }
 }
 
@@ -62,13 +199,16 @@ export function fetchSubPosts(props, id) {
   return async (dispatch) => {
     let keyDB = props.keys[id]
     let activePost = id
-    dispatch(fetchPostsStart)
+    console.log(keyDB)
+    console.log(activePost)
+    dispatch(fetchPostsStart(true))
     try {
       const response = await axios.get(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
       )
       dispatch(changeActiveSubPost(0))
       dispatch(fetchSubPostsSuccess(response.data.subPosts, activePost))
+      dispatch(fetchPostsStart(false))
       console.log(response.data)
     } catch (e) {
       dispatch(fetchPostsError(e))
@@ -121,10 +261,54 @@ export function fetchSubPostsSuccess(subPosts, activePost) {
   }
 }
 
+export function changeNewSubPostName(newSubPost) {
+  return {
+    type: CHANGE_SUBPOST_NAME,
+    newSubPost,
+  }
+}
+
+export function newPostNameHandle(newPostName) {
+  return {
+    type: NEW_POSTNAME_HANDLE,
+    newPostName,
+  }
+}
+
+export function createNS(subPosts, newSubPost) {
+  return {
+    type: CREATE_NEW_SUBPOST,
+    subPosts,
+    newSubPost,
+  }
+}
+
+export function changeNP(newPost) {
+  return {
+    type: CHANGE_NEW_POST,
+    newPost,
+  }
+}
+export function newPostAdd(posts, newPost, keys) {
+  return {
+    type: NEW_POST_ADD,
+    posts,
+    newPost,
+    keys,
+  }
+}
+
 export function fetchPostsStart(bool) {
   return {
     type: FETCH_POSTS_START,
     bool,
+  }
+}
+
+export function putSubPosts(subPosts) {
+  return {
+    type: PUT_SUBPOSTS,
+    subPosts,
   }
 }
 

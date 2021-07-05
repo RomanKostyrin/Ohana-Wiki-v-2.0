@@ -1,5 +1,4 @@
 import React from 'react'
-import axios from 'axios'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
 import classes from './Editor.module.scss'
@@ -12,13 +11,26 @@ import {
   changeSubPost,
   isDisabledButtonsFunction,
   changeActiveSub,
-  addText,
+  addHandle,
   deleteSubEl,
+  onChangeText,
+  pathImg,
+  newPostNameFunction,
+  putSP,
+  onSubmitP,
+  changePostName,
+  createNewSub,
+  changeSPHandle,
 } from '../../store/actions/edit'
 
 class Editor extends React.Component {
   componentDidMount() {
     this.props.fetchPosts()
+  }
+  getIndexFromSome = (string) => {
+    const indexOfDash = string.indexOf('-')
+    const newIndex = string.slice(indexOfDash + 1, string.length)
+    return newIndex
   }
   putActivePost = (event) => {
     event.preventDefault()
@@ -34,151 +46,46 @@ class Editor extends React.Component {
   changeActiveSubPost = (event) => {
     this.props.changeActiveSub(event.target.value)
   }
-  addTextHandle = (event) => {
+  addHandle = (event, type) => {
     event.preventDefault()
-    this.props.addText(this.props)
+    this.props.addHandle(this.props, type)
   }
   deleteSubElement = (event) => {
     event.preventDefault()
     this.props.deleteSubEl(this.props, event.target.id)
   }
-
-  addImgHandle = (event) => {
+  onChangeTextArea = (event) => {
     event.preventDefault()
-    let tempSubs = this.props.subPosts
-    tempSubs[this.props.activeSubPost].data.type.push('img')
-    tempSubs[this.props.activeSubPost].data.value.push('')
-    this.setState({
-      subPosts: tempSubs,
-    })
+    this.props.onChangeText(this.props, event)
   }
   pathImgHandle = (event) => {
     event.preventDefault()
-    let tempSubs = this.props.subPosts
-
-    let pathId = this.getIndexFromSome(event.target.id)
-    tempSubs[this.props.activeSubPost].data.value[pathId] = event.target.value
-    this.setState({
-      subPosts: tempSubs,
-    })
+    this.props.pathImg(this.props, event)
   }
   newPostNameHandle = (event) => {
-    this.setState({
-      newPostName: event.target.value,
-    })
+    this.props.newPostNameFunction(event.target.value)
   }
-
-  onChangeTextArea = (event) => {
-    const indexOfTextArea = this.getIndexFromSome(event.target.id)
-    const tempSub = this.props.subPosts
-    tempSub[this.props.activeSubPost].data.value[indexOfTextArea] =
-      event.target.value
-    this.setState({
-      subPosts: tempSub,
-    })
-  }
-  ChangeSubPost = async (event) => {
+  ChangeSubPost = (event) => {
     event.preventDefault()
-    let keyDB = this.props.keys[this.props.activePost]
-    await this.putSubPosts(keyDB)
+    this.props.putSP(this.props)
   }
-  putSubPosts = async (key) => {
-    this.disableButtons(true)
-    try {
-      const response = await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
-        this.props.subPosts
-      )
-      console.log(response.data)
-      this.setState({
-        subPosts: response.data,
-        isDisabledButtons: false,
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   onSubmitPost = async (event) => {
     event.preventDefault()
-    this.disableButtons(true)
-    try {
-      const response = await axios.post(
-        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-        this.props.newPost
-      )
-      console.log(response)
-      let arr = this.props.posts
-      arr.push(this.props.newPost.postName)
-
-      this.setState({
-        posts: arr,
-        newPost: { postName: '', subPosts: [{}] },
-        isDisabledButtons: false,
-      })
-    } catch (e) {
-      console.log(e)
-    }
+    this.props.onSubmitP(this.props)
   }
-  getIndexFromSome = (string) => {
-    const indexOfDash = string.indexOf('-')
-    const newIndex = string.slice(indexOfDash + 1, string.length)
-    return newIndex
+  onChangePostName = (event) => {
+    this.props.changePostName(event.target.value)
   }
   createNewSubPost = async (event) => {
     event.preventDefault()
-    let keyDB = this.props.keys[this.props.activePost]
-    let newSubPosts = this.props.subPosts
-    console.log('newSubPosts')
-    console.log(newSubPosts)
-    if (newSubPosts[0].name === '') {
-      console.log('newsubpost-0')
-      newSubPosts = []
-    }
-    newSubPosts.push(this.props.newSubPost)
-    console.log(newSubPosts)
-    await this.setState({
-      subPosts: newSubPosts,
-      newSubPost: {
-        name: '',
-        data: {
-          type: ['text'],
-          value: [' '],
-        },
-      },
-    })
-    this.putSubPosts(keyDB)
+    this.props.createNewSub(this.props)
   }
-  onChangePostName = (event) => {
-    this.setState({
-      newPost: {
-        postName: event.target.value,
-        subPosts: [
-          {
-            name: '',
-            data: {
-              type: ['text'],
-              value: [''],
-            },
-          },
-        ],
-      },
-    })
-  }
+
   changeSubPostsHandle = (event) => {
-    this.setState({
-      newSubPost: {
-        name: event.target.value,
-        data: {
-          type: ['text'],
-          value: [' '],
-        },
-      },
-    })
+    this.props.changeSPHandle(event.target.value)
   }
 
   render() {
-    console.log(this.props)
     return (
       <>
         <div className={classes.СontainerColumn}>
@@ -348,6 +255,7 @@ class Editor extends React.Component {
                           <Textarea
                             LabelClass={'TextareaLabel'}
                             labelName={'Введите текст'}
+                            labelId={`${Math.random()}`}
                             rows={10}
                             cols={120}
                             placeholder={'Введите текст'}
@@ -411,7 +319,7 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={this.addTextHandle}
+                onClick={(event) => this.addHandle(event, 'text')}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить текст
@@ -421,7 +329,7 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={this.addImgHandle}
+                onClick={(event) => this.addHandle(event, 'img')}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить картинку
@@ -466,8 +374,16 @@ function mapDispatchPoProps(dispatch) {
     isDisabledButtonsFunction: (bool) =>
       dispatch(isDisabledButtonsFunction(bool)),
     changeActiveSub: (value) => dispatch(changeActiveSub(value)),
-    addText: (props) => dispatch(addText(props)),
+    addHandle: (props, type) => dispatch(addHandle(props, type)),
     deleteSubEl: (props, id) => dispatch(deleteSubEl(props, id)),
+    onChangeText: (props, event) => dispatch(onChangeText(props, event)),
+    pathImg: (props, event) => dispatch(pathImg(props, event)),
+    newPostNameFunction: (value) => dispatch(newPostNameFunction(value)),
+    putSP: (props) => dispatch(putSP(props)),
+    onSubmitP: (props) => dispatch(onSubmitP(props)),
+    changePostName: (value) => dispatch(changePostName(value)),
+    createNewSub: (props) => dispatch(createNewSub(props)),
+    changeSPHandle: (value) => dispatch(changeSPHandle(value)),
   }
 }
 
