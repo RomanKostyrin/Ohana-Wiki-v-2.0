@@ -6,42 +6,43 @@ import classes from './Editor.module.scss'
 import Loader from '../UI/Loader/Loader'
 import Textarea from '../UI/Textarea/Textarea'
 import { connect } from 'react-redux'
-import { fetchPosts, fetchSubPosts } from '../../store/actions/edit'
+import {
+  fetchPosts,
+  fetchSubPosts,
+  changeSubPost,
+  isDisabledButtonsFunction,
+  changeActiveSub,
+  addText,
+  deleteSubEl,
+} from '../../store/actions/edit'
 
 class Editor extends React.Component {
-  ChangeSubPostName = (event) => {
-    this.props.ChangeSubPostName(event)
+  componentDidMount() {
+    this.props.fetchPosts()
+  }
+  putActivePost = (event) => {
     event.preventDefault()
-    let tempSubs = this.props.subPosts
-    tempSubs[this.props.activeSubPost].name = event.target.value
-    this.setState({
-      subPosts: tempSubs,
-    })
+    this.props.fetchSubPosts(this.props, event.target.value)
+  }
+  ChangeSubPostName = (event) => {
+    event.preventDefault()
+    this.props.changeSubPost(this.props, event)
+  }
+  disableButtons = (bool) => {
+    this.props.isDisabledButtonsFunction(bool)
+  }
+  changeActiveSubPost = (event) => {
+    this.props.changeActiveSub(event.target.value)
   }
   addTextHandle = (event) => {
     event.preventDefault()
-    let tempSubs = this.props.subPosts
-    tempSubs[this.props.activeSubPost].data.type.push('text')
-    tempSubs[this.props.activeSubPost].data.value.push('')
-    this.setState({
-      subPosts: tempSubs,
-    })
+    this.props.addText(this.props)
   }
   deleteSubElement = (event) => {
     event.preventDefault()
-    let btnId = this.getIndexFromSome(event.target.id)
-
-    let tempSubs = this.props.subPosts
-    if (tempSubs[this.props.activeSubPost].data.value.length === 1) {
-      return alert('Нельзя удалять единственный')
-    }
-    console.log(tempSubs[this.props.activeSubPost].data.value[btnId])
-    tempSubs[this.props.activeSubPost].data.type.splice(btnId, 1)
-    tempSubs[this.props.activeSubPost].data.value.splice(btnId, 1)
-    this.setState({
-      subPosts: tempSubs,
-    })
+    this.props.deleteSubEl(this.props, event.target.id)
   }
+
   addImgHandle = (event) => {
     event.preventDefault()
     let tempSubs = this.props.subPosts
@@ -66,11 +67,7 @@ class Editor extends React.Component {
       newPostName: event.target.value,
     })
   }
-  changeActiveSubPost = (event) => {
-    this.setState({
-      activeSubPost: event.target.value,
-    })
-  }
+
   onChangeTextArea = (event) => {
     const indexOfTextArea = this.getIndexFromSome(event.target.id)
     const tempSub = this.props.subPosts
@@ -101,15 +98,7 @@ class Editor extends React.Component {
       console.log(e)
     }
   }
-  putActivePost = (event) => {
-    event.preventDefault()
-    this.props.fetchSubPosts(this.props, event.target.value)
-  }
-  disableButtons = (bool) => {
-    this.setState({
-      isDisabledButtons: bool,
-    })
-  }
+
   onSubmitPost = async (event) => {
     event.preventDefault()
     this.disableButtons(true)
@@ -187,11 +176,9 @@ class Editor extends React.Component {
       },
     })
   }
-  componentDidMount() {
-    this.props.fetchPosts()
-  }
 
   render() {
+    console.log(this.props)
     return (
       <>
         <div className={classes.СontainerColumn}>
@@ -475,6 +462,12 @@ function mapDispatchPoProps(dispatch) {
   return {
     fetchPosts: () => dispatch(fetchPosts()),
     fetchSubPosts: (props, id) => dispatch(fetchSubPosts(props, id)),
+    changeSubPost: (props, event) => dispatch(changeSubPost(props, event)),
+    isDisabledButtonsFunction: (bool) =>
+      dispatch(isDisabledButtonsFunction(bool)),
+    changeActiveSub: (value) => dispatch(changeActiveSub(value)),
+    addText: (props) => dispatch(addText(props)),
+    deleteSubEl: (props, id) => dispatch(deleteSubEl(props, id)),
   }
 }
 

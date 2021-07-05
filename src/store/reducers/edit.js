@@ -3,11 +3,14 @@ import {
   FETCH_POSTS_SUCCESS,
   FETCH_POSTS_START,
   FETCH_SUBPOSTS,
+  CHANGE_SUBPOSTS,
+  CHANGE_ACTIVE_SUBPOST,
 } from '../actions/actionTypes'
 
 const initialState = {
   posts: ['1', '2'],
   keys: [],
+  activePost: 0,
   activeSubPost: 0,
   subPosts: [
     {
@@ -27,23 +30,29 @@ const initialState = {
       value: [' '],
     },
   },
-  isDisabledButtons: true,
+  isDisabledButtons: false,
   error: null,
 }
 
 export default function editReducer(state = initialState, action) {
   switch (action.type) {
+    case CHANGE_ACTIVE_SUBPOST:
+      return {
+        ...state,
+        activeSubPost: action.activeSubPost,
+      }
     case FETCH_POSTS_START:
       return {
         ...state,
-        isDisabledButtons: true,
+        isDisabledButtons: action.bool,
       }
+
     case FETCH_POSTS_SUCCESS:
       return {
         ...state,
         isDisabledButtons: false,
-        posts: action.arrPosts,
-        subPosts: action.arrSubPosts,
+        posts: action.posts,
+        subPosts: action.subPosts,
         keys: action.keys,
       }
     case FETCH_POSTS_ERROR:
@@ -55,8 +64,15 @@ export default function editReducer(state = initialState, action) {
     case FETCH_SUBPOSTS:
       return {
         ...state,
+        activePost: action.activePost,
         subPosts: action.subPosts,
-        isDisabledButtons: false,
+      }
+    case CHANGE_SUBPOSTS:
+      console.log(action.subPosts)
+      return {
+        ...state,
+        subPosts: action.subPosts,
+        isDisabledButtons: true,
       }
     default:
       return state
