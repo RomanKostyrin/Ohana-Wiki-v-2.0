@@ -2,46 +2,27 @@ import React from 'react'
 import classes from './Header.module.scss'
 import Input from '../UI/Input/Input'
 import Button from '../UI/Button/Button'
-import axios from 'axios'
+import { connect } from 'react-redux'
+import {
+  auth,
+  onChangeLogin,
+  onChangePassword,
+  isDisabled,
+} from '../../store/actions/auth'
 
 let popup = [classes.signIn, classes.popupShow]
 let showWrapper = [classes.modalWrapper, classes.showModalWrapper]
 
 class Header extends React.Component {
   state = {
-    currentEmail: 'kostyrin@ohanafitness.ru',
-    email: 'enemy-iubip@mail.ru',
-    password: '',
     popup: classes.signIn,
     wrapper: classes.modalWrapper,
   }
   signInHandler = async (event) => {
     event.preventDefault()
-    const authData = {
-      email: this.state.email,
-      password: this.state.password,
-      returnSecureToken: true,
-    }
-    try {
-      const response = await axios.post(
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCZ5AHawQ9Rr2m_pMRkOGSf_9pDqGcr8aU',
-        authData
-      )
-      console.log(response.data)
-    } catch (e) {
-      console.log(e)
-    }
+    this.props.auth(this.props.email, this.props.password, true)
   }
-  onChangeLogin = (event) => {
-    this.setState({
-      email: event.target.value,
-    })
-  }
-  onChangePassword = (event) => {
-    this.setState({
-      password: event.target.value,
-    })
-  }
+
   showPopup = (event) => {
     this.setState({
       popup: popup.join(' '),
@@ -54,11 +35,11 @@ class Header extends React.Component {
       wrapper: classes.modalWrapper,
     })
   }
-
   signOutHandler = (event) => {
     event.preventDefault()
     console.log(event.target)
   }
+
   render() {
     return (
       <header className={classes.Header}>
@@ -81,7 +62,7 @@ class Header extends React.Component {
                   label={'Логин'}
                   name={'signInEmail'}
                   placeholder="Введите логин"
-                  onChange={this.onChangeLogin}
+                  onChange={(event) => this.props.onChangeLogin(event)}
                   value={this.state.email}
                 />
               </p>
@@ -93,7 +74,7 @@ class Header extends React.Component {
                   label={'Пароль'}
                   name={'signInPassword'}
                   placeholder={'Введите пароль'}
-                  onChange={this.onChangePassword}
+                  onChange={(event) => this.props.onChangePassword(event)}
                   value={this.state.password}
                 />
               </p>
@@ -104,7 +85,7 @@ class Header extends React.Component {
               classType2={'ButtonSubmit'}
               classType={'ButtonPrimary'}
               onClick={this.signInHandler}
-              disabled={this.state.isDisabledButtons}
+              disabled={this.props.isDisabledButtons}
             >
               Войти
             </Button>
@@ -128,7 +109,7 @@ class Header extends React.Component {
 
         <span className={classes.LoggedAs}>
           Вы вошли как:{' '}
-          <span className={classes.userName}>{this.state.currentEmail}</span>
+          <span className={classes.userName}>{this.props.currentEmail}</span>
         </span>
 
         <Button
@@ -143,4 +124,25 @@ class Header extends React.Component {
   }
 }
 
-export default Header
+function mapStatePoProps(state) {
+  return {
+    email: state.auth.email,
+    password: state.auth.password,
+    isLogin: state.auth.isLogin,
+    token: state.auth.token,
+    isDisabledButtons: state.auth.isDisabledButtons,
+    currentEmail: state.auth.currentEmail,
+  }
+}
+
+function mapDispatchPoProps(dispatch) {
+  return {
+    auth: (email, password, isLogin) =>
+      dispatch(auth(email, password, isLogin)),
+    onChangeLogin: (event) => dispatch(onChangeLogin(event)),
+    onChangePassword: (event) => dispatch(onChangePassword(event)),
+    isDisabled: (bool) => dispatch(isDisabled(bool)),
+  }
+}
+
+export default connect(mapStatePoProps, mapDispatchPoProps)(Header)

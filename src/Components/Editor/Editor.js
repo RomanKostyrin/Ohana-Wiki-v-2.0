@@ -9,7 +9,6 @@ import {
   fetchPosts,
   fetchSubPosts,
   changeSubPost,
-  isDisabledButtonsFunction,
   changeActiveSub,
   addHandle,
   deleteSubEl,
@@ -27,62 +26,6 @@ class Editor extends React.Component {
   componentDidMount() {
     this.props.fetchPosts()
   }
-  getIndexFromSome = (string) => {
-    const indexOfDash = string.indexOf('-')
-    const newIndex = string.slice(indexOfDash + 1, string.length)
-    return newIndex
-  }
-  putActivePost = (event) => {
-    event.preventDefault()
-    this.props.fetchSubPosts(event.target.value)
-  }
-  ChangeSubPostName = (event) => {
-    event.preventDefault()
-    this.props.changeSubPost(event)
-  }
-  disableButtons = (bool) => {
-    this.props.isDisabledButtonsFunction(bool)
-  }
-  changeActiveSubPost = (event) => {
-    this.props.changeActiveSub(event.target.value)
-  }
-  addHandle = (event, type) => {
-    event.preventDefault()
-    this.props.addHandle(type)
-  }
-  deleteSubElement = (event) => {
-    event.preventDefault()
-    this.props.deleteSubEl(event.target.id)
-  }
-  onChangeTextArea = (event) => {
-    console.log(event.target.value)
-    this.props.onChangeText(event)
-  }
-  pathImgHandle = (event) => {
-    event.preventDefault()
-    this.props.pathImg(event)
-  }
-  newPostNameHandle = (event) => {
-    this.props.newPostNameFunction(event.target.value)
-  }
-  ChangeSubPost = (event) => {
-    event.preventDefault()
-    this.props.putSP()
-  }
-  onSubmitPost = async (event) => {
-    event.preventDefault()
-    this.props.onSubmitP()
-  }
-  onChangePostName = (event) => {
-    this.props.changePostName(event.target.value)
-  }
-  createNewSubPost = async (event) => {
-    event.preventDefault()
-    this.props.createNewSub()
-  }
-  changeSubPostsHandle = (event) => {
-    this.props.changeSPHandle(event.target.value)
-  }
 
   render() {
     return (
@@ -97,7 +40,7 @@ class Editor extends React.Component {
             </header>
             <form
               className={classes.mainSectionForm}
-              onSubmit={this.onSubmitPost}
+              onSubmit={(event) => this.props.onSubmitP(event)}
             >
               <h2 className={classes.mainSectionHeaderTitle}>
                 Создание основного поста
@@ -111,7 +54,9 @@ class Editor extends React.Component {
                     label={'Название поста'}
                     name={'login'}
                     placeholder="Введите название"
-                    onChange={this.onChangePostName}
+                    onChange={(event) =>
+                      this.props.changePostName(event.target.value)
+                    }
                     value={this.props.newPost.postName}
                   />
                 </p>
@@ -145,7 +90,7 @@ class Editor extends React.Component {
                       id={'selectPosts'}
                       name={'users'}
                       className={classes.signInSelect}
-                      onChange={this.putActivePost}
+                      onChange={(event) => this.props.fetchSubPosts(event)}
                     >
                       {this.props.posts.map((post, index) => {
                         return (
@@ -170,7 +115,9 @@ class Editor extends React.Component {
                     name={'post'}
                     placeholder="Введите название"
                     value={this.props.newPostName}
-                    onChange={this.newPostNameHandle}
+                    onChange={(event) =>
+                      this.props.newPostNameFunction(event.target.value)
+                    }
                   />
                 </p>
               </div>
@@ -186,7 +133,9 @@ class Editor extends React.Component {
                     label={'Название Сабпоста'}
                     name={'login'}
                     placeholder="Введите название"
-                    onChange={this.changeSubPostsHandle}
+                    onChange={(event) =>
+                      this.props.changeSPHandle(event.target.value)
+                    }
                     value={this.props.newSubPost.name}
                   />
                 </p>
@@ -196,7 +145,7 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={this.createNewSubPost}
+                onClick={(event) => this.props.createNewSub(event)}
                 disabled={this.props.isDisabledButtons}
               >
                 Создать
@@ -213,7 +162,9 @@ class Editor extends React.Component {
                       id={'selectSubPosts'}
                       name={'users'}
                       className={classes.signInSelect}
-                      onChange={this.changeActiveSubPost}
+                      onChange={(event) =>
+                        this.props.changeActiveSub(event.target.value)
+                      }
                       disabled={this.props.isDisabledButtons}
                     >
                       {this.props.subPosts.map((post, index) => {
@@ -238,7 +189,7 @@ class Editor extends React.Component {
                     label={'Новое название'}
                     name={'subPost'}
                     placeholder={'Введите название'}
-                    onChange={this.ChangeSubPostName}
+                    onChange={(event) => this.props.changeSubPost(event)}
                   />
                 </p>
 
@@ -259,14 +210,14 @@ class Editor extends React.Component {
                             placeholder={'Введите текст'}
                             value={elem.data.value[index]}
                             id={`textarea-${index}`}
-                            onChange={this.onChangeTextArea}
+                            onChange={(event) => this.props.onChangeText(event)}
                           ></Textarea>
                           <button
                             className={classes.btnClose}
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
-                            onClick={this.deleteSubElement}
+                            onClick={(event) => this.props.deleteSubEl(event)}
                             disabled={this.props.isDisabledButtons}
                           ></button>
                         </p>
@@ -295,7 +246,7 @@ class Editor extends React.Component {
                               placeholder="Введите название"
                               value={elem.data.value[index]}
                               id={`path-${index}`}
-                              onChange={this.pathImgHandle}
+                              onChange={(event) => this.props.pathImg(event)}
                             />
                           </p>
                           <button
@@ -317,7 +268,7 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.addHandle(event, 'text')}
+                onClick={(event) => this.props.addHandle(event, 'text')}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить текст
@@ -327,7 +278,7 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.addHandle(event, 'img')}
+                onClick={(event) => this.props.addHandle(event, 'img')}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить картинку
@@ -337,7 +288,7 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={this.ChangeSubPost}
+                onClick={(event) => this.props.putSP(event)}
                 disabled={this.props.isDisabledButtons}
               >
                 Сохранить
@@ -367,20 +318,18 @@ function mapStatePoProps(state) {
 function mapDispatchPoProps(dispatch) {
   return {
     fetchPosts: () => dispatch(fetchPosts()),
-    fetchSubPosts: (id) => dispatch(fetchSubPosts(id)),
+    fetchSubPosts: (event) => dispatch(fetchSubPosts(event)),
     changeSubPost: (event) => dispatch(changeSubPost(event)),
-    isDisabledButtonsFunction: (bool) =>
-      dispatch(isDisabledButtonsFunction(bool)),
     changeActiveSub: (value) => dispatch(changeActiveSub(value)),
-    addHandle: (type) => dispatch(addHandle(type)),
-    deleteSubEl: (id) => dispatch(deleteSubEl(id)),
+    addHandle: (event, type) => dispatch(addHandle(event, type)),
+    deleteSubEl: (event) => dispatch(deleteSubEl(event)),
     onChangeText: (event) => dispatch(onChangeText(event)),
     pathImg: (event) => dispatch(pathImg(event)),
     newPostNameFunction: (value) => dispatch(newPostNameFunction(value)),
-    putSP: () => dispatch(putSP()),
-    onSubmitP: () => dispatch(onSubmitP()),
+    putSP: (event) => dispatch(putSP(event)),
+    onSubmitP: (event) => dispatch(onSubmitP(event)),
     changePostName: (value) => dispatch(changePostName(value)),
-    createNewSub: () => dispatch(createNewSub()),
+    createNewSub: (event) => dispatch(createNewSub(event)),
     changeSPHandle: (value) => dispatch(changeSPHandle(value)),
   }
 }

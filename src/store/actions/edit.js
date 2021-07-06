@@ -40,7 +40,8 @@ export function changePostName(value) {
   }
 }
 
-export function onSubmitP() {
+export function onSubmitP(event) {
+  event.preventDefault()
   return async (dispatch, getState) => {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
@@ -71,7 +72,6 @@ export function onChangeText(event) {
     const tempSubs = state.subPosts
     tempSubs[state.activeSubPost].data.value[indexOfTextArea] =
       event.target.value
-
     dispatch(changeSubPosts(tempSubs))
     dispatch(fetchPostsStart(false))
   }
@@ -84,6 +84,7 @@ export function newPostNameFunction(value) {
   }
 }
 export function pathImg(event) {
+  event.preventDefault()
   return (dispatch, getState) => {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
@@ -108,7 +109,8 @@ export function changeSPHandle(value) {
   }
 }
 
-export function putSP() {
+export function putSP(event) {
+  event.preventDefault()
   return async (dispatch, getState) => {
     const state = getState().edit
     let key = state.keys[state.activePost]
@@ -128,7 +130,8 @@ export function putSP() {
     }
   }
 }
-export function createNewSub() {
+export function createNewSub(event) {
+  event.preventDefault()
   return (dispatch, getState) => {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
@@ -145,15 +148,16 @@ export function createNewSub() {
     }
     newSubPosts.push(state.newSubPost)
     dispatch(createNS(newSubPosts, newSubPost))
-    dispatch(putSP(state))
+    dispatch(putSP(event))
   }
 }
 
-export function deleteSubEl(id) {
+export function deleteSubEl(event) {
+  event.preventDefault()
   return (dispatch, getState) => {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
-    let btnId = getIndexFromSome(id)
+    let btnId = getIndexFromSome(event.target.id)
     let tmpSubs = state.subPosts
     if (tmpSubs[state.activeSubPost].data.value.length === 1) {
       dispatch(fetchPostsStart(false))
@@ -172,7 +176,8 @@ export function isDisabledButtonsFunction(bool) {
   }
 }
 
-export function addHandle(type) {
+export function addHandle(event, type) {
+  event.preventDefault()
   return (dispatch, getState) => {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
@@ -201,11 +206,12 @@ export function changeSubPost(event) {
   }
 }
 
-export function fetchSubPosts(id) {
+export function fetchSubPosts(event) {
+  event.preventDefault()
   return async (dispatch, getState) => {
     const state = getState().edit
-    let keyDB = state.keys[id]
-    let activePost = id
+    let keyDB = state.keys[event.target.value]
+    let activePost = event.target.value
     console.log(keyDB)
     console.log(activePost)
     dispatch(fetchPostsStart(true))
