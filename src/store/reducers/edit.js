@@ -106,6 +106,7 @@ export default function editReducer(state = initialState, action) {
         newPostName: action.newPostName,
       }
     case CHANGE_SUBPOSTS:
+      console.log(action.subPosts)
       return {
         ...state,
         subPosts: action.subPosts,

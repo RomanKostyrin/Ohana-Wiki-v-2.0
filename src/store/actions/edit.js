@@ -64,11 +64,14 @@ export function onSubmitP(props) {
 
 export function onChangeText(props, event) {
   return (dispatch) => {
+    dispatch(fetchPostsStart(true))
     const indexOfTextArea = getIndexFromSome(event.target.id)
     const tempSubs = props.subPosts
     tempSubs[props.activeSubPost].data.value[indexOfTextArea] =
       event.target.value
+
     dispatch(changeSubPosts(tempSubs))
+    dispatch(fetchPostsStart(false))
   }
 }
 
@@ -104,19 +107,16 @@ export function changeSPHandle(value) {
 
 export function putSP(props) {
   let key = props.keys[props.activePost]
-  console.log(props)
+  console.log(key)
   return async (dispatch) => {
-    console.log('005')
     dispatch(fetchPostsStart(true))
-    console.log('1')
+
     try {
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
         props.subPosts
       )
-      console.log('2')
       dispatch(putSubPosts(response.data))
-      console.log('3')
       dispatch(fetchPostsStart(false))
       console.log(response.data)
     } catch (e) {
@@ -139,10 +139,8 @@ export function createNewSub(props) {
       newSubPosts = []
     }
     newSubPosts.push(props.newSubPost)
-    console.log('01')
     dispatch(createNS(newSubPosts, newSubPost))
-
-    putSP(props)
+    dispatch(putSP(props))
   }
 }
 

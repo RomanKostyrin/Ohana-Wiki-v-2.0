@@ -55,7 +55,7 @@ class Editor extends React.Component {
     this.props.deleteSubEl(this.props, event.target.id)
   }
   onChangeTextArea = (event) => {
-    event.preventDefault()
+    console.log(event.target.value)
     this.props.onChangeText(this.props, event)
   }
   pathImgHandle = (event) => {
@@ -80,7 +80,6 @@ class Editor extends React.Component {
     event.preventDefault()
     this.props.createNewSub(this.props)
   }
-
   changeSubPostsHandle = (event) => {
     this.props.changeSPHandle(event.target.value)
   }
@@ -255,11 +254,10 @@ class Editor extends React.Component {
                           <Textarea
                             LabelClass={'TextareaLabel'}
                             labelName={'Введите текст'}
-                            labelId={`${Math.random()}`}
                             rows={10}
                             cols={120}
                             placeholder={'Введите текст'}
-                            defaultValue={elem.data.value[index]}
+                            value={elem.data.value[index]}
                             id={`textarea-${index}`}
                             onChange={this.onChangeTextArea}
                           ></Textarea>
