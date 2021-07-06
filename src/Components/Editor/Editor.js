@@ -34,11 +34,11 @@ class Editor extends React.Component {
   }
   putActivePost = (event) => {
     event.preventDefault()
-    this.props.fetchSubPosts(this.props, event.target.value)
+    this.props.fetchSubPosts(event.target.value)
   }
   ChangeSubPostName = (event) => {
     event.preventDefault()
-    this.props.changeSubPost(this.props, event)
+    this.props.changeSubPost(event)
   }
   disableButtons = (bool) => {
     this.props.isDisabledButtonsFunction(bool)
@@ -48,37 +48,37 @@ class Editor extends React.Component {
   }
   addHandle = (event, type) => {
     event.preventDefault()
-    this.props.addHandle(this.props, type)
+    this.props.addHandle(type)
   }
   deleteSubElement = (event) => {
     event.preventDefault()
-    this.props.deleteSubEl(this.props, event.target.id)
+    this.props.deleteSubEl(event.target.id)
   }
   onChangeTextArea = (event) => {
     console.log(event.target.value)
-    this.props.onChangeText(this.props, event)
+    this.props.onChangeText(event)
   }
   pathImgHandle = (event) => {
     event.preventDefault()
-    this.props.pathImg(this.props, event)
+    this.props.pathImg(event)
   }
   newPostNameHandle = (event) => {
     this.props.newPostNameFunction(event.target.value)
   }
   ChangeSubPost = (event) => {
     event.preventDefault()
-    this.props.putSP(this.props)
+    this.props.putSP()
   }
   onSubmitPost = async (event) => {
     event.preventDefault()
-    this.props.onSubmitP(this.props)
+    this.props.onSubmitP()
   }
   onChangePostName = (event) => {
     this.props.changePostName(event.target.value)
   }
   createNewSubPost = async (event) => {
     event.preventDefault()
-    this.props.createNewSub(this.props)
+    this.props.createNewSub()
   }
   changeSubPostsHandle = (event) => {
     this.props.changeSPHandle(event.target.value)
@@ -367,20 +367,20 @@ function mapStatePoProps(state) {
 function mapDispatchPoProps(dispatch) {
   return {
     fetchPosts: () => dispatch(fetchPosts()),
-    fetchSubPosts: (props, id) => dispatch(fetchSubPosts(props, id)),
-    changeSubPost: (props, event) => dispatch(changeSubPost(props, event)),
+    fetchSubPosts: (id) => dispatch(fetchSubPosts(id)),
+    changeSubPost: (event) => dispatch(changeSubPost(event)),
     isDisabledButtonsFunction: (bool) =>
       dispatch(isDisabledButtonsFunction(bool)),
     changeActiveSub: (value) => dispatch(changeActiveSub(value)),
-    addHandle: (props, type) => dispatch(addHandle(props, type)),
-    deleteSubEl: (props, id) => dispatch(deleteSubEl(props, id)),
-    onChangeText: (props, event) => dispatch(onChangeText(props, event)),
-    pathImg: (props, event) => dispatch(pathImg(props, event)),
+    addHandle: (type) => dispatch(addHandle(type)),
+    deleteSubEl: (id) => dispatch(deleteSubEl(id)),
+    onChangeText: (event) => dispatch(onChangeText(event)),
+    pathImg: (event) => dispatch(pathImg(event)),
     newPostNameFunction: (value) => dispatch(newPostNameFunction(value)),
-    putSP: (props) => dispatch(putSP(props)),
-    onSubmitP: (props) => dispatch(onSubmitP(props)),
+    putSP: () => dispatch(putSP()),
+    onSubmitP: () => dispatch(onSubmitP()),
     changePostName: (value) => dispatch(changePostName(value)),
-    createNewSub: (props) => dispatch(createNewSub(props)),
+    createNewSub: () => dispatch(createNewSub()),
     changeSPHandle: (value) => dispatch(changeSPHandle(value)),
   }
 }

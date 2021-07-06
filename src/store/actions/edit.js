@@ -40,20 +40,21 @@ export function changePostName(value) {
   }
 }
 
-export function onSubmitP(props) {
-  return async (dispatch) => {
+export function onSubmitP() {
+  return async (dispatch, getState) => {
+    const state = getState().edit
     dispatch(fetchPostsStart(true))
     try {
       const response = await axios.post(
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-        props.newPost
+        state.newPost
       )
       console.log(response)
-      let keys = props.keys
+      let keys = state.keys
       keys.push(response.data.name)
-      let arr = props.posts
+      let arr = state.posts
       let newPost = { postName: '', subPosts: [{}] }
-      arr.push(props.newPost.postName)
+      arr.push(state.newPost.postName)
       dispatch(newPostAdd(arr, newPost, keys))
       dispatch(fetchPostsStart(false))
     } catch (e) {
@@ -62,12 +63,13 @@ export function onSubmitP(props) {
   }
 }
 
-export function onChangeText(props, event) {
-  return (dispatch) => {
+export function onChangeText(event) {
+  return (dispatch, getState) => {
+    const state = getState().edit
     dispatch(fetchPostsStart(true))
     const indexOfTextArea = getIndexFromSome(event.target.id)
-    const tempSubs = props.subPosts
-    tempSubs[props.activeSubPost].data.value[indexOfTextArea] =
+    const tempSubs = state.subPosts
+    tempSubs[state.activeSubPost].data.value[indexOfTextArea] =
       event.target.value
 
     dispatch(changeSubPosts(tempSubs))
@@ -81,12 +83,13 @@ export function newPostNameFunction(value) {
     dispatch(newPostNameHandle(value))
   }
 }
-export function pathImg(props, event) {
-  return (dispatch) => {
+export function pathImg(event) {
+  return (dispatch, getState) => {
+    const state = getState().edit
     dispatch(fetchPostsStart(true))
-    let tempSubs = props.subPosts
+    let tempSubs = state.subPosts
     let pathId = getIndexFromSome(event.target.id)
-    tempSubs[props.activeSubPost].data.value[pathId] = event.target.value
+    tempSubs[state.activeSubPost].data.value[pathId] = event.target.value
     dispatch(changeSubPosts(tempSubs))
     dispatch(fetchPostsStart(false))
   }
@@ -105,16 +108,17 @@ export function changeSPHandle(value) {
   }
 }
 
-export function putSP(props) {
-  let key = props.keys[props.activePost]
-  console.log(key)
-  return async (dispatch) => {
+export function putSP() {
+  return async (dispatch, getState) => {
+    const state = getState().edit
+    let key = state.keys[state.activePost]
+    console.log(key)
     dispatch(fetchPostsStart(true))
 
     try {
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
-        props.subPosts
+        state.subPosts
       )
       dispatch(putSubPosts(response.data))
       dispatch(fetchPostsStart(false))
@@ -124,10 +128,11 @@ export function putSP(props) {
     }
   }
 }
-export function createNewSub(props) {
-  return (dispatch) => {
+export function createNewSub() {
+  return (dispatch, getState) => {
+    const state = getState().edit
     dispatch(fetchPostsStart(true))
-    let newSubPosts = props.subPosts
+    let newSubPosts = state.subPosts
     let newSubPost = {
       name: '',
       data: {
@@ -138,23 +143,24 @@ export function createNewSub(props) {
     if (newSubPosts[0].name === '') {
       newSubPosts = []
     }
-    newSubPosts.push(props.newSubPost)
+    newSubPosts.push(state.newSubPost)
     dispatch(createNS(newSubPosts, newSubPost))
-    dispatch(putSP(props))
+    dispatch(putSP(state))
   }
 }
 
-export function deleteSubEl(props, id) {
-  return (dispatch) => {
+export function deleteSubEl(id) {
+  return (dispatch, getState) => {
+    const state = getState().edit
     dispatch(fetchPostsStart(true))
     let btnId = getIndexFromSome(id)
-    let tmpSubs = props.subPosts
-    if (tmpSubs[props.activeSubPost].data.value.length === 1) {
+    let tmpSubs = state.subPosts
+    if (tmpSubs[state.activeSubPost].data.value.length === 1) {
       dispatch(fetchPostsStart(false))
       return alert('Нельзя удалять единственный')
     }
-    tmpSubs[props.activeSubPost].data.type.splice(btnId, 1)
-    tmpSubs[props.activeSubPost].data.value.splice(btnId, 1)
+    tmpSubs[state.activeSubPost].data.type.splice(btnId, 1)
+    tmpSubs[state.activeSubPost].data.value.splice(btnId, 1)
     dispatch(changeSubPosts(tmpSubs))
     dispatch(fetchPostsStart(false))
   }
@@ -166,12 +172,13 @@ export function isDisabledButtonsFunction(bool) {
   }
 }
 
-export function addHandle(props, type) {
-  return (dispatch) => {
+export function addHandle(type) {
+  return (dispatch, getState) => {
+    const state = getState().edit
     dispatch(fetchPostsStart(true))
-    let tempSubs = props.subPosts
-    tempSubs[props.activeSubPost].data.type.push(type)
-    tempSubs[props.activeSubPost].data.value.push('')
+    let tempSubs = state.subPosts
+    tempSubs[state.activeSubPost].data.type.push(type)
+    tempSubs[state.activeSubPost].data.value.push('')
     dispatch(changeSubPosts(tempSubs))
     dispatch(fetchPostsStart(false))
   }
@@ -185,17 +192,19 @@ export function changeActiveSub(value) {
   }
 }
 
-export function changeSubPost(props, event) {
-  return (dispatch) => {
-    let tempSubs = props.subPosts
-    tempSubs[props.activeSubPost].name = event.target.value
+export function changeSubPost(event) {
+  return (dispatch, getState) => {
+    const state = getState().edit
+    let tempSubs = state.subPosts
+    tempSubs[state.activeSubPost].name = event.target.value
     dispatch(changeSubPosts(tempSubs))
   }
 }
 
-export function fetchSubPosts(props, id) {
-  return async (dispatch) => {
-    let keyDB = props.keys[id]
+export function fetchSubPosts(id) {
+  return async (dispatch, getState) => {
+    const state = getState().edit
+    let keyDB = state.keys[id]
     let activePost = id
     console.log(keyDB)
     console.log(activePost)
