@@ -3,10 +3,13 @@ import {
   CHANGE_EMAIL,
   CHANGE_PASSWORD,
   DISABLED_BUTTONS,
+  AUTH_SUCCESS,
+  AUTH_LOGOUT,
+  CURRENT_EMAIL,
 } from '../actions/actionTypes'
 
 const initialState = {
-  currentEmail: 'kostyrin@ohanafitness.ru',
+  currentEmail: '',
   email: '',
   password: '',
   isLogin: false,
@@ -16,12 +19,27 @@ const initialState = {
 
 export default function authReducer(state = initialState, action) {
   switch (action.type) {
+    case AUTH_LOGOUT:
+      return {
+        ...state,
+        token: null,
+      }
+    case CURRENT_EMAIL:
+      return {
+        ...state,
+        currentEmail: action.currentEmail,
+      }
     case AUTH:
       return {
         ...state,
         email: action.email,
         password: action.password,
         isLogin: action.isLogin,
+      }
+    case AUTH_SUCCESS:
+      return {
+        ...state,
+        token: action.token,
       }
     case DISABLED_BUTTONS:
       return {

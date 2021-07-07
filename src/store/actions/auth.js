@@ -4,6 +4,9 @@ import {
   CHANGE_EMAIL,
   CHANGE_PASSWORD,
   DISABLED_BUTTONS,
+  AUTH_SUCCESS,
+  AUTH_LOGOUT,
+  CURRENT_EMAIL,
 } from './actionTypes'
 
 export function auth(email, password, isLogin) {
@@ -25,12 +28,36 @@ export function auth(email, password, isLogin) {
     }
     try {
       const response = await axios.post(url, authData)
-      console.log(response.data)
+      const data = response.data
+      const expirationDate = new Date(
+        new Date().getTime() + data.expiresIn * 1000
+      )
+      localStorage.setItem('token', data.idToken)
+      localStorage.setItem('userId', data.localId)
+      localStorage.setItem('email', data.email)
+      localStorage.setItem('expirationDate', expirationDate)
+
+      dispatch(authSuccess(data.idToken))
+      dispatch(autoLogOut(data.expiresIn))
+      dispatch(logAs(data.email))
     } catch (e) {
       console.log(e)
     }
 
     dispatch(isDisabled(false))
+  }
+}
+
+export function autoLogOut(time) {
+  return (dispatch) => {
+    setTimeout(() => {
+      dispatch(logout())
+    }, time * 1000)
+  }
+}
+export function LoggedAs(AsName) {
+  return (dispatch) => {
+    dispatch(logAs(AsName))
   }
 }
 export function isDisabled(bool) {
@@ -53,7 +80,27 @@ export function onChangePassword(event) {
     dispatch(changePassword(event.target.value))
   }
 }
-
+export function logAs(currentEmail) {
+  return {
+    type: CURRENT_EMAIL,
+    currentEmail,
+  }
+}
+export function logout() {
+  localStorage.removeItem('token')
+  localStorage.removeItem('userId')
+  localStorage.removeItem('email')
+  localStorage.removeItem('expirationDate')
+  return {
+    type: AUTH_LOGOUT,
+    currentEmail: '',
+  }
+}
+export function authSuccess(token) {
+  return {
+    type: AUTH_SUCCESS,
+  }
+}
 export function changeEmail(email) {
   return {
     type: CHANGE_EMAIL,

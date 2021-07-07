@@ -8,6 +8,8 @@ import {
   onChangeLogin,
   onChangePassword,
   isDisabled,
+  logout,
+  LoggedAs,
 } from '../../store/actions/auth'
 
 let popup = [classes.signIn, classes.popupShow]
@@ -15,29 +17,49 @@ let showWrapper = [classes.modalWrapper, classes.showModalWrapper]
 
 class Header extends React.Component {
   state = {
+    hideButtonSignIn: '',
+    hideButtonSignOut: 'visuallyHidden',
+    hideLoggAs: classes.loggedAsHide,
     popup: classes.signIn,
     wrapper: classes.modalWrapper,
+    redirect: false,
   }
   signInHandler = async (event) => {
     event.preventDefault()
-    this.props.auth(this.props.email, this.props.password, true)
+    await this.props.auth(this.props.email, this.props.password, true)
+    if (!!localStorage.getItem('email')) {
+      this.closePopup()
+      this.hideSignIn()
+    }
   }
-
-  showPopup = (event) => {
+  hideSignIn = () => {
+    this.setState({
+      hideButtonSignIn: 'visuallyHidden',
+      hideButtonSignOut: '',
+      hideLoggAs: classes.loggedAs,
+    })
+  }
+  showPopup = () => {
     this.setState({
       popup: popup.join(' '),
       wrapper: showWrapper.join(' '),
     })
   }
-  closePopup = (event) => {
+  closePopup = () => {
     this.setState({
       popup: classes.signIn,
       wrapper: classes.modalWrapper,
     })
   }
-  signOutHandler = (event) => {
+  logOutHandler = (event) => {
     event.preventDefault()
-    console.log(event.target)
+    this.props.logout()
+    this.props.LoggedAs('')
+    this.setState({
+      hideButtonSignIn: '',
+      hideButtonSignOut: 'visuallyHidden',
+      hideLoggAs: classes.loggedAsHide,
+    })
   }
 
   render() {
@@ -102,12 +124,13 @@ class Header extends React.Component {
         <Button
           classType={'ButtonImportant'}
           classType2={'ButtonSignIn'}
+          classType3={this.state.hideButtonSignIn}
           onClick={this.showPopup}
         >
           Войти
         </Button>
 
-        <span className={classes.LoggedAs}>
+        <span className={this.state.hideLoggAs}>
           Вы вошли как:{' '}
           <span className={classes.userName}>{this.props.currentEmail}</span>
         </span>
@@ -115,7 +138,8 @@ class Header extends React.Component {
         <Button
           classType={'ButtonPrimary'}
           classType2={'ButtonSignOut'}
-          onClick={this.signOutHandler}
+          classType3={this.state.hideButtonSignOut}
+          onClick={this.logOutHandler}
         >
           Выйти
         </Button>
@@ -142,6 +166,8 @@ function mapDispatchPoProps(dispatch) {
     onChangeLogin: (event) => dispatch(onChangeLogin(event)),
     onChangePassword: (event) => dispatch(onChangePassword(event)),
     isDisabled: (bool) => dispatch(isDisabled(bool)),
+    logout: () => dispatch(logout()),
+    LoggedAs: (AsName) => dispatch(LoggedAs(AsName)),
   }
 }
 

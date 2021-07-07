@@ -12,6 +12,9 @@ $darkPurple: rgb(71, 14, 71);
   min-height: 80px;
   margin-bottom: 20px;
 }
+.loggedAsHide {
+  display: none;
+}
 .Logo {
   margin-left: 20px;
   padding: 2px 54px 2px 21px;
@@ -20,10 +23,11 @@ $darkPurple: rgb(71, 14, 71);
   height: 34px;
   background: url('../../img/svg/ohana.svg') no-repeat;
 }
-.LoggedAs {
+.loggedAs {
   position: relative;
   display: inline-block;
-  padding: 8px 15px 8px 35px;
+  min-width: fit-content;
+  padding: 8px 10px 8px 35px;
   border-radius: 3px;
   font-size: 14px;
   line-height: 18px;
@@ -34,7 +38,7 @@ $darkPurple: rgb(71, 14, 71);
   border-radius: 5px;
   margin: 0px 20px 0px 20px;
 }
-.LoggedAs::before {
+.loggedAs::before {
   content: '';
   width: 27px;
   height: 23px;

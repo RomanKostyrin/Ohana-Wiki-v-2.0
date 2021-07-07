@@ -6,6 +6,7 @@ const Button = (props) => {
     classes.Button,
     classes[props.classType],
     classes[props.classType2],
+    classes[props.classType3],
     classes[props.classTypeActive],
   ]
   return (
