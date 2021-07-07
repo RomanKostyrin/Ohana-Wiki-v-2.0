@@ -18,7 +18,7 @@ import {
 const initialState = {
   posts: ['1', '2'],
   keys: [],
-  activePost: 0,
+  activePost: null,
   activeSubPost: 0,
   subPosts: [
     {

@@ -227,7 +227,6 @@ export function changeSubPost(event) {
 }
 
 export function fetchSubPosts(event, isNavigation = false) {
-  event.preventDefault()
   return async (dispatch, getState) => {
     const state = getState().edit
     let keyDB = state.keys[event.target.value]

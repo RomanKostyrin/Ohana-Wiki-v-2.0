@@ -20,6 +20,9 @@ class Navigation extends React.Component {
             return (
               <li key={`NavButton-${index}`}>
                 <Button
+                  link={'link'}
+                  to={`/posts/${index}`}
+                  exact={false}
                   id={`NavButton-${index}`}
                   classType={'ButtonImportant'}
                   classType2={'ButtonNavigation'}
@@ -37,6 +40,9 @@ class Navigation extends React.Component {
           })}
           <li key={'edit'}>
             <Button
+              link={'link'}
+              to={`/editor`}
+              exact={false}
               id={`NavButton-10`}
               classType={'ButtonImportant'}
               classType2={'ButtonNavigation'}
@@ -50,6 +56,9 @@ class Navigation extends React.Component {
           </li>
           <li key={'users'}>
             <Button
+              link={'link'}
+              to={`/users`}
+              exact={false}
               id={`NavButton-20`}
               classType={'ButtonImportant'}
               classType2={'ButtonNavigation'}

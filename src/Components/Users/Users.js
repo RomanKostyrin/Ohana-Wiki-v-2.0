@@ -102,7 +102,7 @@ class Users extends React.Component {
             </div>
             <Button
               type={'submit'}
-              id={'NewUserButton'}
+              id={'NewUserBut'}
               classType2={'ButtonSubmit'}
               classType={'ButtonPrimary'}
               onClick={this.registerHandler}

@@ -4,69 +4,79 @@ import Button from '../UI/Button/Button'
 import { connect } from 'react-redux'
 import { onClickSubPost, onImgClick } from '../../store/actions/edit'
 
-const Post = (props) => {
-  let ImgButton = [classes.imgButton, classes[props.imgButtonClass]]
-  let ImgClass = [classes.img, classes[props.imgClass]]
-  const BCClassIndex = [classes.breadCrumbsLink, classes.breadCrumbsLinkIndex]
-  const BCClassActive = [classes.breadCrumbsLink, classes.breadCrumbsLinkActive]
-  return (
-    <div className={classes.containerColumn}>
-      <h1 className={classes.visuallyHidden}>
-        Главная страница Wiki Craft Ohana &#171;Ohana Fitness&#187;
-      </h1>
-      <section className={classes.mainSection}>
-        <ul className={classes.breadCrumbs}>
-          <li>
-            <a
-              href="/"
-              className={BCClassIndex.join(' ')}
-              aria-label="Ссылка на главную страницу"
-            >
-              {' '}
-            </a>
-          </li>
-          <li>
-            <a href="/nomen" className={classes.breadCrumbsLink}>
-              {props.posts[props.activePost]}
-            </a>
-          </li>
-          <li>
-            <a href="/nomen" className={BCClassActive.join(' ')}>
-              {props.subPosts[props.activeSubPost].name}
-            </a>
-          </li>
-        </ul>
-        <header className={classes.mainSectionHeader}>
-          <h2 className={classes.mainSectionHeaderTitle}>
-            {props.posts[props.activePost]}
-          </h2>
-        </header>
-        <ul className={classes.postList}>
-          {props.subPosts.map((element, index) => {
-            return (
-              <li key={index}>
-                <Button
-                  classType={
-                    props.activeSubPost === index
-                      ? 'ButtonNavigationActive'
-                      : 'ButtonImportant'
-                  }
-                  onClick={(event) => props.onClickSubPost(event.target.id)}
-                  id={`sub-${index}`}
-                >
-                  {props.subPosts[index].name}
-                </Button>
-              </li>
-            )
-          })}
-        </ul>
-        <div className={classes.mainSectionPost}>
-          {Object.keys(props.subPosts[props.activeSubPost].data.type).map(
-            (element, index) => {
+class Post extends React.Component {
+  render() {
+    console.log(this.props)
+    let ImgButton = [classes.imgButton, classes[this.props.imgButtonClass]]
+    let ImgClass = [classes.img, classes[this.props.imgClass]]
+    const BCClassIndex = [classes.breadCrumbsLink, classes.breadCrumbsLinkIndex]
+    const BCClassActive = [
+      classes.breadCrumbsLink,
+      classes.breadCrumbsLinkActive,
+    ]
+    return (
+      <div className={classes.containerColumn}>
+        <h1 className={classes.visuallyHidden}>
+          Главная страница Wiki Craft Ohana &#171;Ohana Fitness&#187;
+        </h1>
+        <section className={classes.mainSection}>
+          <ul className={classes.breadCrumbs}>
+            <li>
+              <a
+                href="/"
+                className={BCClassIndex.join(' ')}
+                aria-label="Ссылка на главную страницу"
+              >
+                {' '}
+              </a>
+            </li>
+            <li>
+              <a href="/nomen" className={classes.breadCrumbsLink}>
+                {this.props.posts[this.props.match.params.activePost]}
+              </a>
+            </li>
+            <li>
+              <a href="/nomen" className={BCClassActive.join(' ')}>
+                {this.props.subPosts[this.props.activeSubPost].name}
+              </a>
+            </li>
+          </ul>
+          <header className={classes.mainSectionHeader}>
+            <h2 className={classes.mainSectionHeaderTitle}>
+              {this.props.posts[this.props.activePost]}
+            </h2>
+          </header>
+          <ul className={classes.postList}>
+            {this.props.subPosts.map((element, index) => {
+              return (
+                <li key={index}>
+                  <Button
+                    classType={
+                      this.props.activeSubPost === index
+                        ? 'ButtonNavigationActive'
+                        : 'ButtonImportant'
+                    }
+                    onClick={(event) =>
+                      this.props.onClickSubPost(event.target.id)
+                    }
+                    id={`sub-${index}`}
+                  >
+                    {this.props.subPosts[index].name}
+                  </Button>
+                </li>
+              )
+            })}
+          </ul>
+          <div className={classes.mainSectionPost}>
+            {Object.keys(
+              this.props.subPosts[this.props.activeSubPost].data.type
+            ).map((element, index) => {
               let typeData =
-                props.subPosts[props.activeSubPost].data.type[element]
+                this.props.subPosts[this.props.activeSubPost].data.type[element]
               let valueData =
-                props.subPosts[props.activeSubPost].data.value[element]
+                this.props.subPosts[this.props.activeSubPost].data.value[
+                  element
+                ]
 
               return typeData === 'text' ? (
                 <p
@@ -80,11 +90,11 @@ const Post = (props) => {
                 <div className={classes.imgWrapper} key={`imgWrapper-${index}`}>
                   <button
                     className={
-                      props.imgId === index
+                      this.props.imgId === index
                         ? ImgButton.join(' ')
                         : classes.imgButton
                     }
-                    onClick={(event) => props.onImgClick(event)}
+                    onClick={(event) => this.props.onImgClick(event)}
                   >
                     <img
                       id={`${typeData}-${index}`}
@@ -94,18 +104,20 @@ const Post = (props) => {
                       width="273"
                       height="167"
                       className={
-                        props.imgId === index ? ImgClass.join(' ') : classes.img
+                        this.props.imgId === index
+                          ? ImgClass.join(' ')
+                          : classes.img
                       }
                     />
                   </button>
                 </div>
               )
-            }
-          )}
-        </div>
-      </section>
-    </div>
-  )
+            })}
+          </div>
+        </section>
+      </div>
+    )
+  }
 }
 
 function mapStatePoProps(state) {
