@@ -13,6 +13,7 @@ class Navigation extends React.Component {
     this.props.fetchPosts()
   }
   render() {
+    console.log(this.props.activePost)
     return (
       <nav className={classes.Navigation}>
         <ul className={classes.NavigationList}>
@@ -20,6 +21,7 @@ class Navigation extends React.Component {
             return (
               <li key={`NavButton-${index}`}>
                 <Button
+                  disabledLink={this.props.isDisabledButtons}
                   link={'link'}
                   to={`/posts/${index}`}
                   exact={false}
@@ -40,6 +42,7 @@ class Navigation extends React.Component {
           })}
           <li key={'edit'}>
             <Button
+              disabledLink={this.props.isDisabledButtons}
               link={'link'}
               to={`/editor`}
               exact={false}
@@ -56,6 +59,7 @@ class Navigation extends React.Component {
           </li>
           <li key={'users'}>
             <Button
+              disabledLink={this.props.isDisabledButtons}
               link={'link'}
               to={`/users`}
               exact={false}
@@ -82,6 +86,7 @@ function mapStatePoProps(state) {
     activePost: state.edit.activePost,
     activeSubPost: state.edit.activeSubPost,
     subPosts: state.edit.subPosts,
+    isDisabledButtons: state.edit.isDisabledButtons,
   }
 }
 

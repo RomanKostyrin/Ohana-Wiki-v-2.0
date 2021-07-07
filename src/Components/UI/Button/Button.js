@@ -10,12 +10,14 @@ const Button = (props) => {
     classes[props.classType3],
     classes[props.classTypeActive],
   ]
+  if (props.disabledLink) {
+    cls.push(classes.disabledLink)
+  }
   if (props.link === 'link') {
     return (
       <NavLink
         to={props.to}
         exact={props.exact}
-        disabled={props.disabled}
         id={props.id}
         onClick={props.onClick}
         className={cls.join(' ')}

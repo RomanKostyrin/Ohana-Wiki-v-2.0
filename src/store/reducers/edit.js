@@ -38,7 +38,7 @@ const initialState = {
       value: [' '],
     },
   },
-  isDisabledButtons: false,
+  isDisabledButtons: true,
   error: null,
   imgId: '',
   imgClass: '',

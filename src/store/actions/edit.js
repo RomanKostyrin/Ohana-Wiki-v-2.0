@@ -186,6 +186,12 @@ export function deleteSubEl(event) {
   }
 }
 
+export function getActivePost(activePost) {
+  return (dispatch) => {
+    dispatch(setActiveP(+activePost))
+  }
+}
+
 export function isDisabledButtonsFunction(bool) {
   return (dispatch) => {
     dispatch(fetchPostsStart(bool))
@@ -244,7 +250,6 @@ export function fetchSubPosts(event, isNavigation = false) {
       dispatch(changeActiveSubPost(0))
       dispatch(fetchSubPostsSuccess(response.data.subPosts, activePost))
       dispatch(fetchPostsStart(false))
-      console.log(response.data)
     } catch (e) {
       dispatch(fetchPostsError(e))
     }

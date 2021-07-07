@@ -2,9 +2,17 @@ import classes from './Post.module.scss'
 import React from 'react'
 import Button from '../UI/Button/Button'
 import { connect } from 'react-redux'
-import { onClickSubPost, onImgClick } from '../../store/actions/edit'
+import {
+  onClickSubPost,
+  onImgClick,
+  getActivePost,
+} from '../../store/actions/edit'
+import { NavLink } from 'react-router-dom'
 
 class Post extends React.Component {
+  componentDidMount() {
+    this.props.getActivePost(this.props.match.params.activePost)
+  }
   render() {
     console.log(this.props)
     let ImgButton = [classes.imgButton, classes[this.props.imgButtonClass]]
@@ -31,9 +39,14 @@ class Post extends React.Component {
               </a>
             </li>
             <li>
-              <a href="/nomen" className={classes.breadCrumbsLink}>
+              <NavLink
+                href="/nomen"
+                className={classes.breadCrumbsLink}
+                exact={false}
+                to={`/posts/${this.props.activePost}`}
+              >
                 {this.props.posts[this.props.match.params.activePost]}
-              </a>
+              </NavLink>
             </li>
             <li>
               <a href="/nomen" className={BCClassActive.join(' ')}>
@@ -136,6 +149,7 @@ function mapDispatchPoProps(dispatch) {
   return {
     onClickSubPost: (subId) => dispatch(onClickSubPost(subId)),
     onImgClick: (event) => dispatch(onImgClick(event)),
+    getActivePost: (activePost) => dispatch(getActivePost(activePost)),
   }
 }
 
