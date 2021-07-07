@@ -5,7 +5,7 @@ $darkPurple: rgb(71, 14, 71);
 $red: #ba2732;
 $darkRed: #8a1d25;
 
-.VisuallyHidden {
+.visuallyHidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -15,7 +15,7 @@ $darkRed: #8a1d25;
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
-.ContainerColumn {
+.containerColumn {
   display: flex;
   margin-left: 50px;
   margin-top: 10px;
@@ -23,13 +23,13 @@ $darkRed: #8a1d25;
   margin-right: auto;
   flex-direction: column;
 }
-.MainSection {
+.mainSection {
   display: flex;
   flex-direction: column;
   margin: 0px 50px 50px 0;
   font-family: 'Cuprum', 'Arial', sans-serif;
 }
-.MainSectionHeader {
+.mainSectionHeader {
   display: flex;
   height: 38px;
   align-items: center;
@@ -40,25 +40,25 @@ $darkRed: #8a1d25;
   border-radius: 5px;
   box-shadow: 0px 10px 25px 0px rgba(41, 52, 73, 0.5);
 }
-.MainSectionHeaderTitle {
+.mainSectionHeaderTitle {
   font-family: 'Cuprum', 'Arial', sans-serif;
   color: white;
   font-size: 24px;
   line-height: 26px;
   font-weight: 400;
 }
-.MainSectionText {
+.mainSectionText {
   font-family: 'Cuprum', 'Arial', sans-serif;
   font-size: 16px;
   line-height: 18px;
 }
-.MainSectionPost {
+.mainSectionPost {
   margin: 0 20px 20px 20px;
 }
-.MainSectionImg {
+.mainSectionImg {
   margin-right: 10px;
 }
-.BreadCrumbs {
+.breadCrumbs {
   list-style: none;
   margin-bottom: 10px;
   margin-top: 7px;
@@ -68,7 +68,7 @@ $darkRed: #8a1d25;
   flex-wrap: wrap;
 }
 
-.BreadCrumbsLink {
+.breadCrumbsLink {
   position: relative;
   padding-right: 42px;
   font-family: 'PT Sans', 'Arial', sans-serif;
@@ -78,21 +78,21 @@ $darkRed: #8a1d25;
   text-decoration: none;
   text-transform: uppercase;
 }
-.BreadCrumbsLink:hover {
+.breadCrumbsLink:hover {
   color: #ee3643;
 }
-.BreadCrumbsLinkActive:hover {
+.breadCrumbsLinkActive:hover {
   color: black;
 }
-.BreadCrumbsLink:active {
+.breadCrumbsLink:active {
   color: #32425c;
   opacity: 0.3;
 }
-.BreadCrumbsLinkActive:active {
+.breadCrumbsLinkActive:active {
   color: black;
   opacity: 1;
 }
-.BreadCrumbsLink:after {
+.breadCrumbsLink:after {
   content: '';
   width: 27px;
   height: 23px;
@@ -101,10 +101,10 @@ $darkRed: #8a1d25;
   top: 2px;
   background: url('../../img/svg/icon-right-small.svg') no-repeat;
 }
-.BreadCrumbsLinkActive:after {
+.breadCrumbsLinkActive:after {
   display: none;
 }
-.BreadCrumbsLinkIndex {
+.breadCrumbsLinkIndex {
   position: relative;
   padding-right: 42px;
   padding-left: 10px;
@@ -112,11 +112,11 @@ $darkRed: #8a1d25;
   height: 22px;
   background: url('../../img/svg/icon-home.svg') no-repeat;
 }
-.BreadCrumbsLinkIndex:hover {
+.breadCrumbsLinkIndex:hover {
   background: url('../../img/svg/icon-home-hover.svg') no-repeat;
 }
 
-.PostList {
+.postList {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
@@ -127,13 +127,13 @@ $darkRed: #8a1d25;
   justify-content: flex-start;
   margin-top: 20px;
 }
-.ImgWrapper {
+.imgWrapper {
   width: 273px;
   height: 167px;
   display: inline-block;
   margin-right: 10px;
 }
-.ImgButton {
+.imgButton {
   padding: 0;
   outline: none;
   background-color: unset;
@@ -152,7 +152,7 @@ $darkRed: #8a1d25;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.3);
 }
-.Img {
+.img {
   width: 273px;
   height: 167px;
   border-radius: 15px;

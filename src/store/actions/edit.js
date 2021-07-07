@@ -12,6 +12,8 @@ import {
   NEW_POST_ADD,
   PUT_SUBPOSTS,
   CREATE_NEW_SUBPOST,
+  SET_ACTIVE_POST,
+  SHOW_IMG,
 } from './actionTypes'
 
 let getIndexFromSome = (string) => {
@@ -40,6 +42,23 @@ export function changePostName(value) {
   }
 }
 
+export function onImgClick(event) {
+  event.preventDefault()
+  return (dispatch, getState) => {
+    const state = getState().edit
+    let ImgId = ''
+    let ImgClass = ''
+    let ImgButtonClass = ''
+    if (state.imgClass === '') {
+      ImgId = Number(getIndexFromSome(event.target.id))
+      ImgClass = 'modalImg'
+      ImgButtonClass = 'modalWrapper'
+    }
+
+    dispatch(showImg(ImgId, ImgClass, ImgButtonClass))
+  }
+}
+
 export function onSubmitP(event) {
   event.preventDefault()
   return async (dispatch, getState) => {
@@ -50,7 +69,6 @@ export function onSubmitP(event) {
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
         state.newPost
       )
-      console.log(response)
       let keys = state.keys
       keys.push(response.data.name)
       let arr = state.posts
@@ -78,7 +96,6 @@ export function onChangeText(event) {
 }
 
 export function newPostNameFunction(value) {
-  console.log(value)
   return (dispatch) => {
     dispatch(newPostNameHandle(value))
   }
@@ -114,7 +131,6 @@ export function putSP(event) {
   return async (dispatch, getState) => {
     const state = getState().edit
     let key = state.keys[state.activePost]
-    console.log(key)
     dispatch(fetchPostsStart(true))
 
     try {
@@ -175,7 +191,11 @@ export function isDisabledButtonsFunction(bool) {
     dispatch(fetchPostsStart(bool))
   }
 }
-
+export function setActivePost(postNumber) {
+  return (dispatch) => {
+    dispatch(setActiveP(Number(getIndexFromSome(postNumber))))
+  }
+}
 export function addHandle(event, type) {
   event.preventDefault()
   return (dispatch, getState) => {
@@ -206,14 +226,17 @@ export function changeSubPost(event) {
   }
 }
 
-export function fetchSubPosts(event) {
+export function fetchSubPosts(event, isNavigation = false) {
   event.preventDefault()
   return async (dispatch, getState) => {
     const state = getState().edit
     let keyDB = state.keys[event.target.value]
+
     let activePost = event.target.value
-    console.log(keyDB)
-    console.log(activePost)
+    if (isNavigation) {
+      keyDB = state.keys[getIndexFromSome(event.target.id)]
+      activePost = Number(getIndexFromSome(event.target.id))
+    }
     dispatch(fetchPostsStart(true))
     try {
       const response = await axios.get(
@@ -226,6 +249,12 @@ export function fetchSubPosts(event) {
     } catch (e) {
       dispatch(fetchPostsError(e))
     }
+  }
+}
+
+export function onClickSubPost(activeSubPost) {
+  return (dispatch) => {
+    dispatch(changeActiveSubPost(Number(getIndexFromSome(activeSubPost))))
   }
 }
 
@@ -259,6 +288,14 @@ export function changeActiveSubPost(activeSubPost) {
   }
 }
 
+export function showImg(imgId, imgClass, imgButtonClass) {
+  return {
+    type: SHOW_IMG,
+    imgId,
+    imgClass,
+    imgButtonClass,
+  }
+}
 export function changeSubPosts(subPosts) {
   return {
     type: CHANGE_SUBPOSTS,
@@ -273,7 +310,12 @@ export function fetchSubPostsSuccess(subPosts, activePost) {
     activePost,
   }
 }
-
+export function setActiveP(activePost) {
+  return {
+    type: SET_ACTIVE_POST,
+    activePost,
+  }
+}
 export function changeNewSubPostName(newSubPost) {
   return {
     type: CHANGE_SUBPOST_NAME,
@@ -326,7 +368,6 @@ export function putSubPosts(subPosts) {
 }
 
 export function fetchPostsSuccess(posts, subPosts, keys) {
-  console.log(subPosts)
   return {
     type: FETCH_POSTS_SUCCESS,
     posts,

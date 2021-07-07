@@ -10,22 +10,7 @@ class Main extends React.Component {
       return <Editor />
     } else if (this.props.activePost === 20) {
       return <Users />
-    } else
-      return (
-        <Post
-          ImgId={this.props.ImgId}
-          ImgButtonClass={this.props.ImgButtonClass}
-          ImgClass={this.props.ImgClass}
-          onImgClick={this.props.onImgClick}
-          subPosts={this.props.subPosts}
-          className={classes.Post}
-          posts={this.props.posts}
-          activePost={this.props.activePost}
-          activeSubPost={this.props.activeSubPost}
-          subPost={this.props.subPost}
-          onClick={this.props.onClick}
-        />
-      )
+    } else return <Post />
   }
 }
 

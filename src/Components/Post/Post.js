@@ -2,19 +2,20 @@ import classes from './Post.module.scss'
 import React from 'react'
 import Button from '../UI/Button/Button'
 import { connect } from 'react-redux'
+import { onClickSubPost, onImgClick } from '../../store/actions/edit'
 
 const Post = (props) => {
-  let ImgButton = [classes.ImgButton, classes[props.ImgButtonClass]]
-  let ImgClass = [classes.Img, classes[props.ImgClass]]
-  const BCClassIndex = [classes.BreadCrumbsLink, classes.BreadCrumbsLinkIndex]
-  const BCClassActive = [classes.BreadCrumbsLink, classes.BreadCrumbsLinkActive]
+  let ImgButton = [classes.imgButton, classes[props.imgButtonClass]]
+  let ImgClass = [classes.img, classes[props.imgClass]]
+  const BCClassIndex = [classes.breadCrumbsLink, classes.breadCrumbsLinkIndex]
+  const BCClassActive = [classes.breadCrumbsLink, classes.breadCrumbsLinkActive]
   return (
-    <div className={classes.ContainerColumn}>
-      <h1 className={classes.VisuallyHidden}>
+    <div className={classes.containerColumn}>
+      <h1 className={classes.visuallyHidden}>
         Главная страница Wiki Craft Ohana &#171;Ohana Fitness&#187;
       </h1>
-      <section className={classes.MainSection}>
-        <ul className={classes.BreadCrumbs}>
+      <section className={classes.mainSection}>
+        <ul className={classes.breadCrumbs}>
           <li>
             <a
               href="/"
@@ -25,7 +26,7 @@ const Post = (props) => {
             </a>
           </li>
           <li>
-            <a href="/nomen" className={classes.BreadCrumbsLink}>
+            <a href="/nomen" className={classes.breadCrumbsLink}>
               {props.posts[props.activePost]}
             </a>
           </li>
@@ -35,12 +36,12 @@ const Post = (props) => {
             </a>
           </li>
         </ul>
-        <header className={classes.MainSectionHeader}>
-          <h2 className={classes.MainSectionHeaderTitle}>
+        <header className={classes.mainSectionHeader}>
+          <h2 className={classes.mainSectionHeaderTitle}>
             {props.posts[props.activePost]}
           </h2>
         </header>
-        <ul className={classes.PostList}>
+        <ul className={classes.postList}>
           {props.subPosts.map((element, index) => {
             return (
               <li key={index}>
@@ -50,7 +51,7 @@ const Post = (props) => {
                       ? 'ButtonNavigationActive'
                       : 'ButtonImportant'
                   }
-                  onClick={props.onClick}
+                  onClick={(event) => props.onClickSubPost(event.target.id)}
                   id={`sub-${index}`}
                 >
                   {props.subPosts[index].name}
@@ -59,7 +60,7 @@ const Post = (props) => {
             )
           })}
         </ul>
-        <div className={classes.MainSectionPost}>
+        <div className={classes.mainSectionPost}>
           {Object.keys(props.subPosts[props.activeSubPost].data.type).map(
             (element, index) => {
               let typeData =
@@ -69,21 +70,21 @@ const Post = (props) => {
 
               return typeData === 'text' ? (
                 <p
-                  className={classes.MainSectionText}
+                  className={classes.mainSectionText}
                   key={`${typeData}-${index}`}
                   id={`${typeData}-${index}`}
                 >
                   {valueData}
                 </p>
               ) : (
-                <div className={classes.ImgWrapper} key={`ImgWrapper-${index}`}>
+                <div className={classes.imgWrapper} key={`imgWrapper-${index}`}>
                   <button
                     className={
-                      props.ImgId === index
+                      props.imgId === index
                         ? ImgButton.join(' ')
-                        : classes.ImgButton
+                        : classes.imgButton
                     }
-                    onClick={props.onImgClick}
+                    onClick={(event) => props.onImgClick(event)}
                   >
                     <img
                       id={`${typeData}-${index}`}
@@ -93,7 +94,7 @@ const Post = (props) => {
                       width="273"
                       height="167"
                       className={
-                        props.ImgId === index ? ImgClass.join(' ') : classes.Img
+                        props.imgId === index ? ImgClass.join(' ') : classes.img
                       }
                     />
                   </button>
@@ -108,11 +109,22 @@ const Post = (props) => {
 }
 
 function mapStatePoProps(state) {
-  return {}
+  return {
+    activePost: state.edit.activePost,
+    posts: state.edit.posts,
+    imgId: state.edit.imgId,
+    imgClass: state.edit.imgClass,
+    imgButtonClass: state.edit.imgButtonClass,
+    activeSubPost: state.edit.activeSubPost,
+    subPosts: state.edit.subPosts,
+  }
 }
 
 function mapDispatchPoProps(dispatch) {
-  return {}
+  return {
+    onClickSubPost: (subId) => dispatch(onClickSubPost(subId)),
+    onImgClick: (event) => dispatch(onImgClick(event)),
+  }
 }
 
 export default connect(mapStatePoProps, mapDispatchPoProps)(Post)

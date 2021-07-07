@@ -1,8 +1,17 @@
 import React from 'react'
 import Button from '../UI/Button/Button'
 import classes from './Navigation.module.scss'
+import { connect } from 'react-redux'
+import {
+  fetchPosts,
+  fetchSubPosts,
+  setActivePost,
+} from '../../store/actions/edit'
 
 class Navigation extends React.Component {
+  componentDidMount() {
+    this.props.fetchPosts()
+  }
   render() {
     return (
       <nav className={classes.Navigation}>
@@ -19,7 +28,7 @@ class Navigation extends React.Component {
                       ? 'ButtonNavigationActive'
                       : null
                   }
-                  onClick={this.props.onClick}
+                  onClick={(event) => this.props.fetchSubPosts(event, true)}
                 >
                   {post}
                 </Button>
@@ -34,7 +43,7 @@ class Navigation extends React.Component {
               classTypeActive={
                 this.props.activePost === 10 ? 'ButtonNavigationActive' : null
               }
-              onClick={this.props.onEdit}
+              onClick={(event) => this.props.setActivePost(event.target.id)}
             >
               {'Edit'}
             </Button>
@@ -47,7 +56,7 @@ class Navigation extends React.Component {
               classTypeActive={
                 this.props.activePost === 20 ? 'ButtonNavigationActive' : null
               }
-              onClick={this.props.onUsers}
+              onClick={(event) => this.props.setActivePost(event.target.id)}
             >
               {'Users'}
             </Button>
@@ -58,4 +67,20 @@ class Navigation extends React.Component {
   }
 }
 
-export default Navigation
+function mapStatePoProps(state) {
+  return {
+    posts: state.edit.posts,
+    activePost: state.edit.activePost,
+    activeSubPost: state.edit.activeSubPost,
+    subPosts: state.edit.subPosts,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchPosts: () => dispatch(fetchPosts()),
+    fetchSubPosts: (event, bool) => dispatch(fetchSubPosts(event, bool)),
+    setActivePost: (id) => dispatch(setActivePost(id)),
+  }
+}
+export default connect(mapStatePoProps, mapDispatchToProps)(Navigation)

@@ -259,7 +259,7 @@ class Editor extends React.Component {
                           ></button>
                         </div>
                       )
-                    }
+                    } else return null
                   }
                 )}
               </div>

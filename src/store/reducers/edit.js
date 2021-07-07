@@ -11,6 +11,8 @@ import {
   PUT_SUBPOSTS,
   NEW_POST_ADD,
   CREATE_NEW_SUBPOST,
+  SET_ACTIVE_POST,
+  SHOW_IMG,
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -38,10 +40,18 @@ const initialState = {
   },
   isDisabledButtons: false,
   error: null,
+  imgId: '',
+  imgClass: '',
+  imgButtonClass: '',
 }
 
 export default function editReducer(state = initialState, action) {
   switch (action.type) {
+    case SET_ACTIVE_POST:
+      return {
+        ...state,
+        activePost: action.activePost,
+      }
     case CHANGE_SUBPOST_NAME:
       return {
         ...state,
@@ -57,6 +67,13 @@ export default function editReducer(state = initialState, action) {
       return {
         ...state,
         newPost: action.newPost,
+      }
+    case SHOW_IMG:
+      return {
+        ...state,
+        imgClass: action.imgClass,
+        imgId: action.imgId,
+        imgButtonClass: action.imgButtonClass,
       }
     case NEW_POST_ADD:
       return {
@@ -106,7 +123,6 @@ export default function editReducer(state = initialState, action) {
         newPostName: action.newPostName,
       }
     case CHANGE_SUBPOSTS:
-      console.log(action.subPosts)
       return {
         ...state,
         subPosts: action.subPosts,

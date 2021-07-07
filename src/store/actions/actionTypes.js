@@ -10,6 +10,8 @@ export const NEW_POST_ADD = 'NEW_POST_ADD'
 export const CHANGE_NEW_POST = 'CHANGE_NEW_POST'
 export const CREATE_NEW_SUBPOST = 'CREATE_NEW_SUBPOST'
 export const CHANGE_SUBPOST_NAME = 'CHANGE_SUBPOST_NAME'
+export const SET_ACTIVE_POST = 'SET_ACTIVE_POST'
+export const SHOW_IMG = 'SHOW_IMG'
 
 export const AUTH = 'AUTH'
 export const CHANGE_EMAIL = 'CHANGE_EMAIL'
