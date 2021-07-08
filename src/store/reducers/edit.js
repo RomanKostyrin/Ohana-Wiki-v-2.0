@@ -13,11 +13,13 @@ import {
   CREATE_NEW_SUBPOST,
   SET_ACTIVE_POST,
   SHOW_IMG,
+  SET_LINKS,
 } from '../actions/actionTypes'
 
 const initialState = {
-  posts: ['1', '2'],
+  posts: ['', ''],
   keys: [],
+  links: ['0'],
   activePost: null,
   activeSubPost: 0,
   subPosts: [
@@ -51,6 +53,11 @@ export default function editReducer(state = initialState, action) {
       return {
         ...state,
         activePost: action.activePost,
+      }
+    case SET_LINKS:
+      return {
+        ...state,
+        links: action.links,
       }
     case CHANGE_SUBPOST_NAME:
       return {

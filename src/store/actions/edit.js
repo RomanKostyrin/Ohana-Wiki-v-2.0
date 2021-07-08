@@ -14,7 +14,59 @@ import {
   CREATE_NEW_SUBPOST,
   SET_ACTIVE_POST,
   SHOW_IMG,
+  SET_LINKS,
 } from './actionTypes'
+
+function translit(word) {
+  var answer = ''
+  var converter = {
+    а: 'a',
+    б: 'b',
+    в: 'v',
+    г: 'g',
+    д: 'd',
+    е: 'e',
+    ё: 'e',
+    ж: 'zh',
+    з: 'z',
+    и: 'i',
+    й: 'y',
+    к: 'k',
+    л: 'l',
+    м: 'm',
+    н: 'n',
+    о: 'o',
+    п: 'p',
+    р: 'r',
+    с: 's',
+    т: 't',
+    у: 'u',
+    ф: 'f',
+    х: 'h',
+    ц: 'c',
+    ч: 'ch',
+    ш: 'sh',
+    щ: 'sch',
+    ь: '',
+    ы: 'y',
+    ъ: '',
+    э: 'e',
+    ю: 'yu',
+    я: 'ya',
+  }
+
+  for (var i = 0; i < word.length; ++i) {
+    if (word[i] !== ' ') {
+      if (converter[word[i]] === undefined) {
+        answer += word[i]
+      } else {
+        answer += converter[word[i]]
+      }
+    }
+  }
+
+  return answer
+}
 
 let getIndexFromSome = (string) => {
   const indexOfDash = string.indexOf('-')
@@ -186,8 +238,16 @@ export function deleteSubEl(event) {
   }
 }
 
-export function getActivePost(activePost) {
-  return (dispatch) => {
+export function getActivePost(match) {
+  return (dispatch, getState) => {
+    const state = getState().edit
+    let activePost = 0
+    for (let i = 0; i < state.links.length; i++) {
+      if (match === state.links[i]) {
+        activePost = i
+      }
+    }
+
     dispatch(setActiveP(+activePost))
   }
 }
@@ -272,13 +332,17 @@ export function fetchPosts() {
       let arrPosts = []
       let arrSubPosts = []
       let keys = []
+      let links = []
+
       Object.keys(res.data).forEach((key) => {
+        links.push(translit(res.data[key].postName.toLowerCase()))
         keys.push(key)
         arrPosts.push(res.data[key].postName)
       })
       arrSubPosts = res.data[keys[0]].subPosts
 
       dispatch(fetchPostsSuccess(arrPosts, arrSubPosts, keys))
+      dispatch(setLinks(links))
     } catch (e) {
       dispatch(fetchPostsError(e))
     }
@@ -354,6 +418,13 @@ export function newPostAdd(posts, newPost, keys) {
     posts,
     newPost,
     keys,
+  }
+}
+
+export function setLinks(links) {
+  return {
+    type: SET_LINKS,
+    links,
   }
 }
 

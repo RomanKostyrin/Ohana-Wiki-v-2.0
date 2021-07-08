@@ -10,11 +10,11 @@ import {
 import { NavLink } from 'react-router-dom'
 
 class Post extends React.Component {
-  componentDidMount() {
+  componentDidMount() {}
+  componentDidUpdate() {
     this.props.getActivePost(this.props.match.params.activePost)
   }
   render() {
-    console.log(this.props)
     let ImgButton = [classes.imgButton, classes[this.props.imgButtonClass]]
     let ImgClass = [classes.img, classes[this.props.imgClass]]
     const BCClassIndex = [classes.breadCrumbsLink, classes.breadCrumbsLinkIndex]
@@ -142,6 +142,7 @@ function mapStatePoProps(state) {
     imgButtonClass: state.edit.imgButtonClass,
     activeSubPost: state.edit.activeSubPost,
     subPosts: state.edit.subPosts,
+    links: state.edit.links,
   }
 }
 
