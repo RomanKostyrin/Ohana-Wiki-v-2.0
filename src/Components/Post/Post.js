@@ -11,9 +11,7 @@ import { NavLink } from 'react-router-dom'
 
 class Post extends React.Component {
   componentDidMount() {}
-  componentDidUpdate() {
-    this.props.getActivePost(this.props.match.params.activePost)
-  }
+  componentDidUpdate() {}
   render() {
     let ImgButton = [classes.imgButton, classes[this.props.imgButtonClass]]
     let ImgClass = [classes.img, classes[this.props.imgClass]]

@@ -184,13 +184,17 @@ export function putSP(event) {
     const state = getState().edit
     let key = state.keys[state.activePost]
     dispatch(fetchPostsStart(true))
-
+    console.log(state)
+    const letter = {
+      postName: state.newPostName,
+      subPosts: state.subPosts,
+    }
     try {
       const response = await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}/subPosts.json`,
-        state.subPosts
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}.json`,
+        letter
       )
-      dispatch(putSubPosts(response.data))
+      dispatch(putSubPosts(response.data.subPosts))
       dispatch(fetchPostsStart(false))
       console.log(response.data)
     } catch (e) {
@@ -333,7 +337,7 @@ export function fetchPosts() {
       let arrSubPosts = []
       let keys = []
       let links = []
-
+      console.log(res.data)
       Object.keys(res.data).forEach((key) => {
         links.push(translit(res.data[key].postName.toLowerCase()))
         keys.push(key)
