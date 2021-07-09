@@ -14,6 +14,7 @@ import {
   SET_ACTIVE_POST,
   SHOW_IMG,
   SET_LINKS,
+  CLEAR_EDITOR,
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -69,6 +70,11 @@ export default function editReducer(state = initialState, action) {
         ...state,
         subPosts: action.subPosts,
         newSubPost: action.newSubPost,
+      }
+    case CLEAR_EDITOR:
+      return {
+        ...state,
+        newPostName: action.newPostName,
       }
     case CHANGE_NEW_POST:
       return {
