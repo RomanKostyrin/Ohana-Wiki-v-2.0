@@ -15,6 +15,7 @@ import {
   SET_ACTIVE_POST,
   SHOW_IMG,
   SET_LINKS,
+  CLEAR_EDITOR,
 } from './actionTypes'
 
 function translit(word) {
@@ -183,10 +184,12 @@ export function putSP(event) {
     const state = getState().edit
     let key = state.keys[state.activePost]
     dispatch(fetchPostsStart(true))
-    console.log(state)
     const letter = {
       postName: state.newPostName,
       subPosts: state.subPosts,
+    }
+    if (state.newPostName === '') {
+      letter.postName = state.posts[state.activePost]
     }
     try {
       const response = await axios.put(
@@ -196,6 +199,7 @@ export function putSP(event) {
       dispatch(putSubPosts(response.data.subPosts))
       dispatch(fetchPostsStart(false))
       console.log(response.data)
+      dispatch(clearEditor)
     } catch (e) {
       dispatch(fetchPostsError(e))
     }
@@ -379,6 +383,12 @@ export function fetchSubPostsSuccess(subPosts, activePost) {
     type: FETCH_SUBPOSTS,
     subPosts,
     activePost,
+  }
+}
+export function clearEditor() {
+  return {
+    type: CLEAR_EDITOR,
+    newPostName: '',
   }
 }
 export function setActiveP(activePost) {
