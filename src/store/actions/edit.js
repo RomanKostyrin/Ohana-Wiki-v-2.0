@@ -106,7 +106,6 @@ export function onImgClick(event) {
       ImgClass = 'modalImg'
       ImgButtonClass = 'modalWrapper'
     }
-
     dispatch(showImg(ImgId, ImgClass, ImgButtonClass))
   }
 }

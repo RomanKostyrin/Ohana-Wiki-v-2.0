@@ -66,7 +66,6 @@ class Editor extends React.Component {
                 id={'NewPostButton'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={this.onChangeForm}
                 disabled={this.props.isDisabledButtons}
               >
                 Создать
