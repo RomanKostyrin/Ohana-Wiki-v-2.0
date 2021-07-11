@@ -73,6 +73,23 @@ class Navigation extends React.Component {
               {'Users'}
             </Button>
           </li>
+          <li key={'perms'}>
+            <Button
+              disabledLink={this.props.isDisabledButtons}
+              link={'link'}
+              to={`/perms`}
+              exact={false}
+              id={`NavButton-30`}
+              classType={'ButtonImportant'}
+              classType2={'ButtonNavigation'}
+              classTypeActive={
+                this.props.activePost === 30 ? 'ButtonNavigationActive' : null
+              }
+              onClick={(event) => this.props.setActivePost(event.target.id)}
+            >
+              {'Permissions'}
+            </Button>
+          </li>
         </ul>
       </nav>
     )

@@ -5,6 +5,7 @@ import Editor from './Components/Editor/Editor'
 import Users from './Components/Users/Users'
 import { Route, Switch } from 'react-router-dom'
 import MainPage from './Components/MainPage/MainPage'
+import Permissions from './Components/Permissions/Permissions'
 
 class App extends React.Component {
   render() {
@@ -15,6 +16,7 @@ class App extends React.Component {
           <Route path="/editor" component={Editor} />
           <Route path="/posts/:activePost" component={Post} />
           <Route path="/users" component={Users} />
+          <Route path="/perms" exact component={Permissions} />
           <Route path="/" exact component={MainPage} />
         </Switch>
       </>
