@@ -24,6 +24,10 @@
   padding: 7px 10px;
   background-color: #63a63e;
 }
+.permsListItem:first-of-type {
+  background-color: #ba2732;
+  color: white;
+}
 .permsListText {
   margin: 0px;
   font-family: 'Cuprum', 'Arial', sans-serif;

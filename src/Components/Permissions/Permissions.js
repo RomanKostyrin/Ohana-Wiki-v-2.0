@@ -1,6 +1,8 @@
 import classes from './Permissions.module.scss'
 import React from 'react'
 import Checkbox from '../UI/Checkbox/Checkbox'
+import { connect } from 'react-redux'
+import { fetchSubPosts } from '../../store/actions/edit'
 
 const cls = [classes.permsListItem, classes.permsListItemSub]
 
@@ -11,166 +13,65 @@ class Permissions extends React.Component {
         <div className={classes.mainSectionPerms}>
           <ul className={classes.permsList}>
             <li className={classes.permsListItem}>
-              <p className={classes.permsListText}>Пользователи</p>
+              <p className={classes.permsListText}>Пункты / Пользователи</p>
             </li>
-            <li className={classes.permsListItem}>
-              <p className={classes.permsListText}>Чеки</p>
-            </li>
-            <li className={cls.join(' ')}>
+            {this.props.posts.map((post, index) => {
+              console.log(post)
+              return (
+                <li className={classes.permsListItem} key={`post-${index}`}>
+                  <p className={classes.permsListText}>{post}</p>
+                </li>
+              )
+            })}
+
+            {/* <li className={cls.join(' ')}>
               <p className={classes.permsListText}>Удаление</p>
             </li>
             <li className={cls.join(' ')}>
               <p className={classes.permsListText}>Редактирование</p>
-            </li>
-            <li className={cls.join(' ')}>
-              <p className={classes.permsListText}>Корректировка</p>
-            </li>
-
-            <li className={classes.permsListItem}>
-              <p className={classes.permsListText}>Шаблоны</p>
-            </li>
-            <li className={classes.permsListItem}>
-              <p className={classes.permsListText}>Оплата</p>
-            </li>
-            <li className={classes.permsListItem}>
-              <p className={classes.permsListText}>Возвраты</p>
-            </li>
+            </li> */}
           </ul>
           <ul className={classes.catalogFormCheckboxes}>
             <li className={classes.checkboxesListItem}>
               <p className={classes.checkboxesItemText}>Admin</p>
             </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox1'}
-                value={'1'}
-                id={'checkbox-1'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox2'}
-                value={'2'}
-                id={'checkbox-2'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox3'}
-                value={'3'}
-                id={'checkbox-3'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox4'}
-                value={'4'}
-                id={'checkbox-4'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox5'}
-                value={'5'}
-                id={'checkbox-5'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox6'}
-                value={'6'}
-                id={'checkbox-6'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox7'}
-                value={'7'}
-                id={'checkbox-7'}
-                defaultChecked={true}
-              />
-            </li>
+            {this.props.posts.map((post, index) => {
+              return (
+                <li
+                  className={classes.checkboxesListItem}
+                  key={`check-${index}`}
+                >
+                  <Checkbox
+                    type={'checkbox'}
+                    name={`gridItemCheckbox${index}`}
+                    value={index}
+                    id={`checkbox-${index}`}
+                    defaultChecked={true}
+                  />
+                </li>
+              )
+            })}
           </ul>
           <ul className={classes.catalogFormCheckboxes}>
             <li className={classes.checkboxesListItem}>
               <p className={classes.checkboxesItemText}>Trener</p>
             </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox101'}
-                value={'101'}
-                id={'checkbox-101'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox102'}
-                value={'102'}
-                id={'checkbox-102'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox103'}
-                value={'103'}
-                id={'checkbox-103'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox104'}
-                value={'104'}
-                id={'checkbox-104'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox105'}
-                value={'105'}
-                id={'checkbox-105'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox106'}
-                value={'106'}
-                id={'checkbox-106'}
-                defaultChecked={true}
-              />
-            </li>
-            <li className={classes.checkboxesListItem}>
-              <Checkbox
-                type={'checkbox'}
-                name={'gridItemCheckbox107'}
-                value={'107'}
-                id={'checkbox-107'}
-                defaultChecked={true}
-              />
-            </li>
+            {this.props.posts.map((post, index) => {
+              return (
+                <li
+                  className={classes.checkboxesListItem}
+                  key={`check-${index + 100}`}
+                >
+                  <Checkbox
+                    type={'checkbox'}
+                    name={`gridItemCheckbox${index + 100}`}
+                    value={index + 100}
+                    id={`checkbox-${index + 100}`}
+                    defaultChecked={true}
+                  />
+                </li>
+              )
+            })}
           </ul>
         </div>
         <button
@@ -184,4 +85,21 @@ class Permissions extends React.Component {
   }
 }
 
-export default Permissions
+function mapStatePoProps(state) {
+  return {
+    posts: state.edit.posts,
+    activePost: state.edit.activePost,
+    activeSubPost: state.edit.activeSubPost,
+    subPosts: state.edit.subPosts,
+    isDisabledButtons: state.edit.isDisabledButtons,
+    links: state.edit.links,
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchSubPosts: (event, bool) => dispatch(fetchSubPosts(event, bool)),
+  }
+}
+
+export default connect(mapStatePoProps, mapDispatchToProps)(Permissions)
