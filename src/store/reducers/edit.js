@@ -18,6 +18,16 @@ import {
 } from '../actions/actionTypes'
 
 const initialState = {
+  permissions: [
+    {
+      email: 'ss@ss.ru',
+      perms: [true, false, true, false, true, false],
+    },
+    {
+      email: 'enemy-iubip@mail.ru',
+      perms: [true, false, true, false, true, false],
+    },
+  ],
   posts: ['', ''],
   keys: [],
   links: ['0'],

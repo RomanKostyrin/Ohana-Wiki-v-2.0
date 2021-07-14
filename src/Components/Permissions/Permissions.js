@@ -31,48 +31,33 @@ class Permissions extends React.Component {
               <p className={classes.permsListText}>Редактирование</p>
             </li> */}
           </ul>
-          <ul className={classes.catalogFormCheckboxes}>
-            <li className={classes.checkboxesListItem}>
-              <p className={classes.checkboxesItemText}>Admin</p>
-            </li>
-            {this.props.posts.map((post, index) => {
-              return (
-                <li
-                  className={classes.checkboxesListItem}
-                  key={`check-${index}`}
-                >
-                  <Checkbox
-                    type={'checkbox'}
-                    name={`gridItemCheckbox${index}`}
-                    value={index}
-                    id={`checkbox-${index}`}
-                    defaultChecked={true}
-                  />
+          {this.props.permissions.map((post, ind) => {
+            console.log(post)
+
+            return (
+              <ul className={classes.catalogFormCheckboxes} key={`ul-${ind}`}>
+                <li className={classes.checkboxesListItem}>
+                  <p className={classes.checkboxesItemText}>{post.email}</p>
                 </li>
-              )
-            })}
-          </ul>
-          <ul className={classes.catalogFormCheckboxes}>
-            <li className={classes.checkboxesListItem}>
-              <p className={classes.checkboxesItemText}>Trener</p>
-            </li>
-            {this.props.posts.map((post, index) => {
-              return (
-                <li
-                  className={classes.checkboxesListItem}
-                  key={`check-${index + 100}`}
-                >
-                  <Checkbox
-                    type={'checkbox'}
-                    name={`gridItemCheckbox${index + 100}`}
-                    value={index + 100}
-                    id={`checkbox-${index + 100}`}
-                    defaultChecked={true}
-                  />
-                </li>
-              )
-            })}
-          </ul>
+                {post.perms.map((post, index) => {
+                  return (
+                    <li
+                      className={classes.checkboxesListItem}
+                      key={`check-${ind}-${index}`}
+                    >
+                      <Checkbox
+                        type={'checkbox'}
+                        name={`gridItemCheckbox-${ind}-${index}`}
+                        value={index}
+                        id={`checkbox--${ind}-${index}`}
+                        defaultChecked={post}
+                      />
+                    </li>
+                  )
+                })}
+              </ul>
+            )
+          })}
         </div>
         <button
           className="btn btn--submit"
@@ -93,6 +78,7 @@ function mapStatePoProps(state) {
     subPosts: state.edit.subPosts,
     isDisabledButtons: state.edit.isDisabledButtons,
     links: state.edit.links,
+    permissions: state.edit.permissions,
   }
 }
 

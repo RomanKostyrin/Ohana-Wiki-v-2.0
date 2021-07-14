@@ -25,6 +25,7 @@
   background-color: #63a63e;
 }
 .permsListItem:first-of-type {
+  height: 56px;
   background-color: #ba2732;
   color: white;
 }
@@ -51,20 +52,22 @@
   padding-left: 0px;
 }
 .checkboxesListItem {
+  align-items: center;
+  text-align: center;
   height: 34px;
-  width: 80px;
-  border-right: 1px solid black;
+  width: 150px;
 }
 .checkboxesListItem:first-of-type {
-  height: 35px;
+  height: 70px;
   border: 1px solid black;
 }
 .checkboxesListItem:last-of-type {
   border-bottom: 1px solid black;
 }
 .checkboxesItemText {
-  padding: 7px 0 0 10px;
+  padding: 7px 0 0 0px;
   margin: 0px;
+  text-align: center;
 }
 
 .visuallyHidden {
