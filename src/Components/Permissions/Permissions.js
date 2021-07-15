@@ -2,11 +2,20 @@ import classes from './Permissions.module.scss'
 import React from 'react'
 import Checkbox from '../UI/Checkbox/Checkbox'
 import { connect } from 'react-redux'
-import { fetchSubPosts } from '../../store/actions/edit'
+import {
+  onChangeCheckbox,
+  savePermissions,
+  getPermissions,
+} from '../../store/actions/edit'
+import Button from '../UI/Button/Button'
 
-const cls = [classes.permsListItem, classes.permsListItemSub]
+// const cls = [classes.permsListItem, classes.permsListItemSub]
 
 class Permissions extends React.Component {
+  async componentDidMount() {
+    await this.props.getPermissions()
+    console.log(this.props.permissions)
+  }
   render() {
     return (
       <form className={classes.mainSectionForm}>
@@ -16,7 +25,6 @@ class Permissions extends React.Component {
               <p className={classes.permsListText}>Пункты / Пользователи</p>
             </li>
             {this.props.posts.map((post, index) => {
-              console.log(post)
               return (
                 <li className={classes.permsListItem} key={`post-${index}`}>
                   <p className={classes.permsListText}>{post}</p>
@@ -32,14 +40,12 @@ class Permissions extends React.Component {
             </li> */}
           </ul>
           {this.props.permissions.map((post, ind) => {
-            console.log(post)
-
             return (
               <ul className={classes.catalogFormCheckboxes} key={`ul-${ind}`}>
                 <li className={classes.checkboxesListItem}>
                   <p className={classes.checkboxesItemText}>{post.email}</p>
                 </li>
-                {post.perms.map((post, index) => {
+                {post.perms.map((value, index) => {
                   return (
                     <li
                       className={classes.checkboxesListItem}
@@ -47,10 +53,11 @@ class Permissions extends React.Component {
                     >
                       <Checkbox
                         type={'checkbox'}
-                        name={`gridItemCheckbox-${ind}-${index}`}
-                        value={index}
-                        id={`checkbox--${ind}-${index}`}
-                        defaultChecked={post}
+                        name={`gridItemCheckbox-${ind}`}
+                        value={post.email}
+                        id={`$checkbox:${ind}-${index}`}
+                        defaultChecked={value}
+                        onChange={this.props.onChangeCheckbox}
                       />
                     </li>
                   )
@@ -59,12 +66,16 @@ class Permissions extends React.Component {
             )
           })}
         </div>
-        <button
-          className="btn btn--submit"
-          onChange={this.props.changePermissions}
+        <Button
+          type={'submit'}
+          id={'NewPostButton'}
+          classType2={'ButtonSubmit'}
+          classType={'ButtonPrimary'}
+          onClick={(event) => this.props.savePermissions(event)}
+          disabled={this.props.isDisabledButtons}
         >
           Сохранить
-        </button>
+        </Button>
       </form>
     )
   }
@@ -84,7 +95,9 @@ function mapStatePoProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSubPosts: (event, bool) => dispatch(fetchSubPosts(event, bool)),
+    onChangeCheckbox: (event) => dispatch(onChangeCheckbox(event)),
+    savePermissions: (event) => dispatch(savePermissions(event)),
+    getPermissions: () => dispatch(getPermissions()),
   }
 }
 
