@@ -16,6 +16,7 @@ import {
   SHOW_IMG,
   SET_LINKS,
   CLEAR_EDITOR,
+  CHANGE_CHECKBOX,
 } from './actionTypes'
 
 function translit(word) {
@@ -69,10 +70,51 @@ function translit(word) {
   return answer
 }
 
-let getIndexFromSome = (string) => {
-  const indexOfDash = string.indexOf('-')
+let getIndexFromSome = (string, value = '-') => {
+  const indexOfDash = string.indexOf(value)
   const newIndex = string.slice(indexOfDash + 1, string.length)
   return newIndex
+}
+
+export function getPermissions() {
+  return async (dispatch) => {
+    const key = '-MedBz7V9TWeKhoLOJm9'
+    dispatch(fetchPostsStart(true))
+    try {
+      const response = await axios.get(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`
+      )
+      console.log(response.data)
+      dispatch(setPerms(response.data))
+      dispatch(fetchPostsStart(false))
+    } catch (e) {
+      dispatch(fetchPostsError(e))
+    }
+  }
+}
+
+export function savePermissions(event) {
+  event.preventDefault()
+  return async (dispatch, getState) => {
+    const state = getState().edit
+    const key = '-MedBz7V9TWeKhoLOJm9'
+    dispatch(fetchPostsStart(true))
+    try {
+      const response = await axios.put(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`,
+        state.permissions
+      )
+
+      console.log(response.data)
+      // let arr = state.posts
+      // let newPost = { postName: '', subPosts: [{}] }
+      // arr.push(state.newPost.postName)
+      // dispatch(newPostAdd(arr, newPost, keys))
+      dispatch(fetchPostsStart(false))
+    } catch (e) {
+      dispatch(fetchPostsError(e))
+    }
+  }
 }
 
 export function changePostName(value) {
@@ -92,6 +134,18 @@ export function changePostName(value) {
     }
     dispatch(changeNP(newpost))
     dispatch(fetchPostsStart(false))
+  }
+}
+
+export function onChangeCheckbox(event) {
+  console.log(event.target)
+  return async (dispatch, getState) => {
+    const state = getState().edit
+    let permsis = state.permissions
+    permsis[getIndexFromSome(event.target.name)].perms[
+      getIndexFromSome(event.target.id)
+    ] = event.target.checked
+    dispatch(setPerms(permsis))
   }
 }
 
@@ -369,6 +423,12 @@ export function showImg(imgId, imgClass, imgButtonClass) {
     imgId,
     imgClass,
     imgButtonClass,
+  }
+}
+export function setPerms(permissions) {
+  return {
+    type: CHANGE_CHECKBOX,
+    permissions,
   }
 }
 export function changeSubPosts(subPosts) {

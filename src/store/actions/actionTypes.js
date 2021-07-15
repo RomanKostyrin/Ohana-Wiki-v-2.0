@@ -14,6 +14,7 @@ export const SET_ACTIVE_POST = 'SET_ACTIVE_POST'
 export const SHOW_IMG = 'SHOW_IMG'
 export const SET_LINKS = 'SET_LINKS'
 export const CLEAR_EDITOR = 'CLEAR_EDITOR'
+export const CHANGE_CHECKBOX = 'CHANGE_CHECKBOX'
 
 export const AUTH = 'AUTH'
 export const CHANGE_EMAIL = 'CHANGE_EMAIL'

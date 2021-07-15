@@ -15,6 +15,7 @@ import {
   SHOW_IMG,
   SET_LINKS,
   CLEAR_EDITOR,
+  CHANGE_CHECKBOX,
 } from '../actions/actionTypes'
 
 const initialState = {
@@ -90,6 +91,11 @@ export default function editReducer(state = initialState, action) {
       return {
         ...state,
         newPost: action.newPost,
+      }
+    case CHANGE_CHECKBOX:
+      return {
+        ...state,
+        permissions: action.permissions,
       }
     case SHOW_IMG:
       return {
