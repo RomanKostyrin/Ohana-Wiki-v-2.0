@@ -93,6 +93,7 @@ export default function editReducer(state = initialState, action) {
         newPost: action.newPost,
       }
     case CHANGE_CHECKBOX:
+      console.log(action.permissions)
       return {
         ...state,
         permissions: action.permissions,

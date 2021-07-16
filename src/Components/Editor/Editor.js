@@ -141,7 +141,7 @@ class Editor extends React.Component {
               </div>
               <Button
                 type={'submit'}
-                id={'NewPostButton'}
+                id={'NewPostButton22'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={(event) => this.props.createNewSub(event)}
@@ -264,7 +264,7 @@ class Editor extends React.Component {
               </div>
               <Button
                 type={'submit'}
-                id={'NewPostButton'}
+                id={'NewPostButton71'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={(event) => this.props.addHandle(event, 'text')}
@@ -274,7 +274,7 @@ class Editor extends React.Component {
               </Button>
               <Button
                 type={'submit'}
-                id={'NewPostButton'}
+                id={'NewPostButton55'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={(event) => this.props.addHandle(event, 'img')}
@@ -284,7 +284,7 @@ class Editor extends React.Component {
               </Button>
               <Button
                 type={'submit'}
-                id={'NewPostButton'}
+                id={'NewPostButton15'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
                 onClick={(event) => this.props.putSP(event)}

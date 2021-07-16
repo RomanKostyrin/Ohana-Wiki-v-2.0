@@ -140,12 +140,14 @@ export function changePostName(value) {
 export function onChangeCheckbox(event) {
   console.log(event.target)
   return async (dispatch, getState) => {
+    dispatch(fetchPostsStart(true))
     const state = getState().edit
     let permsis = state.permissions
     permsis[getIndexFromSome(event.target.name)].perms[
       getIndexFromSome(event.target.id)
     ] = event.target.checked
     dispatch(setPerms(permsis))
+    dispatch(fetchPostsStart(false))
   }
 }
 
@@ -170,6 +172,8 @@ export function onSubmitP(event) {
   return async (dispatch, getState) => {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
+    let perms = state.permissions
+    perms.forEach((elem) => elem.perms)
     try {
       const response = await axios.post(
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
@@ -180,6 +184,7 @@ export function onSubmitP(event) {
       let arr = state.posts
       let newPost = { postName: '', subPosts: [{}] }
       arr.push(state.newPost.postName)
+
       dispatch(newPostAdd(arr, newPost, keys))
       dispatch(fetchPostsStart(false))
     } catch (e) {
@@ -394,7 +399,6 @@ export function fetchPosts() {
       let arrSubPosts = []
       let keys = []
       let links = []
-      console.log(res.data)
       Object.keys(res.data).forEach((key) => {
         links.push(translit(res.data[key].postName.toLowerCase()))
         keys.push(key)

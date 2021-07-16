@@ -12,7 +12,7 @@ const Checkbox = (props) => {
         name={props.name}
         onChange={props.onChange}
         value={props.value}
-        defaultChecked={props.defaultChecked}
+        checked={props.checked}
       />
       <label className={classes.checkboxLabel} htmlFor={props.id}></label>
     </>

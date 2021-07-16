@@ -46,6 +46,7 @@ class Permissions extends React.Component {
                   <p className={classes.checkboxesItemText}>{post.email}</p>
                 </li>
                 {post.perms.map((value, index) => {
+                  console.log(value)
                   return (
                     <li
                       className={classes.checkboxesListItem}
@@ -56,8 +57,8 @@ class Permissions extends React.Component {
                         name={`gridItemCheckbox-${ind}`}
                         value={post.email}
                         id={`$checkbox:${ind}-${index}`}
-                        defaultChecked={value}
-                        onChange={this.props.onChangeCheckbox}
+                        checked={value}
+                        onChange={(event) => this.props.onChangeCheckbox(event)}
                       />
                     </li>
                   )
