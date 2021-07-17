@@ -84,7 +84,6 @@ export function getPermissions() {
       const response = await axios.get(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`
       )
-      console.log(response.data)
       dispatch(setPerms(response.data))
       dispatch(fetchPostsStart(false))
     } catch (e) {
@@ -98,18 +97,48 @@ export function savePermissions(event) {
   return async (dispatch, getState) => {
     const state = getState().edit
     const key = '-MedBz7V9TWeKhoLOJm9'
+    console.log(state.permissions)
     dispatch(fetchPostsStart(true))
     try {
-      const response = await axios.put(
+      await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`,
         state.permissions
       )
 
-      console.log(response.data)
-      // let arr = state.posts
-      // let newPost = { postName: '', subPosts: [{}] }
-      // arr.push(state.newPost.postName)
-      // dispatch(newPostAdd(arr, newPost, keys))
+      dispatch(fetchPostsStart(false))
+    } catch (e) {
+      dispatch(fetchPostsError(e))
+    }
+  }
+}
+
+export function onSubmitP(event) {
+  event.preventDefault()
+  return async (dispatch, getState) => {
+    const state = getState().edit
+    const key = '-MedBz7V9TWeKhoLOJm9'
+    dispatch(fetchPostsStart(true))
+    let perms = state.permissions
+    perms.forEach((elem) => elem.perms)
+    try {
+      const response = await axios.post(
+        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
+        state.newPost
+      )
+      let perms = state.permissions
+      perms.map((item) => item.perms.push(false))
+      dispatch(savePerms(perms))
+      await axios.put(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`,
+        state.permissions
+      )
+      let keys = state.keys
+      keys.push(response.data.name)
+      let arr = state.posts
+      let newPost = { postName: '', subPosts: [{}] }
+      arr.push(state.newPost.postName)
+
+      dispatch(newPostAdd(arr, newPost, keys))
       dispatch(fetchPostsStart(false))
     } catch (e) {
       dispatch(fetchPostsError(e))
@@ -164,32 +193,6 @@ export function onImgClick(event) {
       ImgButtonClass = 'modalWrapper'
     }
     dispatch(showImg(ImgId, ImgClass, ImgButtonClass))
-  }
-}
-
-export function onSubmitP(event) {
-  event.preventDefault()
-  return async (dispatch, getState) => {
-    const state = getState().edit
-    dispatch(fetchPostsStart(true))
-    let perms = state.permissions
-    perms.forEach((elem) => elem.perms)
-    try {
-      const response = await axios.post(
-        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-        state.newPost
-      )
-      let keys = state.keys
-      keys.push(response.data.name)
-      let arr = state.posts
-      let newPost = { postName: '', subPosts: [{}] }
-      arr.push(state.newPost.postName)
-
-      dispatch(newPostAdd(arr, newPost, keys))
-      dispatch(fetchPostsStart(false))
-    } catch (e) {
-      dispatch(fetchPostsError(e))
-    }
   }
 }
 
@@ -439,6 +442,13 @@ export function changeSubPosts(subPosts) {
   return {
     type: CHANGE_SUBPOSTS,
     subPosts,
+  }
+}
+export function savePerms(permissions) {
+  console.log(permissions)
+  return {
+    type: CHANGE_CHECKBOX,
+    permissions,
   }
 }
 

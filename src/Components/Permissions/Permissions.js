@@ -12,9 +12,8 @@ import Button from '../UI/Button/Button'
 // const cls = [classes.permsListItem, classes.permsListItemSub]
 
 class Permissions extends React.Component {
-  async componentDidMount() {
-    await this.props.getPermissions()
-    console.log(this.props.permissions)
+  componentDidMount() {
+    this.props.getPermissions()
   }
   render() {
     return (
@@ -46,7 +45,6 @@ class Permissions extends React.Component {
                   <p className={classes.checkboxesItemText}>{post.email}</p>
                 </li>
                 {post.perms.map((value, index) => {
-                  console.log(value)
                   return (
                     <li
                       className={classes.checkboxesListItem}
