@@ -75,6 +75,11 @@ let getIndexFromSome = (string, value = '-') => {
   const newIndex = string.slice(indexOfDash + 1, string.length)
   return newIndex
 }
+let getNameFromSome = (string, value = '-') => {
+  const indexOfDash = string.indexOf(value)
+  const newIndex = string.slice(0, indexOfDash)
+  return newIndex
+}
 
 export function getPermissions() {
   return async (dispatch) => {
@@ -125,8 +130,15 @@ export function onSubmitP(event) {
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
         state.newPost
       )
-      let perms = state.permissions
-      perms.map((item) => item.perms.push(false))
+      let permiss = state.permissions
+      permiss.map((item) =>
+        item.perms.push({
+          post: state.newPost.postName,
+          permPost: false,
+          subPosts: ['1'],
+          perms: [false],
+        })
+      )
       dispatch(savePerms(perms))
       await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`,
@@ -167,15 +179,23 @@ export function changePostName(value) {
 }
 
 export function onChangeCheckbox(event) {
-  console.log(getIndexFromSome(event.target.value))
+  console.log(getIndexFromSome(event.target.id))
   return async (dispatch, getState) => {
-    let mainUser = event.target.value
-    let mainPost = event.target.name
+    let name = getNameFromSome(event.target.name)
+    let mainPost = event.target.value
+    let mainUser = event.target.name
     dispatch(fetchPostsStart(true))
     let permissions = getState().edit.permissions
-    permissions[getIndexFromSome(mainPost)].perms[
-      getIndexFromSome(mainUser)
-    ].permPost = event.target.checked
+    if (name === 'post') {
+      permissions[getIndexFromSome(mainUser)].perms[
+        getIndexFromSome(mainPost)
+      ].permPost = event.target.checked
+    } else {
+      permissions[getIndexFromSome(mainUser)].perms[
+        getIndexFromSome(mainPost)
+      ].perms[getIndexFromSome(event.target.id)] = event.target.checked
+    }
+
     dispatch(setPerms(permissions))
     dispatch(fetchPostsStart(false))
   }
@@ -246,15 +266,32 @@ export function putSP(event) {
   return async (dispatch, getState) => {
     const state = getState().edit
     let key = state.keys[state.activePost]
+    let permissions = state.permissions
+    permissions.forEach((user) => {
+      if (state.newPostName !== '') {
+        user.perms[state.activePost].post = state.newPostName
+      }
+      user.perms[state.activePost].subPosts[state.activeSubPost] =
+        state.subPosts[state.activeSubPost].name
+    })
+
+    const keyPerms = '-MedBz7V9TWeKhoLOJm9'
     dispatch(fetchPostsStart(true))
     const letter = {
       postName: state.newPostName,
       subPosts: state.subPosts,
     }
+
     if (state.newPostName === '') {
       letter.postName = state.posts[state.activePost]
     }
+    console.log(permissions)
     try {
+      await axios.put(
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${keyPerms}.json`,
+        permissions
+      )
+
       const response = await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}.json`,
         letter
@@ -460,6 +497,7 @@ export function fetchSubPostsSuccess(subPosts, activePost) {
     activePost,
   }
 }
+
 export function clearEditor() {
   return {
     type: CLEAR_EDITOR,
@@ -467,6 +505,7 @@ export function clearEditor() {
   }
 }
 export function setActiveP(activePost) {
+  console.log(activePost)
   return {
     type: SET_ACTIVE_POST,
     activePost,

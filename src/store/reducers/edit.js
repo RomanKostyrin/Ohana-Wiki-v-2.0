@@ -25,15 +25,15 @@ const initialState = {
       perms: [
         {
           post: 'Пользователи',
-          perms: [true, true],
           permPost: true,
           subPosts: ['Удаление', 'Редактирование'],
+          perms: [true, true],
         },
         {
           post: 'Номенклатура',
-          perms: [true, true],
           permPost: true,
           subPosts: ['Удаление', 'Редактирование'],
+          perms: [true, true],
         },
       ],
     },
@@ -58,7 +58,7 @@ const initialState = {
   posts: ['', ''],
   keys: [],
   links: ['0'],
-  activePost: null,
+  activePost: 0,
   activeSubPost: 0,
   subPosts: [
     {

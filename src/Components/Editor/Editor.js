@@ -20,11 +20,13 @@ import {
   changePostName,
   createNewSub,
   changeSPHandle,
+  getPermissions,
 } from '../../store/actions/edit'
 
 class Editor extends React.Component {
   componentDidMount() {
     this.props.fetchPosts()
+    this.props.getPermissions()
   }
 
   render() {
@@ -330,6 +332,7 @@ function mapDispatchPoProps(dispatch) {
     changePostName: (value) => dispatch(changePostName(value)),
     createNewSub: (event) => dispatch(createNewSub(event)),
     changeSPHandle: (value) => dispatch(changeSPHandle(value)),
+    getPermissions: () => dispatch(getPermissions()),
   }
 }
 
