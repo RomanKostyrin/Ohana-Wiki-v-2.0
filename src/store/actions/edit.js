@@ -167,15 +167,16 @@ export function changePostName(value) {
 }
 
 export function onChangeCheckbox(event) {
-  console.log(event.target)
+  console.log(getIndexFromSome(event.target.value))
   return async (dispatch, getState) => {
+    let mainUser = event.target.value
+    let mainPost = event.target.name
     dispatch(fetchPostsStart(true))
-    const state = getState().edit
-    let permsis = state.permissions
-    permsis[getIndexFromSome(event.target.name)].perms[
-      getIndexFromSome(event.target.id)
-    ] = event.target.checked
-    dispatch(setPerms(permsis))
+    let permissions = getState().edit.permissions
+    permissions[getIndexFromSome(mainPost)].perms[
+      getIndexFromSome(mainUser)
+    ].permPost = event.target.checked
+    dispatch(setPerms(permissions))
     dispatch(fetchPostsStart(false))
   }
 }

@@ -22,11 +22,37 @@ const initialState = {
   permissions: [
     {
       email: 'ss@ss.ru',
-      perms: [true, false, true, false, true, false],
+      perms: [
+        {
+          post: 'Пользователи',
+          perms: [true, true],
+          permPost: true,
+          subPosts: ['Удаление', 'Редактирование'],
+        },
+        {
+          post: 'Номенклатура',
+          perms: [true, true],
+          permPost: true,
+          subPosts: ['Удаление', 'Редактирование'],
+        },
+      ],
     },
     {
       email: 'enemy-iubip@mail.ru',
-      perms: [true, false, true, false, true, false],
+      perms: [
+        {
+          post: 'Пользователи',
+          perms: [true, true],
+          permPost: true,
+          subPosts: ['Удаление', 'Редактирование'],
+        },
+        {
+          post: 'Номенклатура',
+          perms: [true, true],
+          permPost: true,
+          subPosts: ['Удаление', 'Редактирование'],
+        },
+      ],
     },
   ],
   posts: ['', ''],

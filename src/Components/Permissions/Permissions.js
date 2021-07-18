@@ -9,56 +9,91 @@ import {
 } from '../../store/actions/edit'
 import Button from '../UI/Button/Button'
 
-// const cls = [classes.permsListItem, classes.permsListItemSub]
+const cls = [classes.permsListItem, classes.permsListItemSub]
 
 class Permissions extends React.Component {
   componentDidMount() {
     this.props.getPermissions()
   }
   render() {
+    console.log(this.props.permissions)
+
     return (
       <form className={classes.mainSectionForm}>
         <div className={classes.mainSectionPerms}>
           <ul className={classes.permsList}>
-            <li className={classes.permsListItem}>
+            <li className={classes.permsListItem} key={`post---1`}>
               <p className={classes.permsListText}>Пункты / Пользователи</p>
             </li>
-            {this.props.posts.map((post, index) => {
+            {this.props.permissions.map((user, index) => {
               return (
-                <li className={classes.permsListItem} key={`post-${index}`}>
-                  <p className={classes.permsListText}>{post}</p>
-                </li>
+                <React.Fragment key={`fragm-${index}`}>
+                  <li className={classes.permsListItem} key={`post-${index}`}>
+                    <p className={classes.permsListText}>
+                      {user.perms[index].post}
+                    </p>
+                  </li>
+                  {user.perms[index].subPosts.map((sub, i) => {
+                    return (
+                      <li
+                        className={cls.join(' ')}
+                        key={`sub-${index}-${i}-${sub}`}
+                      >
+                        <p className={classes.permsListText}>{sub}</p>
+                      </li>
+                    )
+                  })}
+                </React.Fragment>
               )
             })}
-
-            {/* <li className={cls.join(' ')}>
-              <p className={classes.permsListText}>Удаление</p>
-            </li>
-            <li className={cls.join(' ')}>
-              <p className={classes.permsListText}>Редактирование</p>
-            </li> */}
           </ul>
-          {this.props.permissions.map((post, ind) => {
+          {this.props.permissions.map((user, ind) => {
             return (
               <ul className={classes.catalogFormCheckboxes} key={`ul-${ind}`}>
-                <li className={classes.checkboxesListItem}>
-                  <p className={classes.checkboxesItemText}>{post.email}</p>
+                <li
+                  className={classes.checkboxesListItem}
+                  key={`first-${ind}-`}
+                >
+                  <p className={classes.checkboxesItemText}>{user.email}</p>
                 </li>
-                {post.perms.map((value, index) => {
+                {user.perms.map((post, index) => {
                   return (
-                    <li
-                      className={classes.checkboxesListItem}
-                      key={`check-${ind}-${index}`}
-                    >
-                      <Checkbox
-                        type={'checkbox'}
-                        name={`gridItemCheckbox-${ind}`}
-                        value={post.email}
-                        id={`$checkbox:${ind}-${index}`}
-                        checked={value}
-                        onChange={(event) => this.props.onChangeCheckbox(event)}
-                      />
-                    </li>
+                    <React.Fragment key={`fragm2-${index}`}>
+                      <li
+                        className={classes.checkboxesListItem}
+                        key={`check-${ind}-${index}`}
+                      >
+                        <Checkbox
+                          type={'checkbox'}
+                          name={`post-${ind}`}
+                          value={index}
+                          id={`$checkbox:${ind}-${index}`}
+                          checked={post.permPost}
+                          onChange={(event) =>
+                            this.props.onChangeCheckbox(event)
+                          }
+                        />
+                      </li>
+                      {user.perms.map((item, j) => {
+                        return (
+                          <li
+                            className={classes.checkboxesListItem}
+                            key={`checksubs-${ind}-${j}`}
+                          >
+                            <Checkbox
+                              type={'checkbox'}
+                              name={`subPosts-${ind}`}
+                              value={j}
+                              id={`$checkbox:${ind}-${index}-${j}`}
+                              checked={item}
+                              onChange={(event) =>
+                                this.props.onChangeCheckbox(event)
+                              }
+                            />
+                          </li>
+                        )
+                      })}
+                    </React.Fragment>
                   )
                 })}
               </ul>
