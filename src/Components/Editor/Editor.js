@@ -255,7 +255,7 @@ class Editor extends React.Component {
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
-                            onClick={this.deleteSubElement}
+                            onClick={(event) => this.props.deleteSubEl(event)}
                             disabled={this.props.isDisabledButtons}
                           ></button>
                         </div>

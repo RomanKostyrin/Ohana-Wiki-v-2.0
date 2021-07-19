@@ -268,13 +268,20 @@ export function putSP(event) {
     let key = state.keys[state.activePost]
     let permissions = state.permissions
     permissions.forEach((user) => {
+      if (state.newSubPost.name !== '') {
+        if (user.perms[state.activePost].subPosts[0] === '1') {
+          user.perms[state.activePost].subPosts = []
+        }
+        user.perms[state.activePost].subPosts.push(state.newSubPost.name)
+        user.perms[state.activePost].perms.push(false)
+      }
       if (state.newPostName !== '') {
         user.perms[state.activePost].post = state.newPostName
       }
       user.perms[state.activePost].subPosts[state.activeSubPost] =
         state.subPosts[state.activeSubPost].name
     })
-
+    console.log(permissions)
     const keyPerms = '-MedBz7V9TWeKhoLOJm9'
     dispatch(fetchPostsStart(true))
     const letter = {
@@ -285,7 +292,6 @@ export function putSP(event) {
     if (state.newPostName === '') {
       letter.postName = state.posts[state.activePost]
     }
-    console.log(permissions)
     try {
       await axios.put(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${keyPerms}.json`,
@@ -311,6 +317,7 @@ export function createNewSub(event) {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
     let newSubPosts = state.subPosts
+
     let newSubPost = {
       name: '',
       data: {
@@ -321,6 +328,7 @@ export function createNewSub(event) {
     if (newSubPosts[0].name === '') {
       newSubPosts = []
     }
+
     newSubPosts.push(state.newSubPost)
     dispatch(createNS(newSubPosts, newSubPost))
     dispatch(putSP(event))
