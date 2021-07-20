@@ -18,76 +18,21 @@ import {
   CLEAR_EDITOR,
   CHANGE_CHECKBOX,
 } from './actionTypes'
+import translit from '../../Utilits/translator'
 
-function translit(word) {
-  var answer = ''
-  var converter = {
-    а: 'a',
-    б: 'b',
-    в: 'v',
-    г: 'g',
-    д: 'd',
-    е: 'e',
-    ё: 'e',
-    ж: 'zh',
-    з: 'z',
-    и: 'i',
-    й: 'y',
-    к: 'k',
-    л: 'l',
-    м: 'm',
-    н: 'n',
-    о: 'o',
-    п: 'p',
-    р: 'r',
-    с: 's',
-    т: 't',
-    у: 'u',
-    ф: 'f',
-    х: 'h',
-    ц: 'c',
-    ч: 'ch',
-    ш: 'sh',
-    щ: 'sch',
-    ь: '',
-    ы: 'y',
-    ъ: '',
-    э: 'e',
-    ю: 'yu',
-    я: 'ya',
-  }
-
-  for (var i = 0; i < word.length; ++i) {
-    if (word[i] !== ' ') {
-      if (converter[word[i]] === undefined) {
-        answer += word[i]
-      } else {
-        answer += converter[word[i]]
-      }
-    }
-  }
-
-  return answer
+const getIndexFromSome = (string, value = '-') => {
+  return string.slice(string.indexOf(value) + 1, string.length)
 }
-
-let getIndexFromSome = (string, value = '-') => {
-  const indexOfDash = string.indexOf(value)
-  const newIndex = string.slice(indexOfDash + 1, string.length)
-  return newIndex
-}
-let getNameFromSome = (string, value = '-') => {
-  const indexOfDash = string.indexOf(value)
-  const newIndex = string.slice(0, indexOfDash)
-  return newIndex
+const getNameFromSome = (string, value = '-') => {
+  return string.slice(0, string.indexOf(value))
 }
 
 export function getPermissions() {
   return async (dispatch) => {
-    const key = '-MedBz7V9TWeKhoLOJm9'
     dispatch(fetchPostsStart(true))
     try {
       const response = await axios.get(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`
       )
       dispatch(setPerms(response.data))
       dispatch(fetchPostsStart(false))
@@ -100,16 +45,13 @@ export function getPermissions() {
 export function savePermissions(event) {
   event.preventDefault()
   return async (dispatch, getState) => {
-    const state = getState().edit
-    const key = '-MedBz7V9TWeKhoLOJm9'
-    console.log(state.permissions)
     dispatch(fetchPostsStart(true))
+    const state = getState().edit
     try {
       await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`,
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`,
         state.permissions
       )
-
       dispatch(fetchPostsStart(false))
     } catch (e) {
       dispatch(fetchPostsError(e))
@@ -120,34 +62,22 @@ export function savePermissions(event) {
 export function onSubmitP(event) {
   event.preventDefault()
   return async (dispatch, getState) => {
-    const state = getState().edit
-    const key = '-MedBz7V9TWeKhoLOJm9'
     dispatch(fetchPostsStart(true))
-    let perms = state.permissions
-    perms.forEach((elem) => elem.perms)
+    const state = getState().edit
     try {
       const response = await axios.post(
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
         state.newPost
       )
-      let permiss = state.permissions
-      permiss.map((item) =>
-        item.perms.push({
-          post: state.newPost.postName,
-          permPost: false,
-          subPosts: ['1'],
-          perms: [false],
-        })
-      )
-      dispatch(savePerms(perms))
+      dispatch(savePerms(state.permissions))
       await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${key}.json`,
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`,
         state.permissions
       )
-      let keys = state.keys
+      const keys = state.keys
       keys.push(response.data.name)
-      let arr = state.posts
-      let newPost = { postName: '', subPosts: [{}] }
+      const arr = state.posts
+      const newPost = { postName: '', subPosts: [{}] }
       arr.push(state.newPost.postName)
 
       dispatch(newPostAdd(arr, newPost, keys))
@@ -179,22 +109,19 @@ export function changePostName(value) {
 }
 
 export function onChangeCheckbox(event) {
-  console.log(getIndexFromSome(event.target.id))
   return async (dispatch, getState) => {
-    let name = getNameFromSome(event.target.name)
-    let mainPost = event.target.value
-    let mainUser = event.target.name
     dispatch(fetchPostsStart(true))
-    let permissions = getState().edit.permissions
-    if (name === 'post') {
-      permissions[getIndexFromSome(mainUser)].perms[
-        getIndexFromSome(mainPost)
-      ].permPost = event.target.checked
-    } else {
-      permissions[getIndexFromSome(mainUser)].perms[
-        getIndexFromSome(mainPost)
-      ].perms[getIndexFromSome(event.target.id)] = event.target.checked
-    }
+    const typeOfPostOnCheckbox = getNameFromSome(event.target.name)
+    const numberOfPost = getIndexFromSome(event.target.value)
+    const numberOfSubPost = getIndexFromSome(event.target.id)
+    const numberOfUser = getIndexFromSome(event.target.name)
+    const permissions = getState().edit.permissions
+
+    typeOfPostOnCheckbox === 'post'
+      ? (permissions[numberOfUser].perms[numberOfPost].permPost =
+          event.target.checked)
+      : (permissions[numberOfUser].perms[numberOfPost].perms[numberOfSubPost] =
+          event.target.checked)
 
     dispatch(setPerms(permissions))
     dispatch(fetchPostsStart(false))
@@ -205,22 +132,19 @@ export function onImgClick(event) {
   event.preventDefault()
   return (dispatch, getState) => {
     const state = getState().edit
-    let ImgId = ''
-    let ImgClass = ''
-    let ImgButtonClass = ''
-    if (state.imgClass === '') {
-      ImgId = Number(getIndexFromSome(event.target.id))
-      ImgClass = 'modalImg'
-      ImgButtonClass = 'modalWrapper'
-    }
+    const ImgId =
+      state.imgClass === '' ? Number(getIndexFromSome(event.target.id)) : ''
+    const ImgClass = state.imgClass === '' ? 'modalImg' : ''
+    const ImgButtonClass = state.imgClass === '' ? 'modalWrapper' : ''
+
     dispatch(showImg(ImgId, ImgClass, ImgButtonClass))
   }
 }
 
 export function onChangeText(event) {
   return (dispatch, getState) => {
-    const state = getState().edit
     dispatch(fetchPostsStart(true))
+    const state = getState().edit
     const indexOfTextArea = getIndexFromSome(event.target.id)
     const tempSubs = state.subPosts
     tempSubs[state.activeSubPost].data.value[indexOfTextArea] =
@@ -235,13 +159,13 @@ export function newPostNameFunction(value) {
     dispatch(newPostNameHandle(value))
   }
 }
+
 export function pathImg(event) {
-  event.preventDefault()
   return (dispatch, getState) => {
-    const state = getState().edit
     dispatch(fetchPostsStart(true))
-    let tempSubs = state.subPosts
-    let pathId = getIndexFromSome(event.target.id)
+    const state = getState().edit
+    const tempSubs = state.subPosts
+    const pathId = getIndexFromSome(event.target.id)
     tempSubs[state.activeSubPost].data.value[pathId] = event.target.value
     dispatch(changeSubPosts(tempSubs))
     dispatch(fetchPostsStart(false))
@@ -261,12 +185,11 @@ export function changeSPHandle(value) {
   }
 }
 
-export function putSP(event) {
-  event.preventDefault()
+export function putSP() {
   return async (dispatch, getState) => {
     const state = getState().edit
-    let key = state.keys[state.activePost]
-    let permissions = state.permissions
+    const postKey = state.keys[state.activePost]
+    const permissions = state.permissions
     permissions.forEach((user) => {
       if (state.newSubPost.name !== '') {
         if (user.perms[state.activePost].subPosts[0] === '1') {
@@ -281,25 +204,23 @@ export function putSP(event) {
       user.perms[state.activePost].subPosts[state.activeSubPost] =
         state.subPosts[state.activeSubPost].name
     })
-    console.log(permissions)
-    const keyPerms = '-MedBz7V9TWeKhoLOJm9'
+
     dispatch(fetchPostsStart(true))
     const letter = {
-      postName: state.newPostName,
       subPosts: state.subPosts,
     }
+    letter.postName =
+      state.newPostName === ''
+        ? state.posts[state.activePost]
+        : state.newPostName
 
-    if (state.newPostName === '') {
-      letter.postName = state.posts[state.activePost]
-    }
     try {
       await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/${keyPerms}.json`,
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`,
         permissions
       )
-
       const response = await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${key}.json`,
+        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${postKey}.json`,
         letter
       )
       dispatch(putSubPosts(response.data.subPosts))
@@ -311,43 +232,36 @@ export function putSP(event) {
     }
   }
 }
-export function createNewSub(event) {
-  event.preventDefault()
-  return (dispatch, getState) => {
-    const state = getState().edit
-    dispatch(fetchPostsStart(true))
-    let newSubPosts = state.subPosts
 
-    let newSubPost = {
+export function createNewSub(event) {
+  return (dispatch, getState) => {
+    dispatch(fetchPostsStart(true))
+    const state = getState().edit
+    const newSubPosts = state.subPosts[0].name === '' ? [] : state.subPosts
+    const newSubPost = {
       name: '',
       data: {
         type: ['text'],
         value: [' '],
       },
     }
-    if (newSubPosts[0].name === '') {
-      newSubPosts = []
-    }
-
     newSubPosts.push(state.newSubPost)
     dispatch(createNS(newSubPosts, newSubPost))
     dispatch(putSP(event))
   }
 }
 
-export function deleteSubEl(event) {
-  event.preventDefault()
+export function deleteSubEl(id) {
   return (dispatch, getState) => {
     const state = getState().edit
     dispatch(fetchPostsStart(true))
-    let btnId = getIndexFromSome(event.target.id)
-    let tmpSubs = state.subPosts
+    const tmpSubs = state.subPosts
     if (tmpSubs[state.activeSubPost].data.value.length === 1) {
       dispatch(fetchPostsStart(false))
       return alert('Нельзя удалять единственный')
     }
-    tmpSubs[state.activeSubPost].data.type.splice(btnId, 1)
-    tmpSubs[state.activeSubPost].data.value.splice(btnId, 1)
+    tmpSubs[state.activeSubPost].data.type.splice(getIndexFromSome(id), 1)
+    tmpSubs[state.activeSubPost].data.value.splice(getIndexFromSome(id), 1)
     dispatch(changeSubPosts(tmpSubs))
     dispatch(fetchPostsStart(false))
   }
@@ -362,7 +276,6 @@ export function getActivePost(match) {
         activePost = i
       }
     }
-
     dispatch(setActiveP(+activePost))
   }
 }
@@ -372,17 +285,18 @@ export function isDisabledButtonsFunction(bool) {
     dispatch(fetchPostsStart(bool))
   }
 }
+
 export function setActivePost(postNumber) {
   return (dispatch) => {
     dispatch(setActiveP(Number(getIndexFromSome(postNumber))))
   }
 }
-export function addHandle(event, type) {
-  event.preventDefault()
+
+export function addHandle(type) {
   return (dispatch, getState) => {
-    const state = getState().edit
     dispatch(fetchPostsStart(true))
-    let tempSubs = state.subPosts
+    const state = getState().edit
+    const tempSubs = state.subPosts
     tempSubs[state.activeSubPost].data.type.push(type)
     tempSubs[state.activeSubPost].data.value.push('')
     dispatch(changeSubPosts(tempSubs))
@@ -401,7 +315,7 @@ export function changeActiveSub(value) {
 export function changeSubPost(event) {
   return (dispatch, getState) => {
     const state = getState().edit
-    let tempSubs = state.subPosts
+    const tempSubs = state.subPosts
     tempSubs[state.activeSubPost].name = event.target.value
     dispatch(changeSubPosts(tempSubs))
   }
@@ -409,15 +323,15 @@ export function changeSubPost(event) {
 
 export function fetchSubPosts(event, isNavigation = false) {
   return async (dispatch, getState) => {
-    const state = getState().edit
-    let keyDB = state.keys[event.target.value]
-
-    let activePost = event.target.value
-    if (isNavigation) {
-      keyDB = state.keys[getIndexFromSome(event.target.id)]
-      activePost = Number(getIndexFromSome(event.target.id))
-    }
     dispatch(fetchPostsStart(true))
+    const state = getState().edit
+    const keyDB = isNavigation
+      ? state.keys[getIndexFromSome(event.target.id)]
+      : state.keys[event.target.value]
+    const activePost = isNavigation
+      ? Number(getIndexFromSome(event.target.id))
+      : event.target.value
+
     try {
       const response = await axios.get(
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
@@ -444,17 +358,15 @@ export function fetchPosts() {
       const res = await axios.get(
         'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
       )
-      let arrPosts = []
-      let arrSubPosts = []
-      let keys = []
-      let links = []
+      const arrPosts = []
+      const keys = []
+      const links = []
       Object.keys(res.data).forEach((key) => {
         links.push(translit(res.data[key].postName.toLowerCase()))
         keys.push(key)
         arrPosts.push(res.data[key].postName)
       })
-      arrSubPosts = res.data[keys[0]].subPosts
-
+      const arrSubPosts = res.data[keys[0]].subPosts
       dispatch(fetchPostsSuccess(arrPosts, arrSubPosts, keys))
       dispatch(setLinks(links))
     } catch (e) {
@@ -469,7 +381,6 @@ export function changeActiveSubPost(activeSubPost) {
     activeSubPost,
   }
 }
-
 export function showImg(imgId, imgClass, imgButtonClass) {
   return {
     type: SHOW_IMG,
@@ -497,7 +408,6 @@ export function savePerms(permissions) {
     permissions,
   }
 }
-
 export function fetchSubPostsSuccess(subPosts, activePost) {
   return {
     type: FETCH_SUBPOSTS,
@@ -505,7 +415,6 @@ export function fetchSubPostsSuccess(subPosts, activePost) {
     activePost,
   }
 }
-
 export function clearEditor() {
   return {
     type: CLEAR_EDITOR,
@@ -525,14 +434,12 @@ export function changeNewSubPostName(newSubPost) {
     newSubPost,
   }
 }
-
 export function newPostNameHandle(newPostName) {
   return {
     type: NEW_POSTNAME_HANDLE,
     newPostName,
   }
 }
-
 export function createNS(subPosts, newSubPost) {
   return {
     type: CREATE_NEW_SUBPOST,
@@ -540,7 +447,6 @@ export function createNS(subPosts, newSubPost) {
     newSubPost,
   }
 }
-
 export function changeNP(newPost) {
   return {
     type: CHANGE_NEW_POST,
@@ -555,28 +461,24 @@ export function newPostAdd(posts, newPost, keys) {
     keys,
   }
 }
-
 export function setLinks(links) {
   return {
     type: SET_LINKS,
     links,
   }
 }
-
 export function fetchPostsStart(bool) {
   return {
     type: FETCH_POSTS_START,
     bool,
   }
 }
-
 export function putSubPosts(subPosts) {
   return {
     type: PUT_SUBPOSTS,
     subPosts,
   }
 }
-
 export function fetchPostsSuccess(posts, subPosts, keys) {
   return {
     type: FETCH_POSTS_SUCCESS,
@@ -585,7 +487,6 @@ export function fetchPostsSuccess(posts, subPosts, keys) {
     keys,
   }
 }
-
 export function fetchPostsError(e) {
   return {
     type: FETCH_POSTS_ERROR,

@@ -39,7 +39,7 @@ class Navigation extends React.Component {
               </li>
             )
           })}
-          <li key={'edit'}>
+          <li>
             <Button
               disabledLink={this.props.isDisabledButtons}
               link={'link'}
@@ -56,7 +56,7 @@ class Navigation extends React.Component {
               {'Edit'}
             </Button>
           </li>
-          <li key={'users'}>
+          <li>
             <Button
               disabledLink={this.props.isDisabledButtons}
               link={'link'}
@@ -73,7 +73,7 @@ class Navigation extends React.Component {
               {'Users'}
             </Button>
           </li>
-          <li key={'perms'}>
+          <li>
             <Button
               disabledLink={this.props.isDisabledButtons}
               link={'link'}

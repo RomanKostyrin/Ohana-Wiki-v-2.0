@@ -13,13 +13,6 @@ class Post extends React.Component {
   componentDidMount() {}
   componentDidUpdate() {}
   render() {
-    let ImgButton = [classes.imgButton, classes[this.props.imgButtonClass]]
-    let ImgClass = [classes.img, classes[this.props.imgClass]]
-    const BCClassIndex = [classes.breadCrumbsLink, classes.breadCrumbsLinkIndex]
-    const BCClassActive = [
-      classes.breadCrumbsLink,
-      classes.breadCrumbsLinkActive,
-    ]
     return (
       <div className={classes.containerColumn}>
         <h1 className={classes.visuallyHidden}>
@@ -30,7 +23,10 @@ class Post extends React.Component {
             <li>
               <a
                 href="/"
-                className={BCClassIndex.join(' ')}
+                className={[
+                  classes.breadCrumbsLink,
+                  classes.breadCrumbsLinkIndex,
+                ].join(' ')}
                 aria-label="Ссылка на главную страницу"
               >
                 {' '}
@@ -47,7 +43,13 @@ class Post extends React.Component {
               </NavLink>
             </li>
             <li>
-              <a href="/nomen" className={BCClassActive.join(' ')}>
+              <a
+                href="/nomen"
+                className={[
+                  classes.breadCrumbsLink,
+                  classes.breadCrumbsLinkActive,
+                ].join(' ')}
+              >
                 {this.props.subPosts[this.props.activeSubPost].name}
               </a>
             </li>
@@ -102,7 +104,10 @@ class Post extends React.Component {
                   <button
                     className={
                       this.props.imgId === index
-                        ? ImgButton.join(' ')
+                        ? [
+                            classes.imgButton,
+                            classes[this.props.imgButtonClass],
+                          ].join(' ')
                         : classes.imgButton
                     }
                     onClick={(event) => this.props.onImgClick(event)}
@@ -116,7 +121,9 @@ class Post extends React.Component {
                       height="167"
                       className={
                         this.props.imgId === index
-                          ? ImgClass.join(' ')
+                          ? [classes.img, classes[this.props.imgClass]].join(
+                              ' '
+                            )
                           : classes.img
                       }
                     />

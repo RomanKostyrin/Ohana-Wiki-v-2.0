@@ -29,6 +29,26 @@ class Editor extends React.Component {
     this.props.getPermissions()
   }
 
+  addHandlefunction(event, type) {
+    event.preventDefault()
+    this.props.addHandle(type)
+  }
+
+  putSPfunction(event) {
+    event.preventDefault()
+    this.props.putSP()
+  }
+
+  createNewSubfunction(event) {
+    event.preventDefault()
+    this.props.createNewSub(event)
+  }
+
+  deleteSubElfunction(event) {
+    event.preventDefault()
+    this.props.deleteSubEl(event.target.id)
+  }
+
   render() {
     return (
       <>
@@ -146,7 +166,7 @@ class Editor extends React.Component {
                 id={'NewPostButton22'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.props.createNewSub(event)}
+                onClick={(event) => this.props.createNewSubfunction(event)}
                 disabled={this.props.isDisabledButtons}
               >
                 Создать
@@ -218,7 +238,9 @@ class Editor extends React.Component {
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
-                            onClick={(event) => this.props.deleteSubEl(event)}
+                            onClick={(event) =>
+                              this.props.deleteSubElfunction(event)
+                            }
                             disabled={this.props.isDisabledButtons}
                           ></button>
                         </p>
@@ -255,7 +277,9 @@ class Editor extends React.Component {
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
-                            onClick={(event) => this.props.deleteSubEl(event)}
+                            onClick={(event) =>
+                              this.props.deleteSubElfunction(event)
+                            }
                             disabled={this.props.isDisabledButtons}
                           ></button>
                         </div>
@@ -269,7 +293,7 @@ class Editor extends React.Component {
                 id={'NewPostButton71'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.props.addHandle(event, 'text')}
+                onClick={(event) => this.props.addHandlefunction(event, 'text')}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить текст
@@ -279,7 +303,7 @@ class Editor extends React.Component {
                 id={'NewPostButton55'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.props.addHandle(event, 'img')}
+                onClick={(event) => this.props.addHandlefunction(event, 'img')}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить картинку
@@ -289,7 +313,7 @@ class Editor extends React.Component {
                 id={'NewPostButton15'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.props.putSP(event)}
+                onClick={(event) => this.putSPfunction(event)}
                 disabled={this.props.isDisabledButtons}
               >
                 Сохранить
@@ -322,12 +346,12 @@ function mapDispatchPoProps(dispatch) {
     fetchSubPosts: (event) => dispatch(fetchSubPosts(event)),
     changeSubPost: (event) => dispatch(changeSubPost(event)),
     changeActiveSub: (value) => dispatch(changeActiveSub(value)),
-    addHandle: (event, type) => dispatch(addHandle(event, type)),
-    deleteSubEl: (event) => dispatch(deleteSubEl(event)),
+    addHandle: (type) => dispatch(addHandle(type)),
+    deleteSubEl: (id) => dispatch(deleteSubEl(id)),
     onChangeText: (event) => dispatch(onChangeText(event)),
     pathImg: (event) => dispatch(pathImg(event)),
     newPostNameFunction: (value) => dispatch(newPostNameFunction(value)),
-    putSP: (event) => dispatch(putSP(event)),
+    putSP: () => dispatch(putSP()),
     onSubmitP: (event) => dispatch(onSubmitP(event)),
     changePostName: (value) => dispatch(changePostName(value)),
     createNewSub: (event) => dispatch(createNewSub(event)),

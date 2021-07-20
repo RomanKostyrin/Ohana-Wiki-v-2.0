@@ -19,13 +19,10 @@ export function auth(email, password, isLogin) {
       returnSecureToken: true,
     }
 
-    let url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCZ5AHawQ9Rr2m_pMRkOGSf_9pDqGcr8aU'
+    const url = isLogin
+      ? 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCZ5AHawQ9Rr2m_pMRkOGSf_9pDqGcr8aU'
+      : 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCZ5AHawQ9Rr2m_pMRkOGSf_9pDqGcr8aU'
 
-    if (isLogin) {
-      url =
-        'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCZ5AHawQ9Rr2m_pMRkOGSf_9pDqGcr8aU'
-    }
     try {
       const response = await axios.post(url, authData)
       const data = response.data
@@ -66,16 +63,12 @@ export function isDisabled(bool) {
   }
 }
 export function onChangeLogin(event) {
-  event.preventDefault()
-
   return (dispatch) => {
     dispatch(changeEmail(event.target.value))
   }
 }
 
 export function onChangePassword(event) {
-  event.preventDefault()
-
   return (dispatch) => {
     dispatch(changePassword(event.target.value))
   }
