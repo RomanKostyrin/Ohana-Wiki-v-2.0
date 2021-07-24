@@ -20,19 +20,15 @@ const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk)))
 
 ReactDOM.render(
   <React.StrictMode>
-    <>
-      <Provider store={store}>
-        <Header />
-      </Provider>
+    <Provider store={store}>
+      <Header />
       <div className={classes.container}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </Provider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </div>
       <Footer />
-    </>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 )

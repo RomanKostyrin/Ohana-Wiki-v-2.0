@@ -15,11 +15,10 @@ import {
   SET_ACTIVE_POST,
   SHOW_IMG,
   SET_LINKS,
-  CLEAR_EDITOR,
   CHANGE_CHECKBOX,
 } from './actionTypes'
+import { MainPost, SubPost } from '../../Utilits/state'
 import translit from '../../Utilits/translator'
-
 const getIndexFromSome = (string, value = '-') => {
   return string.slice(string.indexOf(value) + 1, string.length)
 }
@@ -59,51 +58,65 @@ export function savePermissions(event) {
   }
 }
 
-export function onSubmitP(event) {
-  event.preventDefault()
+export function onSubmitP() {
   return async (dispatch, getState) => {
     dispatch(fetchPostsStart(true))
     const state = getState().edit
-    try {
-      const response = await axios.post(
-        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-        state.newPost
-      )
-      dispatch(savePerms(state.permissions))
-      await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`,
-        state.permissions
-      )
-      const keys = state.keys
-      keys.push(response.data.name)
-      const arr = state.posts
-      const newPost = { postName: '', subPosts: [{}] }
-      arr.push(state.newPost.postName)
+    const obj = new MainPost(state.newPostName)
+    const response = await axios.post(
+      'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
+      obj
+    )
+    const keys = state.keys
+    keys.push(response.data.name)
+    const allPosts = state.posts
+    allPosts.push(state.newPostName)
+    dispatch(newPostAdd(allPosts, '', keys))
+    dispatch(fetchPostsStart(false))
+  }
+}
 
-      dispatch(newPostAdd(arr, newPost, keys))
-      dispatch(fetchPostsStart(false))
-    } catch (e) {
-      dispatch(fetchPostsError(e))
-    }
+async function putPost(state, newSubPost = 0) {
+  const postKey = state.keys[state.activePost]
+  const name =
+    state.newPostName !== '' ? state.newPostName : state.posts[state.activePost]
+  const newPost = new MainPost(name, state.subPosts)
+  if (newSubPost !== 0) {
+    newPost.addSubPost(newSubPost)
+  }
+  console.log(newPost)
+  const response = await axios.put(
+    `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${postKey}.json`,
+    newPost
+  )
+  return response
+}
+
+export function saveEditorHandle() {
+  return async (dispatch, getState) => {
+    dispatch(fetchPostsStart(true))
+    const state = getState().edit
+    const response = await putPost(state, 0)
+    console.log(response)
+    dispatch(putSubPosts(response.data.subPosts))
+    dispatch(fetchPostsStart(false))
+  }
+}
+
+export function createNewSub() {
+  return async (dispatch, getState) => {
+    dispatch(fetchPostsStart(true))
+    const state = getState().edit
+    const newSubPost = new SubPost(state.newSubPost.name)
+    await putPost(state, newSubPost)
+    dispatch(fetchPostsStart(false))
   }
 }
 
 export function changePostName(value) {
   return (dispatch) => {
     dispatch(fetchPostsStart(false))
-    let newpost = {
-      postName: value,
-      subPosts: [
-        {
-          name: '',
-          data: {
-            type: ['text'],
-            value: [''],
-          },
-        },
-      ],
-    }
-    dispatch(changeNP(newpost))
+    dispatch(changeNP(value))
     dispatch(fetchPostsStart(false))
   }
 }
@@ -185,72 +198,6 @@ export function changeSPHandle(value) {
   }
 }
 
-export function putSP() {
-  return async (dispatch, getState) => {
-    const state = getState().edit
-    const postKey = state.keys[state.activePost]
-    const permissions = state.permissions
-    permissions.forEach((user) => {
-      if (state.newSubPost.name !== '') {
-        if (user.perms[state.activePost].subPosts[0] === '1') {
-          user.perms[state.activePost].subPosts = []
-        }
-        user.perms[state.activePost].subPosts.push(state.newSubPost.name)
-        user.perms[state.activePost].perms.push(false)
-      }
-      if (state.newPostName !== '') {
-        user.perms[state.activePost].post = state.newPostName
-      }
-      user.perms[state.activePost].subPosts[state.activeSubPost] =
-        state.subPosts[state.activeSubPost].name
-    })
-
-    dispatch(fetchPostsStart(true))
-    const letter = {
-      subPosts: state.subPosts,
-    }
-    letter.postName =
-      state.newPostName === ''
-        ? state.posts[state.activePost]
-        : state.newPostName
-
-    try {
-      await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`,
-        permissions
-      )
-      const response = await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${postKey}.json`,
-        letter
-      )
-      dispatch(putSubPosts(response.data.subPosts))
-      dispatch(fetchPostsStart(false))
-      console.log(response.data)
-      dispatch(clearEditor)
-    } catch (e) {
-      dispatch(fetchPostsError(e))
-    }
-  }
-}
-
-export function createNewSub(event) {
-  return (dispatch, getState) => {
-    dispatch(fetchPostsStart(true))
-    const state = getState().edit
-    const newSubPosts = state.subPosts[0].name === '' ? [] : state.subPosts
-    const newSubPost = {
-      name: '',
-      data: {
-        type: ['text'],
-        value: [' '],
-      },
-    }
-    newSubPosts.push(state.newSubPost)
-    dispatch(createNS(newSubPosts, newSubPost))
-    dispatch(putSP(event))
-  }
-}
-
 export function deleteSubEl(id) {
   return (dispatch, getState) => {
     const state = getState().edit
@@ -329,7 +276,7 @@ export function fetchSubPosts(event, isNavigation = false) {
       ? state.keys[getIndexFromSome(event.target.id)]
       : state.keys[event.target.value]
     const activePost = isNavigation
-      ? Number(getIndexFromSome(event.target.id))
+      ? getIndexFromSome(event.target.id)
       : event.target.value
 
     try {
@@ -337,7 +284,7 @@ export function fetchSubPosts(event, isNavigation = false) {
         `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
       )
       dispatch(changeActiveSubPost(0))
-      dispatch(fetchSubPostsSuccess(response.data.subPosts, activePost))
+      dispatch(fetchSubPostsSuccess(response.data.subPosts, +activePost))
       dispatch(fetchPostsStart(false))
     } catch (e) {
       dispatch(fetchPostsError(e))
@@ -361,11 +308,14 @@ export function fetchPosts() {
       const arrPosts = []
       const keys = []
       const links = []
+      console.log(res.data)
       Object.keys(res.data).forEach((key) => {
-        links.push(translit(res.data[key].postName.toLowerCase()))
+        links.push(translit(res.data[key].name.toLowerCase()))
         keys.push(key)
-        arrPosts.push(res.data[key].postName)
+        console.log(arrPosts)
+        arrPosts.push(res.data[key].name)
       })
+
       const arrSubPosts = res.data[keys[0]].subPosts
       dispatch(fetchPostsSuccess(arrPosts, arrSubPosts, keys))
       dispatch(setLinks(links))
@@ -415,12 +365,6 @@ export function fetchSubPostsSuccess(subPosts, activePost) {
     activePost,
   }
 }
-export function clearEditor() {
-  return {
-    type: CLEAR_EDITOR,
-    newPostName: '',
-  }
-}
 export function setActiveP(activePost) {
   console.log(activePost)
   return {
@@ -447,18 +391,19 @@ export function createNS(subPosts, newSubPost) {
     newSubPost,
   }
 }
-export function changeNP(newPost) {
+export function changeNP(newPostName) {
   return {
     type: CHANGE_NEW_POST,
-    newPost,
+    newPostName,
   }
 }
-export function newPostAdd(posts, newPost, keys) {
+export function newPostAdd(posts, newPostName, keys) {
+  console.log(newPostName)
   return {
     type: NEW_POST_ADD,
     posts,
-    newPost,
     keys,
+    newPostName,
   }
 }
 export function setLinks(links) {

@@ -14,7 +14,6 @@ import {
   SET_ACTIVE_POST,
   SHOW_IMG,
   SET_LINKS,
-  CLEAR_EDITOR,
   CHANGE_CHECKBOX,
 } from '../actions/actionTypes'
 
@@ -70,7 +69,6 @@ const initialState = {
     },
   ],
   newPostName: '',
-  newPost: { postName: '', subPosts: [{}] },
   newSubPost: {
     name: '',
     data: {
@@ -108,15 +106,10 @@ export default function editReducer(state = initialState, action) {
         subPosts: action.subPosts,
         newSubPost: action.newSubPost,
       }
-    case CLEAR_EDITOR:
-      return {
-        ...state,
-        newPostName: action.newPostName,
-      }
     case CHANGE_NEW_POST:
       return {
         ...state,
-        newPost: action.newPost,
+        newPostName: action.newPostName,
       }
     case CHANGE_CHECKBOX:
       console.log(action.permissions)
@@ -132,10 +125,11 @@ export default function editReducer(state = initialState, action) {
         imgButtonClass: action.imgButtonClass,
       }
     case NEW_POST_ADD:
+      console.log(action.newPostName)
       return {
         ...state,
         posts: action.posts,
-        newPost: action.newPost,
+        newPostName: action.newPostName,
         keys: action.keys,
       }
     case CHANGE_ACTIVE_SUBPOST:

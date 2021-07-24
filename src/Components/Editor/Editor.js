@@ -15,7 +15,7 @@ import {
   onChangeText,
   pathImg,
   newPostNameFunction,
-  putSP,
+  saveEditorHandle,
   onSubmitP,
   changePostName,
   createNewSub,
@@ -36,12 +36,12 @@ class Editor extends React.Component {
 
   putSPfunction(event) {
     event.preventDefault()
-    this.props.putSP()
+    this.props.saveEditorHandle()
   }
 
   createNewSubfunction(event) {
     event.preventDefault()
-    this.props.createNewSub(event)
+    this.props.createNewSub()
   }
 
   deleteSubElfunction(event) {
@@ -49,6 +49,10 @@ class Editor extends React.Component {
     this.props.deleteSubEl(event.target.id)
   }
 
+  onSubmitPfunction(event) {
+    event.preventDefault()
+    this.props.onSubmitP()
+  }
   render() {
     return (
       <>
@@ -62,7 +66,7 @@ class Editor extends React.Component {
             </header>
             <form
               className={classes.mainSectionForm}
-              onSubmit={(event) => this.props.onSubmitP(event)}
+              onSubmit={(event) => this.onSubmitPfunction(event)}
             >
               <h2 className={classes.mainSectionHeaderTitle}>
                 Создание основного поста
@@ -79,7 +83,7 @@ class Editor extends React.Component {
                     onChange={(event) =>
                       this.props.changePostName(event.target.value)
                     }
-                    value={this.props.newPost.postName}
+                    value={this.props.newPostName}
                   />
                 </p>
               </div>
@@ -166,7 +170,7 @@ class Editor extends React.Component {
                 id={'NewPostButton22'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.props.createNewSubfunction(event)}
+                onClick={(event) => this.createNewSubfunction(event)}
                 disabled={this.props.isDisabledButtons}
               >
                 Создать
@@ -351,10 +355,10 @@ function mapDispatchPoProps(dispatch) {
     onChangeText: (event) => dispatch(onChangeText(event)),
     pathImg: (event) => dispatch(pathImg(event)),
     newPostNameFunction: (value) => dispatch(newPostNameFunction(value)),
-    putSP: () => dispatch(putSP()),
-    onSubmitP: (event) => dispatch(onSubmitP(event)),
+    saveEditorHandle: () => dispatch(saveEditorHandle()),
+    onSubmitP: () => dispatch(onSubmitP()),
     changePostName: (value) => dispatch(changePostName(value)),
-    createNewSub: (event) => dispatch(createNewSub(event)),
+    createNewSub: () => dispatch(createNewSub()),
     changeSPHandle: (value) => dispatch(changeSPHandle(value)),
     getPermissions: () => dispatch(getPermissions()),
   }
