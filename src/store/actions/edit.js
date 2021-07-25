@@ -19,11 +19,60 @@ import {
 } from './actionTypes'
 import { MainPost, SubPost } from '../../Utilits/state'
 import translit from '../../Utilits/translator'
-const getIndexFromSome = (string, value = '-') => {
-  return string.slice(string.indexOf(value) + 1, string.length)
+const getIndexFromSome = (string, value = '-', type = 'index') => {
+  return type === 'index'
+    ? string.slice(string.indexOf(value) + 1, string.length)
+    : string.slice(0, string.indexOf(value))
 }
-const getNameFromSome = (string, value = '-') => {
-  return string.slice(0, string.indexOf(value))
+const path =
+  'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app'
+
+async function putPost(state, newSubPost = 0) {
+  const postKey = state.keys[state.activePost]
+  const name =
+    state.newPostName !== '' ? state.newPostName : state.posts[state.activePost]
+  const newPost = new MainPost(name, state.subPosts)
+  if (newSubPost !== 0) {
+    newPost.addSubPost(newSubPost)
+  }
+  const response = await axios.put(`${path}/posts/${postKey}.json`, newPost)
+  console.log(response)
+  refreshPostsLight(state, 0, newPost)
+  return response
+}
+
+async function refreshPostsLight(state, response = 0, updatedPost = false) {
+  const keys = state.keys
+  const allPosts = state.posts
+  if (response !== 0) {
+    keys.push(response.data.name)
+    allPosts.push(state.newPostName)
+  }
+  if (updatedPost) {
+    console.log(allPosts)
+    allPosts[state.activePost] = updatedPost.name
+    console.log(allPosts)
+  }
+  const response2 = await axios.put(
+    `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`,
+    [keys, allPosts]
+  )
+  console.log([keys, allPosts])
+  console.log(response2)
+  return [allPosts, '', keys]
+  // }
+}
+
+export function onSubmitP() {
+  return async (dispatch, getState) => {
+    dispatch(fetchPostsStart(true))
+    const state = getState().edit
+    const obj = new MainPost(state.newPostName)
+    const response = await axios.post(`${path}/posts.json`, obj)
+    const responseArray = await refreshPostsLight(state, response)
+    dispatch(newPostAdd(...responseArray))
+    dispatch(fetchPostsStart(false))
+  }
 }
 
 export function getPermissions() {
@@ -31,7 +80,7 @@ export function getPermissions() {
     dispatch(fetchPostsStart(true))
     try {
       const response = await axios.get(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`
+        `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`
       )
       dispatch(setPerms(response.data))
       dispatch(fetchPostsStart(false))
@@ -48,7 +97,7 @@ export function savePermissions(event) {
     const state = getState().edit
     try {
       await axios.put(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/permissions/-MedBz7V9TWeKhoLOJm9.json`,
+        `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`,
         state.permissions
       )
       dispatch(fetchPostsStart(false))
@@ -58,46 +107,11 @@ export function savePermissions(event) {
   }
 }
 
-export function onSubmitP() {
-  return async (dispatch, getState) => {
-    dispatch(fetchPostsStart(true))
-    const state = getState().edit
-    const obj = new MainPost(state.newPostName)
-    const response = await axios.post(
-      'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json',
-      obj
-    )
-    const keys = state.keys
-    keys.push(response.data.name)
-    const allPosts = state.posts
-    allPosts.push(state.newPostName)
-    dispatch(newPostAdd(allPosts, '', keys))
-    dispatch(fetchPostsStart(false))
-  }
-}
-
-async function putPost(state, newSubPost = 0) {
-  const postKey = state.keys[state.activePost]
-  const name =
-    state.newPostName !== '' ? state.newPostName : state.posts[state.activePost]
-  const newPost = new MainPost(name, state.subPosts)
-  if (newSubPost !== 0) {
-    newPost.addSubPost(newSubPost)
-  }
-  console.log(newPost)
-  const response = await axios.put(
-    `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${postKey}.json`,
-    newPost
-  )
-  return response
-}
-
 export function saveEditorHandle() {
   return async (dispatch, getState) => {
     dispatch(fetchPostsStart(true))
     const state = getState().edit
     const response = await putPost(state, 0)
-    console.log(response)
     dispatch(putSubPosts(response.data.subPosts))
     dispatch(fetchPostsStart(false))
   }
@@ -124,7 +138,11 @@ export function changePostName(value) {
 export function onChangeCheckbox(event) {
   return async (dispatch, getState) => {
     dispatch(fetchPostsStart(true))
-    const typeOfPostOnCheckbox = getNameFromSome(event.target.name)
+    const typeOfPostOnCheckbox = getIndexFromSome(
+      event.target.name,
+      '-',
+      'name'
+    )
     const numberOfPost = getIndexFromSome(event.target.value)
     const numberOfSubPost = getIndexFromSome(event.target.id)
     const numberOfUser = getIndexFromSome(event.target.name)
@@ -280,9 +298,7 @@ export function fetchSubPosts(event, isNavigation = false) {
       : event.target.value
 
     try {
-      const response = await axios.get(
-        `https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts/${keyDB}.json`
-      )
+      const response = await axios.get(`${path}/posts/${keyDB}.json`)
       dispatch(changeActiveSubPost(0))
       dispatch(fetchSubPostsSuccess(response.data.subPosts, +activePost))
       dispatch(fetchPostsStart(false))
@@ -303,20 +319,19 @@ export function fetchPosts() {
     dispatch(fetchPostsStart(true))
     try {
       const res = await axios.get(
-        'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app/posts.json'
+        `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`
       )
       const arrPosts = []
       const keys = []
       const links = []
-      console.log(res.data)
-      Object.keys(res.data).forEach((key) => {
-        links.push(translit(res.data[key].name.toLowerCase()))
+      res.data[0].forEach((key, index) => {
+        links.push(translit(res.data[1][index].toLowerCase()))
         keys.push(key)
-        console.log(arrPosts)
-        arrPosts.push(res.data[key].name)
+        arrPosts.push(res.data[1][index])
       })
-
-      const arrSubPosts = res.data[keys[0]].subPosts
+      const res2 = await axios.get(`${path}/posts/${keys[0]}/subPosts.json`)
+      const arrSubPosts = res2.data
+      console.log(res2.data)
       dispatch(fetchPostsSuccess(arrPosts, arrSubPosts, keys))
       dispatch(setLinks(links))
     } catch (e) {
@@ -398,7 +413,6 @@ export function changeNP(newPostName) {
   }
 }
 export function newPostAdd(posts, newPostName, keys) {
-  console.log(newPostName)
   return {
     type: NEW_POST_ADD,
     posts,

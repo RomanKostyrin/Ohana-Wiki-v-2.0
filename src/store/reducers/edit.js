@@ -125,7 +125,6 @@ export default function editReducer(state = initialState, action) {
         imgButtonClass: action.imgButtonClass,
       }
     case NEW_POST_ADD:
-      console.log(action.newPostName)
       return {
         ...state,
         posts: action.posts,
