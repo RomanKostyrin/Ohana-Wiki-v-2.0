@@ -19,43 +19,25 @@ import {
 
 const initialState = {
   permissions: [
-    {
-      email: 'ss@ss.ru',
-      perms: [
-        {
-          post: 'Пользователи',
-          permPost: true,
-          subPosts: ['Удаление', 'Редактирование'],
-          perms: [true, true],
-        },
-        {
-          post: 'Номенклатура',
-          permPost: true,
-          subPosts: ['Удаление', 'Редактирование'],
-          perms: [true, true],
-        },
-      ],
-    },
-    {
-      email: 'enemy-iubip@mail.ru',
-      perms: [
-        {
-          post: 'Пользователи',
-          perms: [true, true],
-          permPost: true,
-          subPosts: ['Удаление', 'Редактирование'],
-        },
-        {
-          post: 'Номенклатура',
-          perms: [true, true],
-          permPost: true,
-          subPosts: ['Удаление', 'Редактирование'],
-        },
-      ],
-    },
+    ['key1', 'key2'],
+    ['post1', 'post2'],
   ],
-  posts: ['', ''],
+  posts: [],
+  fullPostsWithPerms: {
+    key: {
+      name: 'postname',
+      permissions: ['ss@ss.ru'],
+      subPosts: [
+        {
+          data: { type: 'text', value: '1' },
+          name: 'subpost',
+          permissions: ['ss@ss.ru'],
+        },
+      ],
+    },
+  },
   keys: [],
+  userList: ['ss@ss.ru', 'enemy-iubip@mail.ru'],
   links: ['0'],
   activePost: 0,
   activeSubPost: 0,
@@ -112,10 +94,9 @@ export default function editReducer(state = initialState, action) {
         newPostName: action.newPostName,
       }
     case CHANGE_CHECKBOX:
-      console.log(action.permissions)
       return {
         ...state,
-        permissions: action.permissions,
+        fullPostsWithPerms: action.fullPostsWithPerms,
       }
     case SHOW_IMG:
       return {

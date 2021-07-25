@@ -18,49 +18,12 @@ import {
   CHANGE_CHECKBOX,
 } from './actionTypes'
 import { MainPost, SubPost } from '../../Utilits/state'
+import { putPost, refreshPostsLight, path } from '../../Utilits/fetches'
 import translit from '../../Utilits/translator'
 const getIndexFromSome = (string, value = '-', type = 'index') => {
   return type === 'index'
     ? string.slice(string.indexOf(value) + 1, string.length)
     : string.slice(0, string.indexOf(value))
-}
-const path =
-  'https://ohana-754a1-default-rtdb.europe-west1.firebasedatabase.app'
-
-async function putPost(state, newSubPost = 0) {
-  const postKey = state.keys[state.activePost]
-  const name =
-    state.newPostName !== '' ? state.newPostName : state.posts[state.activePost]
-  const newPost = new MainPost(name, state.subPosts)
-  if (newSubPost !== 0) {
-    newPost.addSubPost(newSubPost)
-  }
-  const response = await axios.put(`${path}/posts/${postKey}.json`, newPost)
-  console.log(response)
-  refreshPostsLight(state, 0, newPost)
-  return response
-}
-
-async function refreshPostsLight(state, response = 0, updatedPost = false) {
-  const keys = state.keys
-  const allPosts = state.posts
-  if (response !== 0) {
-    keys.push(response.data.name)
-    allPosts.push(state.newPostName)
-  }
-  if (updatedPost) {
-    console.log(allPosts)
-    allPosts[state.activePost] = updatedPost.name
-    console.log(allPosts)
-  }
-  const response2 = await axios.put(
-    `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`,
-    [keys, allPosts]
-  )
-  console.log([keys, allPosts])
-  console.log(response2)
-  return [allPosts, '', keys]
-  // }
 }
 
 export function onSubmitP() {
@@ -79,9 +42,7 @@ export function getPermissions() {
   return async (dispatch) => {
     dispatch(fetchPostsStart(true))
     try {
-      const response = await axios.get(
-        `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`
-      )
+      const response = await axios.get(`${path}/posts.json`)
       dispatch(setPerms(response.data))
       dispatch(fetchPostsStart(false))
     } catch (e) {
@@ -146,15 +107,16 @@ export function onChangeCheckbox(event) {
     const numberOfPost = getIndexFromSome(event.target.value)
     const numberOfSubPost = getIndexFromSome(event.target.id)
     const numberOfUser = getIndexFromSome(event.target.name)
-    const permissions = getState().edit.permissions
+    const fullPostsWithPerms = getState().edit.fullPostsWithPerms
 
     typeOfPostOnCheckbox === 'post'
-      ? (permissions[numberOfUser].perms[numberOfPost].permPost =
+      ? (fullPostsWithPerms[numberOfUser].perms[numberOfPost].permPost =
           event.target.checked)
-      : (permissions[numberOfUser].perms[numberOfPost].perms[numberOfSubPost] =
-          event.target.checked)
+      : (fullPostsWithPerms[numberOfUser].perms[numberOfPost].perms[
+          numberOfSubPost
+        ] = event.target.checked)
 
-    dispatch(setPerms(permissions))
+    dispatch(setPerms(fullPostsWithPerms))
     dispatch(fetchPostsStart(false))
   }
 }
@@ -318,9 +280,8 @@ export function fetchPosts() {
   return async (dispatch) => {
     dispatch(fetchPostsStart(true))
     try {
-      const res = await axios.get(
-        `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`
-      )
+      const res = await axios.get(`${path}/postsLight.json`)
+
       const arrPosts = []
       const keys = []
       const links = []
@@ -331,7 +292,6 @@ export function fetchPosts() {
       })
       const res2 = await axios.get(`${path}/posts/${keys[0]}/subPosts.json`)
       const arrSubPosts = res2.data
-      console.log(res2.data)
       dispatch(fetchPostsSuccess(arrPosts, arrSubPosts, keys))
       dispatch(setLinks(links))
     } catch (e) {
@@ -354,10 +314,10 @@ export function showImg(imgId, imgClass, imgButtonClass) {
     imgButtonClass,
   }
 }
-export function setPerms(permissions) {
+export function setPerms(fullPostsWithPerms) {
   return {
     type: CHANGE_CHECKBOX,
-    permissions,
+    fullPostsWithPerms,
   }
 }
 export function changeSubPosts(subPosts) {
@@ -367,7 +327,6 @@ export function changeSubPosts(subPosts) {
   }
 }
 export function savePerms(permissions) {
-  console.log(permissions)
   return {
     type: CHANGE_CHECKBOX,
     permissions,
@@ -381,7 +340,6 @@ export function fetchSubPostsSuccess(subPosts, activePost) {
   }
 }
 export function setActiveP(activePost) {
-  console.log(activePost)
   return {
     type: SET_ACTIVE_POST,
     activePost,

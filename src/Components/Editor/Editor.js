@@ -26,11 +26,11 @@ import {
 class Editor extends React.Component {
   componentDidMount() {
     this.props.fetchPosts()
-    this.props.getPermissions()
   }
 
-  addHandlefunction(event, type) {
+  addHandlefunction(event) {
     event.preventDefault()
+    const type = event.target.id === 'NewPostButton71' ? 'text' : 'img'
     this.props.addHandle(type)
   }
 
@@ -242,9 +242,7 @@ class Editor extends React.Component {
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
-                            onClick={(event) =>
-                              this.props.deleteSubElfunction(event)
-                            }
+                            onClick={(event) => this.deleteSubElfunction(event)}
                             disabled={this.props.isDisabledButtons}
                           ></button>
                         </p>
@@ -281,9 +279,7 @@ class Editor extends React.Component {
                             id={`closeBtn-${index}`}
                             type="button"
                             title="close"
-                            onClick={(event) =>
-                              this.props.deleteSubElfunction(event)
-                            }
+                            onClick={(event) => this.deleteSubElfunction(event)}
                             disabled={this.props.isDisabledButtons}
                           ></button>
                         </div>
@@ -297,7 +293,7 @@ class Editor extends React.Component {
                 id={'NewPostButton71'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.props.addHandlefunction(event, 'text')}
+                onClick={(event) => this.addHandlefunction(event)}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить текст
@@ -307,7 +303,7 @@ class Editor extends React.Component {
                 id={'NewPostButton55'}
                 classType2={'ButtonSubmit'}
                 classType={'ButtonPrimary'}
-                onClick={(event) => this.props.addHandlefunction(event, 'img')}
+                onClick={(event) => this.addHandlefunction(event)}
                 disabled={this.props.isDisabledButtons}
               >
                 Добавить картинку

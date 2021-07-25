@@ -27,6 +27,7 @@ export class MainPost extends Post {
               type: ['text'],
               value: ['Введите текст'],
             },
+            permissions: ['ss@ss.ru'],
           },
         ]
     this.permissions = ['ss@ss.ru']
@@ -52,8 +53,3 @@ export class SubPost extends Post {
     this.permissions = ['ss@ss.ru']
   }
 }
-
-// const post = new Post('Пользователи', { name: 'Удаление' })
-// const post2 = new SubPost('Пользователи')
-// let array = [post, post2]
-// console.log(array)
