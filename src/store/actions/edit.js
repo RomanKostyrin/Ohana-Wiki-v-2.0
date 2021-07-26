@@ -97,8 +97,9 @@ export function changePostName(value) {
 }
 
 export function onChangeCheckbox(event) {
-  return async (dispatch, getState) => {
+  return (dispatch, getState) => {
     dispatch(fetchPostsStart(true))
+    const state = getState().edit
     const typeOfPostOnCheckbox = getIndexFromSome(
       event.target.name,
       '-',
@@ -106,17 +107,23 @@ export function onChangeCheckbox(event) {
     )
     const numberOfPost = getIndexFromSome(event.target.value)
     const numberOfSubPost = getIndexFromSome(event.target.id)
-    const numberOfUser = getIndexFromSome(event.target.name)
+    const user = state.userList[getIndexFromSome(event.target.name)]
     const fullPostsWithPerms = getState().edit.fullPostsWithPerms
+    const postPerms = fullPostsWithPerms[state.keys[numberOfPost]].permissions
+    if (typeOfPostOnCheckbox === 'post') {
+      !postPerms.includes(user)
+        ? postPerms.push(user)
+        : postPerms.splice(postPerms.indexOf(user), 1)
+    } else {
+      const subPostPerms =
+        fullPostsWithPerms[state.keys[numberOfPost]].subPosts[numberOfSubPost]
+          .permissions
+      !subPostPerms.includes(user)
+        ? subPostPerms.push(user)
+        : subPostPerms.splice(subPostPerms.indexOf(user), 1)
+    }
 
-    typeOfPostOnCheckbox === 'post'
-      ? (fullPostsWithPerms[numberOfUser].perms[numberOfPost].permPost =
-          event.target.checked)
-      : (fullPostsWithPerms[numberOfUser].perms[numberOfPost].perms[
-          numberOfSubPost
-        ] = event.target.checked)
-
-    dispatch(setPerms(fullPostsWithPerms))
+    // dispatch(setPerms(fullPostsWithPerms))
     dispatch(fetchPostsStart(false))
   }
 }
