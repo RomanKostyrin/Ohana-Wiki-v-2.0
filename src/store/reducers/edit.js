@@ -15,12 +15,13 @@ import {
   SHOW_IMG,
   SET_LINKS,
   CHANGE_CHECKBOX,
+  SET_PERMISSIONS,
 } from '../actions/actionTypes'
 
 const initialState = {
   permissions: [
-    ['key1', 'key2'],
-    ['post1', 'post2'],
+    { post: ['bb@ss.ru'], subposts: [] },
+    { post: ['bb@ss.ru'], subposts: [] },
   ],
   posts: [],
   fullPostsWithPerms: {
@@ -104,6 +105,11 @@ export default function editReducer(state = initialState, action) {
         imgClass: action.imgClass,
         imgId: action.imgId,
         imgButtonClass: action.imgButtonClass,
+      }
+    case SET_PERMISSIONS:
+      return {
+        ...state,
+        permissions: action.permissions,
       }
     case NEW_POST_ADD:
       return {

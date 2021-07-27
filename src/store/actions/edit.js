@@ -16,6 +16,7 @@ import {
   SHOW_IMG,
   SET_LINKS,
   CHANGE_CHECKBOX,
+  SET_PERMISSIONS,
 } from './actionTypes'
 import { MainPost, SubPost } from '../../Utilits/state'
 import { putPost, refreshPostsLight, path } from '../../Utilits/fetches'
@@ -51,16 +52,24 @@ export function getPermissions() {
   }
 }
 
-export function savePermissions(event) {
-  event.preventDefault()
+export function savePermissions() {
   return async (dispatch, getState) => {
     dispatch(fetchPostsStart(true))
     const state = getState().edit
+    const permissions = []
+    Object.keys(state.fullPostsWithPerms).forEach((key, index) => {
+      permissions.push({
+        post: state.fullPostsWithPerms[key].permissions,
+        subPosts: [],
+      })
+      state.fullPostsWithPerms[key].subPosts.forEach((subpost) => {
+        permissions[index].subPosts.push(subpost.permissions)
+      })
+    })
     try {
-      await axios.put(
-        `${path}/permissions/-MedBz7V9TWeKhoLOJm9.json`,
-        state.permissions
-      )
+      await axios.put(`${path}/posts.json`, state.fullPostsWithPerms)
+      await axios.put(`${path}/permissions.json`, permissions)
+      dispatch(setPerms(state.fullPostsWithPerms))
       dispatch(fetchPostsStart(false))
     } catch (e) {
       dispatch(fetchPostsError(e))
@@ -298,8 +307,11 @@ export function fetchPosts() {
         arrPosts.push(res.data[1][index])
       })
       const res2 = await axios.get(`${path}/posts/${keys[0]}/subPosts.json`)
+      const res3 = await axios.get(`${path}/permissions.json`)
       const arrSubPosts = res2.data
+      const permissions = res3.data
       dispatch(fetchPostsSuccess(arrPosts, arrSubPosts, keys))
+      dispatch(setPermissions(permissions))
       dispatch(setLinks(links))
     } catch (e) {
       dispatch(fetchPostsError(e))
@@ -350,6 +362,12 @@ export function setActiveP(activePost) {
   return {
     type: SET_ACTIVE_POST,
     activePost,
+  }
+}
+export function setPermissions(permissions) {
+  return {
+    type: SET_PERMISSIONS,
+    permissions,
   }
 }
 export function changeNewSubPostName(newSubPost) {

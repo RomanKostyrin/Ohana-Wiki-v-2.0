@@ -14,6 +14,12 @@ class Permissions extends React.Component {
   componentDidMount() {
     this.props.getPermissions()
   }
+
+  savePermissionsFunction(event) {
+    event.preventDefault()
+    this.props.savePermissions()
+  }
+
   render() {
     return (
       <form className={classes.mainSectionForm}>
@@ -107,7 +113,7 @@ class Permissions extends React.Component {
           id={'NewPostButton'}
           classType2={'ButtonSubmit'}
           classType={'ButtonPrimary'}
-          onClick={(event) => this.props.savePermissions(event)}
+          onClick={(event) => this.savePermissionsFunction(event)}
           disabled={this.props.isDisabledButtons}
         >
           Сохранить
@@ -135,7 +141,7 @@ function mapStatePoProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onChangeCheckbox: (event) => dispatch(onChangeCheckbox(event)),
-    savePermissions: (event) => dispatch(savePermissions(event)),
+    savePermissions: () => dispatch(savePermissions()),
     getPermissions: () => dispatch(getPermissions()),
   }
 }

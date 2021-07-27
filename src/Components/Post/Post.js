@@ -39,7 +39,7 @@ class Post extends React.Component {
                 exact={false}
                 to={`/posts/${this.props.activePost}`}
               >
-                {this.props.posts[this.props.match.params.activePost]}
+                {this.props.posts[this.props.activePost]}
               </NavLink>
             </li>
             <li>
@@ -148,6 +148,7 @@ function mapStatePoProps(state) {
     activeSubPost: state.edit.activeSubPost,
     subPosts: state.edit.subPosts,
     links: state.edit.links,
+    authenticator: state.auth.token,
   }
 }
 

@@ -33,7 +33,7 @@ export function auth(email, password, isLogin) {
       localStorage.setItem('userId', data.localId)
       localStorage.setItem('email', data.email)
       localStorage.setItem('expirationDate', expirationDate)
-
+      console.log(data.idToken)
       dispatch(authSuccess(data.idToken))
       dispatch(autoLogOut(data.expiresIn))
       dispatch(logAs(data.email))
@@ -92,6 +92,7 @@ export function logout() {
 export function authSuccess(token) {
   return {
     type: AUTH_SUCCESS,
+    token,
   }
 }
 export function changeEmail(email) {

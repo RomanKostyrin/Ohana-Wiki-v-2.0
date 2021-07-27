@@ -17,27 +17,33 @@ class Navigation extends React.Component {
       <nav className={classes.Navigation}>
         <ul className={classes.NavigationList}>
           {this.props.posts.map((post, index) => {
-            return (
-              <li key={`NavButton-${index}`}>
-                <Button
-                  disabledLink={this.props.isDisabledButtons}
-                  link={'link'}
-                  to={`/posts/${this.props.links[index]}`}
-                  exact={false}
-                  id={`NavButton-${index}`}
-                  classType={'ButtonImportant'}
-                  classType2={'ButtonNavigation'}
-                  classTypeActive={
-                    index === this.props.activePost
-                      ? 'ButtonNavigationActive'
-                      : null
-                  }
-                  onClick={(event) => this.props.fetchSubPosts(event, true)}
-                >
-                  {post}
-                </Button>
-              </li>
-            )
+            if (this.props.permissions[index] && this.props.email) {
+              if (
+                this.props.permissions[index].post.includes(this.props.email)
+              ) {
+                return (
+                  <li key={`NavButton-${index}`}>
+                    <Button
+                      disabledLink={this.props.isDisabledButtons}
+                      link={'link'}
+                      to={`/posts/${this.props.links[index]}`}
+                      exact={false}
+                      id={`NavButton-${index}`}
+                      classType={'ButtonImportant'}
+                      classType2={'ButtonNavigation'}
+                      classTypeActive={
+                        index === this.props.activePost
+                          ? 'ButtonNavigationActive'
+                          : null
+                      }
+                      onClick={(event) => this.props.fetchSubPosts(event, true)}
+                    >
+                      {post}
+                    </Button>
+                  </li>
+                )
+              }
+            }
           })}
           <li>
             <Button
@@ -104,6 +110,8 @@ function mapStatePoProps(state) {
     subPosts: state.edit.subPosts,
     isDisabledButtons: state.edit.isDisabledButtons,
     links: state.edit.links,
+    email: state.auth.email,
+    permissions: state.edit.permissions,
   }
 }
 

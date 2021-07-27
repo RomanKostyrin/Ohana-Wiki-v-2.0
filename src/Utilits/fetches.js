@@ -24,6 +24,7 @@ export async function refreshPostsLight(
 ) {
   const keys = state.keys
   const allPosts = state.posts
+  const permissions = state.permissions
   if (response !== 0) {
     keys.push(response.data.name)
     allPosts.push(state.newPostName)
@@ -31,6 +32,6 @@ export async function refreshPostsLight(
   if (updatedPost) {
     allPosts[state.activePost] = updatedPost.name
   }
-  await axios.put(`${path}/postsLight.json`, [keys, allPosts])
+  await axios.put(`${path}/postsLight.json`, [keys, allPosts, permissions])
   return [allPosts, '', keys]
 }

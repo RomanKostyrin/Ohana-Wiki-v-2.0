@@ -27,7 +27,7 @@ export default function translit(word) {
     ч: 'ch',
     ш: 'sh',
     щ: 'sch',
-    ь: '',
+    ь: "'",
     ы: 'y',
     ъ: '',
     э: 'e',
