@@ -14,7 +14,7 @@ class Post extends React.Component {
   componentDidUpdate() {}
   render() {
     return (
-      <div className={classes.containerColumn}>
+      <section className={classes.containerColumn}>
         <h1 className={classes.visuallyHidden}>
           Главная страница Wiki Craft Ohana &#171;Ohana Fitness&#187;
         </h1>
@@ -133,7 +133,7 @@ class Post extends React.Component {
             })}
           </div>
         </section>
-      </div>
+      </section>
     )
   }
 }
