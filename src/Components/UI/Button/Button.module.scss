@@ -135,3 +135,61 @@ $darkRed: #8a1d25;
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+
+.breadCrumbs {
+  list-style: none;
+  margin-bottom: 10px;
+  margin-top: 7px;
+  padding-top: 3px;
+  padding-left: 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.breadCrumbsLink {
+  position: relative;
+  padding-right: 42px;
+  font-family: 'PT Sans', 'Arial', sans-serif;
+  font-size: 13px;
+  line-height: 18px;
+  color: black;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.breadCrumbsLink:hover {
+  color: #ee3643;
+}
+.breadCrumbsLinkActive:hover {
+  color: black;
+}
+.breadCrumbsLink:active {
+  color: #32425c;
+  opacity: 0.3;
+}
+.breadCrumbsLinkActive:active {
+  color: black;
+  opacity: 1;
+}
+.breadCrumbsLink:after {
+  content: '';
+  width: 27px;
+  height: 23px;
+  position: absolute;
+  right: -4px;
+  top: 2px;
+  background: url('../../../img/svg/icon-right-small.svg') no-repeat;
+}
+.breadCrumbsLinkActive:after {
+  display: none;
+}
+.breadCrumbsLinkIndex {
+  position: relative;
+  padding-right: 42px;
+  padding-left: 10px;
+  width: 45px;
+  height: 22px;
+  background: url('../../../img/svg/icon-home.svg') no-repeat;
+}
+.breadCrumbsLinkIndex:hover {
+  background: url('../../../img/svg/icon-home-hover.svg') no-repeat;
+}

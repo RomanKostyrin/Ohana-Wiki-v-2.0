@@ -15,6 +15,7 @@ export const SHOW_IMG = 'SHOW_IMG'
 export const SET_LINKS = 'SET_LINKS'
 export const CHANGE_CHECKBOX = 'CHANGE_CHECKBOX'
 export const SET_PERMISSIONS = 'SET_PERMISSIONS'
+export const SET_SUBPOST_LINKS = 'SET_SUBPOST_LINKS'
 
 export const AUTH = 'AUTH'
 export const CHANGE_EMAIL = 'CHANGE_EMAIL'

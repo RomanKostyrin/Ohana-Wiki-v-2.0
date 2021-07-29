@@ -1,13 +1,13 @@
 import classes from './Post.module.scss'
 import React from 'react'
-import Button from '../UI/Button/Button'
+import Link from '../UI/Button/Link'
+import BreadCrumb from '../UI/Button/BreadCrumb'
 import { connect } from 'react-redux'
 import {
   onClickSubPost,
   onImgClick,
   getActivePost,
 } from '../../store/actions/edit'
-import { NavLink } from 'react-router-dom'
 
 class Post extends React.Component {
   componentDidMount() {}
@@ -21,37 +21,36 @@ class Post extends React.Component {
         <section className={classes.mainSection}>
           <ul className={classes.breadCrumbs}>
             <li>
-              <a
-                href="/"
-                className={[
-                  classes.breadCrumbsLink,
-                  classes.breadCrumbsLinkIndex,
-                ].join(' ')}
-                aria-label="Ссылка на главную страницу"
+              <BreadCrumb
+                to={'/'}
+                disabledLink={this.props.isDisabledButtons}
+                classType={'breadCrumbsLink'}
+                classType2={'breadCrumbsLinkIndex'}
+                ariaLabel={'Ссылка на главную страницу'}
               >
                 {' '}
-              </a>
+              </BreadCrumb>
             </li>
             <li>
-              <NavLink
-                href="/nomen"
-                className={classes.breadCrumbsLink}
+              <BreadCrumb
+                disabledLink={this.props.isDisabledButtons}
                 exact={false}
-                to={`/posts/${this.props.activePost}`}
+                to={`/${this.props.activePost}`}
+                classType={'breadCrumbsLink'}
               >
                 {this.props.posts[this.props.activePost]}
-              </NavLink>
+              </BreadCrumb>
             </li>
             <li>
-              <a
-                href="/nomen"
-                className={[
-                  classes.breadCrumbsLink,
-                  classes.breadCrumbsLinkActive,
-                ].join(' ')}
+              <BreadCrumb
+                disabledLink={this.props.isDisabledButtons}
+                to={'/nomen'}
+                р
+                classType={'breadCrumbsLink'}
+                classType2={'breadCrumbsLinkActive'}
               >
                 {this.props.subPosts[this.props.activeSubPost].name}
-              </a>
+              </BreadCrumb>
             </li>
           </ul>
           <header className={classes.mainSectionHeader}>
@@ -63,19 +62,23 @@ class Post extends React.Component {
             {this.props.subPosts.map((element, index) => {
               return (
                 <li key={index}>
-                  <Button
+                  <Link
+                    disabledLink={this.props.isDisabledButtons}
                     classType={
                       this.props.activeSubPost === index
                         ? 'ButtonNavigationActive'
                         : 'ButtonImportant'
                     }
+                    to={`/posts/${this.props.links[this.props.activePost]}/${
+                      this.props.activeSubPost
+                    }`}
                     onClick={(event) =>
                       this.props.onClickSubPost(event.target.id)
                     }
                     id={`sub-${index}`}
                   >
                     {this.props.subPosts[index].name}
-                  </Button>
+                  </Link>
                 </li>
               )
             })}

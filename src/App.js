@@ -14,7 +14,7 @@ class App extends React.Component {
         <Navigation />
         <Switch>
           <Route path="/editor" component={Editor} />
-          <Route path="/posts/:activePost" component={Post} />
+          <Route path="/posts/:activePost/:activeSubPost" component={Post} />
           <Route path="/users" component={Users} />
           <Route path="/perms" exact component={Permissions} />
           <Route path="/" exact component={MainPage} />

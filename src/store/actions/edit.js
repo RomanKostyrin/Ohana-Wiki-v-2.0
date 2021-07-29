@@ -17,6 +17,7 @@ import {
   SET_LINKS,
   CHANGE_CHECKBOX,
   SET_PERMISSIONS,
+  SET_SUBPOST_LINKS,
 } from './actionTypes'
 import { MainPost, SubPost } from '../../Utilits/state'
 import { putPost, refreshPostsLight, path } from '../../Utilits/fetches'
@@ -274,10 +275,16 @@ export function fetchSubPosts(event, isNavigation = false) {
     const activePost = isNavigation
       ? getIndexFromSome(event.target.id)
       : event.target.value
-
     try {
       const response = await axios.get(`${path}/posts/${keyDB}.json`)
+      const subPostLinks = []
+
+      response.data.subPosts.forEach((sub, index) => {
+        subPostLinks.push(translit(sub.name.toLowerCase()))
+      })
+      console.log(subPostLinks)
       dispatch(changeActiveSubPost(0))
+      dispatch(setSubPostsLinks(subPostLinks))
       dispatch(fetchSubPostsSuccess(response.data.subPosts, +activePost))
       dispatch(fetchPostsStart(false))
     } catch (e) {
@@ -287,8 +294,13 @@ export function fetchSubPosts(event, isNavigation = false) {
 }
 
 export function onClickSubPost(activeSubPost) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const state = getState().edit
+    console.log(state.activeSubPost)
+    dispatch(fetchPostsStart(true))
     dispatch(changeActiveSubPost(Number(getIndexFromSome(activeSubPost))))
+    console.log(state.subPostLinks[state.activeSubPost])
+    dispatch(fetchPostsStart(false))
   }
 }
 
@@ -374,6 +386,12 @@ export function changeNewSubPostName(newSubPost) {
   return {
     type: CHANGE_SUBPOST_NAME,
     newSubPost,
+  }
+}
+export function setSubPostsLinks(subPostLinks) {
+  return {
+    type: SET_SUBPOST_LINKS,
+    subPostLinks,
   }
 }
 export function newPostNameHandle(newPostName) {

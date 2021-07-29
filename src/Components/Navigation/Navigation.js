@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../UI/Button/Button'
+import Link from '../UI/Button/Link'
 import classes from './Navigation.module.scss'
 import { connect } from 'react-redux'
 import {
@@ -24,10 +24,9 @@ class Navigation extends React.Component {
               ) {
                 return (
                   <li key={`NavButton-${index}`}>
-                    <Button
+                    <Link
                       disabledLink={this.props.isDisabledButtons}
-                      link={'link'}
-                      to={`/posts/${this.props.links[index]}`}
+                      to={`/posts/${this.props.links[index]}/${this.props.activeSubPost}`}
                       exact={false}
                       id={`NavButton-${index}`}
                       classType={'ButtonImportant'}
@@ -35,7 +34,7 @@ class Navigation extends React.Component {
                       onClick={(event) => this.props.fetchSubPosts(event, true)}
                     >
                       {post}
-                    </Button>
+                    </Link>
                   </li>
                 )
               }
@@ -44,9 +43,8 @@ class Navigation extends React.Component {
           {this.props.email.includes('ss@ss.ru') && this.props.token ? (
             <>
               <li>
-                <Button
+                <Link
                   disabledLink={this.props.isDisabledButtons}
-                  link={'link'}
                   to={`/editor`}
                   exact={false}
                   id={`NavButton-10`}
@@ -54,12 +52,11 @@ class Navigation extends React.Component {
                   classType2={'ButtonNavigation'}
                 >
                   {'Edit'}
-                </Button>
+                </Link>
               </li>
               <li>
-                <Button
+                <Link
                   disabledLink={this.props.isDisabledButtons}
-                  link={'link'}
                   to={`/users`}
                   exact={false}
                   id={`NavButton-20`}
@@ -67,12 +64,11 @@ class Navigation extends React.Component {
                   classType2={'ButtonNavigation'}
                 >
                   {'Users'}
-                </Button>
+                </Link>
               </li>
               <li>
-                <Button
+                <Link
                   disabledLink={this.props.isDisabledButtons}
-                  link={'link'}
                   to={`/perms`}
                   exact={false}
                   id={`NavButton-30`}
@@ -80,7 +76,7 @@ class Navigation extends React.Component {
                   classType2={'ButtonNavigation'}
                 >
                   {'Permissions'}
-                </Button>
+                </Link>
               </li>
             </>
           ) : null}

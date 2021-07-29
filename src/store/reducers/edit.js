@@ -16,8 +16,12 @@ import {
   SET_LINKS,
   CHANGE_CHECKBOX,
   SET_PERMISSIONS,
+  SET_SUBPOST_LINKS,
 } from '../actions/actionTypes'
 
+// сделать инишиал в отдельный файл и брать данные оттуда.
+// в инишиал загрузить с сервера все кроме fullPostsWithPerms и subPosts сразу
+// и обновлять только когда что то изменит админ в админ панели, после кнопки сохранить.
 const initialState = {
   permissions: [
     { post: ['bb@ss.ru'], subposts: [] },
@@ -40,6 +44,7 @@ const initialState = {
   keys: [],
   userList: ['ss@ss.ru', 'enemy-iubip@mail.ru'],
   links: ['0'],
+  subPostLinks: ['0'],
   activePost: 0,
   activeSubPost: 0,
   subPosts: [
@@ -132,6 +137,11 @@ export default function editReducer(state = initialState, action) {
       return {
         ...state,
         subPosts: action.subPosts,
+      }
+    case SET_SUBPOST_LINKS:
+      return {
+        ...state,
+        subPostLinks: action.subPostLinks,
       }
     case FETCH_POSTS_SUCCESS:
       return {

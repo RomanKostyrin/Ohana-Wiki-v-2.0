@@ -1,7 +1,8 @@
 import classes from './Button.module.scss'
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
-const Button = (props) => {
+const Link = (props) => {
   const cls = [
     classes.Button,
     classes[props.classType],
@@ -12,15 +13,17 @@ const Button = (props) => {
     cls.push(classes.disabledLink)
   }
   return (
-    <button
-      disabled={props.disabled}
+    <NavLink
+      to={props.to}
+      exact={props.exact}
       id={props.id}
       onClick={props.onClick}
       className={cls.join(' ')}
+      activeClassName={classes.ButtonNavigationActive}
     >
       {props.children}
-    </button>
+    </NavLink>
   )
 }
 
-export default Button
+export default Link
