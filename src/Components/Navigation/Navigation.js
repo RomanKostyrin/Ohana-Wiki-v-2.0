@@ -32,11 +32,6 @@ class Navigation extends React.Component {
                       id={`NavButton-${index}`}
                       classType={'ButtonImportant'}
                       classType2={'ButtonNavigation'}
-                      classTypeActive={
-                        index === this.props.activePost
-                          ? 'ButtonNavigationActive'
-                          : null
-                      }
                       onClick={(event) => this.props.fetchSubPosts(event, true)}
                     >
                       {post}
@@ -57,10 +52,6 @@ class Navigation extends React.Component {
                   id={`NavButton-10`}
                   classType={'ButtonImportant'}
                   classType2={'ButtonNavigation'}
-                  // classTypeActive={
-                  //   this.props.activePost === 10 ? 'ButtonNavigationActive' : null
-                  // }
-                  // onClick={(event) => this.props.setActivePost(event.target.id)}
                 >
                   {'Edit'}
                 </Button>
@@ -74,10 +65,6 @@ class Navigation extends React.Component {
                   id={`NavButton-20`}
                   classType={'ButtonImportant'}
                   classType2={'ButtonNavigation'}
-                  // classTypeActive={
-                  //   this.props.activePost === 20 ? 'ButtonNavigationActive' : null
-                  // }
-                  // onClick={(event) => this.props.setActivePost(event.target.id)}
                 >
                   {'Users'}
                 </Button>
@@ -91,10 +78,6 @@ class Navigation extends React.Component {
                   id={`NavButton-30`}
                   classType={'ButtonImportant'}
                   classType2={'ButtonNavigation'}
-                  // classTypeActive={
-                  //   this.props.activePost === 30 ? 'ButtonNavigationActive' : null
-                  // }
-                  // onClick={(event) => this.props.setActivePost(event.target.id)}
                 >
                   {'Permissions'}
                 </Button>

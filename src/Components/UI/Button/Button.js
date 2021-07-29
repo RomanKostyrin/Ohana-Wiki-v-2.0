@@ -8,7 +8,6 @@ const Button = (props) => {
     classes[props.classType],
     classes[props.classType2],
     classes[props.classType3],
-    classes[props.classTypeActive],
   ]
   if (props.disabledLink) {
     cls.push(classes.disabledLink)
@@ -21,6 +20,7 @@ const Button = (props) => {
         id={props.id}
         onClick={props.onClick}
         className={cls.join(' ')}
+        activeClassName={classes.ButtonNavigationActive}
       >
         {props.children}
       </NavLink>
